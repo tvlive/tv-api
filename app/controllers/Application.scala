@@ -2,7 +2,7 @@ package controllers
 
 import play.api.libs.json.{Json, Writes, JsPath}
 import play.api.mvc._
-import uk.freview.api.model.{TVChannel, FakeRepositoy, TVRepository}
+import uk.freview.api.model.{FakeContentRepository, TVChannel, FakeChannelRepositoy, ChannelRepository}
 import scala.concurrent.Future
 
 
@@ -17,7 +17,9 @@ import scala.concurrent.Future
 
 object Application extends Controller {
 
-  val tvRepository = new FakeRepositoy()
+  val tvChannelRepository = new FakeChannelRepositoy()
+  
+  val tvContentRepository = new FakeContentRepository()
 
   def index = Action {
     Ok(views.html.index("Your new application is ready."))
@@ -25,7 +27,25 @@ object Application extends Controller {
 
   def channels = Action.async {
     Future.successful {
-      Ok(Json.toJson(tvRepository.listOfTVChannels()))
+      Ok(Json.toJson(tvChannelRepository.listOfTVChannels()))
+    }
+  }
+
+  def currentContent(channelName: String) = Action.async {
+    Future.successful {
+      Ok(Json.toJson(tvContentRepository.findCurrentContentByChannel(channelName)))
+    }
+  }
+
+  def contentLeft(channelName: String) = Action.async {
+    Future.successful {
+      Ok(Json.toJson(tvContentRepository.findLeftContentByChannel(channelName)))
+    }
+  }
+
+  def allContent(channelName: String) = Action.async {
+    Future.successful {
+      Ok(Json.toJson(tvContentRepository.findDayContentByChannel(channelName)))
     }
   }
 }

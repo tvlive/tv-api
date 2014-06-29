@@ -1,39 +1,88 @@
 package uk.freview.api.model
 
+import java.util.Date
+
 import play.api.libs.json._
+import uk.freview.api.model.TVProgram
 
 
-case class TVChannel(name: String, language: String)
+case class TVChannelContent(channelName: String, program: Seq[TVProgram])
 
-object TVChannel {
+case class TVProgram(programName: String, start: Long, end: Long, typeProgram: String)
 
-  implicit object TVChannelFormat extends Format[TVChannel] {
 
-    def writes(tvChannel: TVChannel): JsValue = {
-      val tvChannelSeq = Seq(
-        "name" -> JsString(tvChannel.name),
-        "tweet" -> JsString(tvChannel.language)
+object TVProgram {
+
+  implicit object TVProgramFormat extends Format[TVProgram] {
+
+    def writes(tvProgram: TVProgram): JsValue = {
+      val tvProgramSeq = Seq(
+        "name" -> JsString(tvProgram.programName),
+        "start" -> JsNumber(tvProgram.start),
+        "end" -> JsNumber(tvProgram.end),
+        "typeProgram" -> JsString(tvProgram.typeProgram)
+
       )
-      JsObject(tvChannelSeq)
+      JsObject(tvProgramSeq)
     }
 
-    def reads(json: JsValue): JsResult[TVChannel] = {
-      JsSuccess(TVChannel("", ""))
+    def reads(json: JsValue): JsResult[TVProgram] = {
+      JsSuccess(TVProgram("", 0L, 0L, ""))
     }
-
   }
 
 }
 
+object TVChannelContent {
 
-trait TVRepository {
+  implicit object TVContentFormat extends Format[TVChannelContent] {
 
-  def listOfTVChannels(): Seq[TVChannel]
+    def writes(tvContent: TVChannelContent): JsValue = {
+      val tvChannelContentSeq = Seq(
+        "name" -> JsString(tvContent.channelName)
+
+      )
+      JsObject(tvChannelContentSeq)
+    }
+
+    def reads(json: JsValue): JsResult[TVChannelContent] = {
+      JsSuccess(TVChannelContent("", Seq()))
+    }
+  }
 
 }
 
-class FakeRepositoy extends TVRepository {
-  override def listOfTVChannels(): Seq[TVChannel] = {
-    Seq(TVChannel("Channel1","ENG"), TVChannel("Channel2","ENG"), TVChannel("Channel3","ENG"))
+trait ContentRepository {
+
+  def findLeftContentByChannel(channelName: String): Seq[TVProgram]
+
+  def findDayContentByChannel(channelName: String): Seq[TVProgram]
+
+  def findCurrentContentByChannel(channelName: String): TVProgram
+
+}
+
+class FakeContentRepository extends ContentRepository {
+
+  override def findLeftContentByChannel(channelName: String): Seq[TVProgram] = {
+    Seq(
+      TVProgram("programName1", new Date(2014, 6, 10, 10, 0, 0).getTime, new Date(2014, 6, 10, 11, 0, 0).getTime, "film"),
+      TVProgram("programName2", new Date(2014, 6, 10, 11, 0, 0).getTime, new Date(2014, 6, 10, 12, 0, 0).getTime, "film")
+    )
+  }
+
+  override def findDayContentByChannel(channelName: String): Seq[TVProgram] = {
+    Seq(
+      TVProgram("programName1", new Date(2014, 6, 10, 8, 0, 0).getTime, new Date(2014, 6, 10, 9, 0, 0).getTime, "film"),
+      TVProgram("programName2", new Date(2014, 6, 10, 9, 0, 0).getTime, new Date(2014, 6, 10, 10, 0, 0).getTime, "film"),
+      TVProgram("programName3", new Date(2014, 6, 10, 10, 0, 0).getTime, new Date(2014, 6, 10, 11, 0, 0).getTime, "film"),
+      TVProgram("programName4", new Date(2014, 6, 10, 11, 0, 0).getTime, new Date(2014, 6, 10, 12, 0, 0).getTime, "film")
+    )
+  }
+
+  override def findCurrentContentByChannel(channelName: String): TVProgram = {
+      TVProgram("programName3", new Date(2014, 6, 10, 10, 0, 0).getTime, new Date(2014, 6, 10, 11, 0, 0).getTime, "film")
   }
 }
+
+

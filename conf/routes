@@ -3,9 +3,15 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.Application.index
+GET     /                               controllers.Application.index
 
-GET     /channels                   controllers.Application.channels
+GET     /channels                       controllers.Application.channels
+
+GET     /channel/:channelName/current  controllers.Application.currentContent(channelName)
+
+GET     /channel/:channelName/today  controllers.Application.allContent(channelName)
+
+GET     /channel/:channelName/left  controllers.Application.contentLeft(channelName)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
