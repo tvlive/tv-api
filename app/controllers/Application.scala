@@ -1,8 +1,9 @@
 package controllers
 
-import play.api.libs.json.{Json, Writes, JsPath}
+import models.{FakeContentRepository, FakeChannelRepositoy}
+import play.api.libs.json.Json
 import play.api.mvc._
-import uk.freview.api.model.{FakeContentRepository, TVChannel, FakeChannelRepositoy, ChannelRepository}
+
 import scala.concurrent.Future
 
 
