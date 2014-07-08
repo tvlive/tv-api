@@ -1,10 +1,10 @@
 import sbt._
 import templemore.sbt.cucumber.CucumberPlugin
-
+import scala.util.Properties._
 object ApplicationBuild extends Build {
 
   val appName = "surfersTV"
-  val appVersion = "1.0-SNAPSHOT"
+  val appVersion = envOrElse("FREEAPI_VIEW_VERSION", "999-SNAPSHOT" )
 
   val appDependencies = Seq(
     "org.scalatest" % "scalatest_2.10.0-RC2" % "2.0.M5" % "test",
