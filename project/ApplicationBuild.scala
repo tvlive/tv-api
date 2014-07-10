@@ -1,21 +1,19 @@
 import sbt._
-import templemore.sbt.cucumber.CucumberPlugin
 import scala.util.Properties._
+
 object ApplicationBuild extends Build {
 
   val appName = "surfersTV"
-  val appVersion = envOrElse("FREEAPI_VIEW_VERSION", "999-SNAPSHOT" )
+  val appVersion = envOrElse("FREEAPI_VIEW_VERSION", "999-SNAPSHOT")
 
   val appDependencies = Seq(
-    "org.scalatest" % "scalatest_2.10.0-RC2" % "2.0.M5" % "test",
-    "org.mongodb" %% "casbah" % "2.6.3",
-    "com.novus" %% "salat" % "1.9.4"
+    "org.reactivemongo" %% "reactivemongo" % "0.10.0",
+    "org.scalatestplus" % "play_2.10" % "1.0.0" % "test"
   )
 
-  val buildSettings = Defaults.defaultSettings ++ CucumberPlugin.cucumberSettingsWithTestPhaseIntegration
+  val buildSettings = Defaults.defaultSettings
 
   val main = play.Project(appName, appVersion, appDependencies)
-
 
 
 }
