@@ -2,14 +2,7 @@ package models
 
 import java.util.Date
 
-import com.mongodb.casbah.MongoConnection
-import com.mongodb.casbah.commons.MongoDBObject
-import com.novus.salat.dao.SalatDAO
-import configuration.Environment._
-import org.bson.types.ObjectId
 import play.api.libs.json._
-import com.novus.salat.Context
-import mongoContext._
 
 case class TVChannelContent(channelName: String, program: Seq[TVProgram])
 
@@ -66,20 +59,20 @@ trait ContentRepository {
 }
 
 
-class TVContentRepository(name: String = "tvChannel")
-  extends SalatDAO[TVProgram, ObjectId](collection = MongoConnection()(mongodbDatabaseName)(name))
-  with ContentRepository {
-
-  override def findLeftContentByChannel(channelName: String): Seq[TVProgram] = Seq()
-
-  override def findDayContentByChannel(channelName: String): Seq[TVProgram] = Seq()
-
-  override def findCurrentContentByChannel(channelName: String): TVProgram = ???
-
-  //  def all(): List[TVChannelContent] = collection.find(MongoDBObject.empty).toList
-
-
-}
+//class TVContentRepository(name: String = "tvChannel")
+//  extends SalatDAO[TVProgram, ObjectId](collection = MongoConnection()(mongodbDatabaseName)(name))
+//  with ContentRepository {
+//
+//  override def findLeftContentByChannel(channelName: String): Seq[TVProgram] = Seq()
+//
+//  override def findDayContentByChannel(channelName: String): Seq[TVProgram] = Seq()
+//
+//  override def findCurrentContentByChannel(channelName: String): TVProgram = ???
+//
+//  //  def all(): List[TVChannelContent] = collection.find(MongoDBObject.empty).toList
+//
+//
+//}
 
 
 class FakeContentRepository extends ContentRepository {

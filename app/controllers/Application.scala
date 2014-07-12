@@ -1,6 +1,6 @@
 package controllers
 
-import models.{FakeContentRepository, FakeChannelRepositoy}
+import models.{FakeContentRepository, FakeTVChannelRepositoy}
 import play.api.libs.json.Json
 import play.api.mvc._
 
@@ -18,17 +18,19 @@ import scala.concurrent.Future
 
 object Application extends Controller {
 
-  val tvChannelRepository = new FakeChannelRepositoy()
+  val tvChannelRepository = FakeTVChannelRepositoy
   
   val tvContentRepository = new FakeContentRepository()
 
   def index = Action {
-    Ok(views.html.index("Your new application is ready."))
+//    Ok(views.html.index("Your new application is ready."))
+    Ok("")
   }
 
   def channels = Action.async {
     Future.successful {
-      Ok(Json.toJson(tvChannelRepository.listOfTVChannels()))
+//      Ok(Json.toJson(tvChannelRepository.listOfTVChannels()))
+      Ok("")
     }
   }
 
