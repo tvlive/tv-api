@@ -23,14 +23,12 @@ object Application extends Controller {
   val tvContentRepository = new FakeContentRepository()
 
   def index = Action {
-//    Ok(views.html.index("Your new application is ready."))
-    Ok("")
+    Ok(views.html.index("Your new application is ready."))
   }
 
   def channels = Action.async {
     Future.successful {
-//      Ok(Json.toJson(tvChannelRepository.listOfTVChannels()))
-      Ok("")
+      Ok("")//(Json.toJson(tvChannelRepository.listOfTVChannels()))
     }
   }
 
