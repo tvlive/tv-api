@@ -9,7 +9,7 @@ import reactivemongo.bson._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-case class TVChannelContent(id: Option[BSONObjectID], channelName: String, program: TVProgram)
+case class TVChannelContent(id: Option[BSONObjectID], channelName: String, program: Seq[TVProgram])
 
 case class TVProgram(programName: String, start: Long, end: Long, typeProgram: String)
 
@@ -29,6 +29,15 @@ object TVProgram {
   }
 
 
+  implicit object SeqProgramBSONWriter extends BSONDocumentWriter[Seq[TVProgram]] {
+    override def write(t: Seq[TVProgram]): BSONDocument = {
+      BSONDocument(
+        "program" -> t.map(TVProgramContentBSONWriter.write(_))
+      )
+    }
+  }
+
+
   implicit object TVProgramContentBSONWriter extends BSONDocumentWriter[TVProgram] {
     override def write(t: TVProgram): BSONDocument = {
       BSONDocument(
@@ -40,36 +49,44 @@ object TVProgram {
     }
   }
 
-  implicit object TVProgramFormat extends Format[TVProgram] {
-
-
-
-    def writes(tvProgram: TVProgram): JsValue = {
-      val tvProgramSeq = Seq(
-        "name" -> JsString(tvProgram.programName),
-        "start" -> JsNumber(tvProgram.start),
-        "end" -> JsNumber(tvProgram.end),
-        "typeProgram" -> JsString(tvProgram.typeProgram)
-      )
-      JsObject(tvProgramSeq)
-    }
-
-    def reads(json: JsValue): JsResult[TVProgram] = {
-      JsSuccess(TVProgram("", 0L, 0L, ""))
-    }
-  }
-
+//  implicit object TVProgramFormat extends Format[TVProgram] {
+//
+//
+//
+//    def writes(tvProgram: TVProgram): JsValue = {
+//      val tvProgramSeq = Seq(
+//        "name" -> JsString(tvProgram.programName),
+//        "start" -> JsNumber(tvProgram.start),
+//        "end" -> JsNumber(tvProgram.end),
+//        "typeProgram" -> JsString(tvProgram.typeProgram)
+//      )
+//      JsObject(tvProgramSeq)
+//    }
+//
+//    def reads(json: JsValue): JsResult[TVProgram] = {
+//      JsSuccess(TVProgram("", 0L, 0L, ""))
+//    }
+//  }
 }
 
 object TVChannelContent {
 
+  implicit object SeqProgramBSONReader extends BSONDocumentReader[Seq[TVProgram]] {
+    def read(doc: BSONDocument): Seq[TVProgram] = {
+      val list = doc.getAs[Seq[BSONDocument]]("program").get
+      val l = list.map(x => TVProgramContentBSONReader.read(x))
+      l
+    }
+  }
+
   implicit object TVChannelContentBSONReader extends BSONDocumentReader[TVChannelContent] {
     def read(doc: BSONDocument): TVChannelContent = {
-      TVChannelContent(
+      val channel = TVChannelContent(
         doc.getAs[BSONObjectID]("_id"),
         doc.getAs[BSONString]("channelName").get.value,
-        TVProgramContentBSONReader.read(doc.getAs[BSONDocument]("program").get)
+        SeqProgramBSONReader.read(doc.getAs[BSONDocument]("program").get)
       )
+      channel
     }
   }
 
@@ -78,7 +95,7 @@ object TVChannelContent {
       BSONDocument(
         "_id" -> t.id.getOrElse(BSONObjectID.generate),
         "channelName" -> t.channelName,
-        "program" -> t.program
+        "program" -> TVProgram.SeqProgramBSONWriter.write(t.program)
       )
     }
   }
@@ -95,7 +112,7 @@ object TVChannelContent {
     }
 
     def reads(json: JsValue): JsResult[TVChannelContent] = {
-      JsSuccess(TVChannelContent(Some(BSONObjectID.generate), "", TVProgram("",0,0,"")))
+      JsSuccess(TVChannelContent(Some(BSONObjectID.generate), "", Seq(TVProgram("",0,0,""))))
     }
   }
 
@@ -137,7 +154,7 @@ class FakeContentRepository extends ContentRepository {
 
   override def findDayContentByChannel(channelName: String): Future[Option[TVChannelContent]] = {
     Future {
-      Some(TVChannelContent(Some(BSONObjectID.generate), "channel1", TVProgram("", 0, 1, "")))
+      Some(TVChannelContent(Some(BSONObjectID.generate), "channel1", Seq(TVProgram("", 0, 1, ""))))
     }
   }
 

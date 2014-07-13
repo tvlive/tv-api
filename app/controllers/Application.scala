@@ -1,7 +1,6 @@
 package controllers
 
 import models.{FakeContentRepository, FakeTVChannelRepositoy}
-import play.api.libs.json.Json
 import play.api.mvc._
 
 import scala.concurrent.Future
@@ -34,13 +33,15 @@ object Application extends Controller {
 
   def currentContent(channelName: String) = Action.async {
     Future.successful {
-      Ok(Json.toJson(tvContentRepository.findCurrentContentByChannel(channelName)))
+//      Ok(Json.toJson(tvContentRepository.findCurrentContentByChannel(channelName)))
+      Ok("")
     }
   }
 
   def contentLeft(channelName: String) = Action.async {
     Future.successful {
-      Ok(Json.toJson(tvContentRepository.findLeftContentByChannel(channelName)))
+//      Ok(Json.toJson(tvContentRepository.findLeftContentByChannel(channelName)))
+      Ok("")
     }
   }
 
