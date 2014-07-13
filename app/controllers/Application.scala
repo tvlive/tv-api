@@ -46,7 +46,8 @@ object Application extends Controller {
 
   def allContent(channelName: String) = Action.async {
     Future.successful {
-      Ok(Json.toJson(tvContentRepository.findDayContentByChannel(channelName)))
+      Ok("")
+//      Ok(Json.toJson(tvContentRepository.findDayContentByChannel(channelName)))
     }
   }
 }
