@@ -2,7 +2,6 @@ package models
 
 import org.scalatest.{BeforeAndAfter, MustMatchers}
 import org.scalatestplus.play.PlaySpec
-import reactivemongo.bson.BSONObjectID
 
 import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -14,17 +13,16 @@ class TVChannelRepositorySpec extends PlaySpec with MustMatchers with BeforeAndA
   val tvChannelRepository = TVChannelRepository(tvChannelCollectionName)
   val collection = tvChannelRepository.collection
 
-  val c1Id = Some(BSONObjectID.generate)
-  val c2Id = Some(BSONObjectID.generate)
-  val c3Id = Some(BSONObjectID.generate)
-  val c4Id = Some(BSONObjectID.generate)
-
+  val tvChannel1 = TVChannel("testTvChannel1", "EN")
+  val tvChannel2 = TVChannel("testTvChannel2", "EN")
+  val tvChannel3 = TVChannel("testTvChannel3", "EN")
+  val tvChannel4 = TVChannel("testTvChannel4", "EN")
   before {
 
-    val channel1 = collection.insert[TVChannel](TVChannel(c1Id,"testTvChannel1", "EN"))
-    val channel2 = collection.insert[TVChannel](TVChannel(c2Id,"testTvChannel2", "EN"))
-    val channel3 = collection.insert[TVChannel](TVChannel(c3Id,"testTvChannel3", "EN"))
-    val channel4 = collection.insert[TVChannel](TVChannel(c4Id,"testTvChannel4", "EN"))
+    val channel1 = collection.insert[TVChannel](tvChannel1)
+    val channel2 = collection.insert[TVChannel](tvChannel2)
+    val channel3 = collection.insert[TVChannel](tvChannel3)
+    val channel4 = collection.insert[TVChannel](tvChannel4)
 
     val result = for {
       c1 <- channel1
@@ -53,12 +51,7 @@ class TVChannelRepositorySpec extends PlaySpec with MustMatchers with BeforeAndA
       val allTVChannels = tvChannelRepository.listOfTVChannels()
       val channels = Await.result(allTVChannels, Duration("20 seconds"))
 
-      channels mustBe Seq(
-        TVChannel(c1Id,"testTvChannel1", "EN"),
-        TVChannel(c2Id,"testTvChannel2", "EN"),
-        TVChannel(c3Id,"testTvChannel3", "EN"),
-        TVChannel(c4Id,"testTvChannel4", "EN")
-      )
+      channels mustBe Seq( tvChannel1, tvChannel2, tvChannel3, tvChannel4)
     }
   }
 
