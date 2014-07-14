@@ -1,18 +1,12 @@
 package models
 
-import java.util.Date
-
-import models.TVProgram.TVProgramContentBSONReader
-import play.api.libs.json._
+import _root_.utils.TimeProvider
 import reactivemongo.bson._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-case class TVChannelContent(id: Option[BSONObjectID], channelName: String, program: Seq[TVProgram])
-
-case class TVProgram(programName: String, start: Long, end: Long, typeProgram: String)
-
+case class TVProgram(channelName: String, programName: String, start: Long, end: Long, typeProgram: String, id: Option[BSONObjectID] = Some(BSONObjectID.generate))
 
 
 object TVProgram {
@@ -20,19 +14,12 @@ object TVProgram {
   implicit object TVProgramContentBSONReader extends BSONDocumentReader[TVProgram] {
     def read(doc: BSONDocument): TVProgram = {
       TVProgram(
+        doc.getAs[BSONString]("channelName").get.value,
         doc.getAs[BSONString]("programName").get.value,
         doc.getAs[BSONLong]("start").get.value,
         doc.getAs[BSONLong]("end").get.value,
-        doc.getAs[BSONString]("typeProgram").get.value
-      )
-    }
-  }
-
-
-  implicit object SeqProgramBSONWriter extends BSONDocumentWriter[Seq[TVProgram]] {
-    override def write(t: Seq[TVProgram]): BSONDocument = {
-      BSONDocument(
-        "program" -> t.map(TVProgramContentBSONWriter.write(_))
+        doc.getAs[BSONString]("typeProgram").get.value,
+        doc.getAs[BSONObjectID]("_id")
       )
     }
   }
@@ -41,6 +28,8 @@ object TVProgram {
   implicit object TVProgramContentBSONWriter extends BSONDocumentWriter[TVProgram] {
     override def write(t: TVProgram): BSONDocument = {
       BSONDocument(
+        "_id" -> t.id.getOrElse(BSONObjectID.generate),
+        "channelName" -> t.channelName,
         "programName" -> t.programName,
         "start" -> t.start,
         "end" -> t.end,
@@ -49,117 +38,57 @@ object TVProgram {
     }
   }
 
-//  implicit object TVProgramFormat extends Format[TVProgram] {
-//
-//
-//
-//    def writes(tvProgram: TVProgram): JsValue = {
-//      val tvProgramSeq = Seq(
-//        "name" -> JsString(tvProgram.programName),
-//        "start" -> JsNumber(tvProgram.start),
-//        "end" -> JsNumber(tvProgram.end),
-//        "typeProgram" -> JsString(tvProgram.typeProgram)
-//      )
-//      JsObject(tvProgramSeq)
-//    }
-//
-//    def reads(json: JsValue): JsResult[TVProgram] = {
-//      JsSuccess(TVProgram("", 0L, 0L, ""))
-//    }
-//  }
-}
-
-object TVChannelContent {
-
-  implicit object SeqProgramBSONReader extends BSONDocumentReader[Seq[TVProgram]] {
-    def read(doc: BSONDocument): Seq[TVProgram] = {
-      val list = doc.getAs[Seq[BSONDocument]]("program").get
-      val l = list.map(x => TVProgramContentBSONReader.read(x))
-      l
-    }
-  }
-
-  implicit object TVChannelContentBSONReader extends BSONDocumentReader[TVChannelContent] {
-    def read(doc: BSONDocument): TVChannelContent = {
-      val channel = TVChannelContent(
-        doc.getAs[BSONObjectID]("_id"),
-        doc.getAs[BSONString]("channelName").get.value,
-        SeqProgramBSONReader.read(doc.getAs[BSONDocument]("program").get)
-      )
-      channel
-    }
-  }
-
-  implicit object TVChannelContentBSONWriter extends BSONDocumentWriter[TVChannelContent] {
-    override def write(t: TVChannelContent): BSONDocument = {
-      BSONDocument(
-        "_id" -> t.id.getOrElse(BSONObjectID.generate),
-        "channelName" -> t.channelName,
-        "program" -> TVProgram.SeqProgramBSONWriter.write(t.program)
-      )
-    }
-  }
-
-
-
-  implicit object TVContentFormat extends Format[TVChannelContent] {
-
-    def writes(tvContent: TVChannelContent): JsValue = {
-      val tvChannelContentSeq = Seq(
-        "name" -> JsString(tvContent.channelName)
-      )
-      JsObject(tvChannelContentSeq)
-    }
-
-    def reads(json: JsValue): JsResult[TVChannelContent] = {
-      JsSuccess(TVChannelContent(Some(BSONObjectID.generate), "", Seq(TVProgram("",0,0,""))))
-    }
-  }
-
 }
 
 trait ContentRepository {
 
-  def findLeftContentByChannel(channelName: String): Seq[TVProgram] = ???
+  def findLeftContentByChannel(channelName: String): Future[Seq[TVProgram]] = ???
 
-  def findDayContentByChannel(channelName: String): Future[Option[TVChannelContent]] = ???
+  def findDayContentByChannel(channelName: String): Future[Seq[TVProgram]] = ???
 
-  def findCurrentContentByChannel(channelName: String): TVProgram = ???
+  def findCurrentContentByChannel(channelName: String): Future[Option[TVProgram]] = ???
 
 }
 
-class TVChannelContentRepository(name: String) extends ContentRepository with Connection {
+class TVContentRepository(name: String) extends ContentRepository with Connection with TimeProvider {
 
   override lazy val collectionName = name
-  override def findDayContentByChannel(channelName: String): Future[Option[TVChannelContent]] = {
+
+  override def findDayContentByChannel(channelName: String): Future[Seq[TVProgram]] = {
     val query = BSONDocument(
+      "$orderby" -> BSONDocument("start" -> 1),
       "$query" -> BSONDocument("channelName" -> channelName)
     )
-    collection.find(query).one[TVChannelContent]
+    val found = collection.find(query).cursor[TVProgram]
+    found.collect[Seq]()
+  }
+
+  override def findCurrentContentByChannel(channelName: String): Future[Option[TVProgram]] = {
+    val query = BSONDocument(
+      "$query" -> BSONDocument(
+        "channelName" -> channelName,
+        "start" -> BSONDocument("$lte" -> currentDate()),
+        "end" -> BSONDocument("$gte" -> currentDate())))
+
+    collection.find(query).one[TVProgram]
+
+  }
+
+  override def findLeftContentByChannel(channelName: String): Future[Seq[TVProgram]] = {
+    val query = BSONDocument(
+      "$orderby" -> BSONDocument("start" -> 1),
+      "$query" -> BSONDocument(
+        "channelName" -> channelName,
+        "end" -> BSONDocument("$gte" -> currentDate())))
+
+    val found = collection.find(query).cursor[TVProgram]
+    found.collect[Seq]()
   }
 }
 
-object TVChannelContentRepository {
-  def apply(collectionName: String) = new TVChannelContentRepository(collectionName)
+object TVContentRepository {
+  def apply(collectionName: String) = new TVContentRepository(collectionName)
 }
 
-class FakeContentRepository extends ContentRepository {
 
-  override def findLeftContentByChannel(channelName: String): Seq[TVProgram] = {
-    Seq(
-      TVProgram("programName1", new Date(2014, 6, 10, 10, 0, 0).getTime, new Date(2014, 6, 10, 11, 0, 0).getTime, "film"),
-      TVProgram("programName2", new Date(2014, 6, 10, 11, 0, 0).getTime, new Date(2014, 6, 10, 12, 0, 0).getTime, "film")
-    )
-  }
-
-  override def findDayContentByChannel(channelName: String): Future[Option[TVChannelContent]] = {
-    Future {
-      Some(TVChannelContent(Some(BSONObjectID.generate), "channel1", Seq(TVProgram("", 0, 1, ""))))
-    }
-  }
-
-  override def findCurrentContentByChannel(channelName: String): TVProgram = {
-    TVProgram("programName3", new Date(2014, 6, 10, 10, 0, 0).getTime, new Date(2014, 6, 10, 11, 0, 0).getTime, "film")
-  }
-}
 
