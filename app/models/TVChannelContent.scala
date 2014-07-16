@@ -1,15 +1,49 @@
 package models
 
 import _root_.utils.TimeProvider
+import play.api.libs.functional.syntax._
+import play.api.libs.json._
 import reactivemongo.bson._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.util.Try
 
 case class TVProgram(channelName: String, programName: String, start: Long, end: Long, typeProgram: String, id: Option[BSONObjectID] = Some(BSONObjectID.generate))
 
-
 object TVProgram {
+
+  implicit object BSONObjectIDFormat extends Format[BSONObjectID] {
+    def writes(objectId: BSONObjectID): JsValue = JsString(objectId.toString())
+    def reads(json: JsValue): JsResult[BSONObjectID] = json match {
+      case JsString(x) => {
+        val maybeOID: Try[BSONObjectID] = BSONObjectID.parse(x)
+        if(maybeOID.isSuccess) JsSuccess(maybeOID.get) else {
+          JsError("Expected BSONObjectID as JsString")
+        }
+      }
+      case _ => JsError("Expected BSONObjectID as JsString")
+    }
+  }
+
+  implicit val reviewReads: Reads[TVProgram] = (
+    (__ \ "channelName").read[String] and
+    (__ \ "programName").read[String] and
+      (__ \ "start").read[Long] and
+      (__ \ "end").read[Long] and
+      (__ \ "typeProgram").read[String] and
+      (__ \ "id").read[Option[BSONObjectID]]
+    )(TVProgram.apply _)
+
+  implicit val reviewWrites: Writes[TVProgram] = (
+    (__ \ "channelName").write[String] and
+      (__ \ "programName").write[String] and
+      (__ \ "start").write[Long] and
+      (__ \ "end").write[Long] and
+      (__ \ "typeProgram").write[String] and
+      (__ \ "id").write[Option[BSONObjectID]]
+    )(unlift(TVProgram.unapply))
+
 
   implicit object TVProgramContentBSONReader extends BSONDocumentReader[TVProgram] {
     def read(doc: BSONDocument): TVProgram = {
