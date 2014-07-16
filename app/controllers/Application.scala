@@ -7,50 +7,16 @@ import play.api.mvc._
 import scala.concurrent.ExecutionContext.Implicits.global
 
 
-object Application extends Application {
-  override val channelRepository = TVChannelRepository("tvChannel")
-  override val contentRepository = TVContentRepository("tvContent")
-}
+//object Application extends Application {
+//  override val channelRepository = TVChannelRepository("tvChannel")
+//  override val contentRepository = TVContentRepository("tvContent")
+//}
+//
 
+object Application extends Controller {
 
-trait Application extends Controller {
-
-  implicit object TVProgramFormat extends Format[TVProgram] {
-
-
-    def writes(tvProgram: TVProgram): JsValue = {
-      val tvProgramSeq = Seq(
-        "channelName" -> JsString(tvProgram.channelName),
-        "programName" -> JsString(tvProgram.programName),
-        "start" -> JsNumber(tvProgram.start),
-        "end" -> JsNumber(tvProgram.end),
-        "typeProgram" -> JsString(tvProgram.typeProgram)
-      )
-      JsObject(tvProgramSeq)
-    }
-
-    def reads(json: JsValue): JsResult[TVProgram] = {
-      JsSuccess(TVProgram("", "", 0L, 0L, ""))
-    }
-  }
-
-  implicit object TVChannelFormat extends Format[TVChannel] {
-
-    def writes(tvChannel: TVChannel): JsValue = {
-      val tvChannelSeq = Seq(
-        "name" -> JsString(tvChannel.name),
-        "language" -> JsString(tvChannel.language)
-      )
-      JsObject(tvChannelSeq)
-    }
-
-    def reads(json: JsValue): JsResult[TVChannel] = {
-      JsSuccess(TVChannel("", ""))
-    }
-  }
-
-  val channelRepository : ChannelRepository = ???
-  val contentRepository : ContentRepository = ???
+  val channelRepository = TVChannelRepository("tvChannel")
+  val contentRepository = TVContentRepository("tvContent")
 
   def index = Action {
     Ok(views.html.index("Your new application is ready."))
