@@ -11,7 +11,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
     val driver = new MongoDriver
     val connection = driver.connection(List("localhost"))
 
-    val db = connection("alvaro_tests")
+    val db = connection("freeview")
 
     lazy val collectionName: String = ???
     lazy val collection: BSONCollection =  db(collectionName)
