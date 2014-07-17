@@ -14,7 +14,7 @@ case class TVProgram(channelName: String, programName: String, start: Long, end:
 object TVProgram {
 
   implicit object BSONObjectIDFormat extends Format[BSONObjectID] {
-    def writes(objectId: BSONObjectID): JsValue = JsString(objectId.toString())
+    def writes(objectId: BSONObjectID): JsValue = JsString(objectId.stringify)
     def reads(json: JsValue): JsResult[BSONObjectID] = json match {
       case JsString(x) => {
         val maybeOID: Try[BSONObjectID] = BSONObjectID.parse(x)

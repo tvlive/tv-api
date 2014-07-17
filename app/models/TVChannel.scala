@@ -16,7 +16,7 @@ object TVChannel {
   import play.api.libs.json._
 
   implicit object BSONObjectIDFormat extends Format[BSONObjectID] {
-    def writes(objectId: BSONObjectID): JsValue = JsString(objectId.toString())
+    def writes(objectId: BSONObjectID): JsValue = JsString(objectId.stringify)
     def reads(json: JsValue): JsResult[BSONObjectID] = json match {
       case JsString(x) => {
         val maybeOID: Try[BSONObjectID] = BSONObjectID.parse(x)
