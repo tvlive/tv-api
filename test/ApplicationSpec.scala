@@ -1,4 +1,4 @@
-import models.{TVChannel, TVChannelRepository, TVContentRepository, TVProgram}
+import models.{TVProgram, TVContentRepository, TVChannel, TVChannelRepository}
 import org.joda.time.DateTime
 import org.junit.runner._
 import org.specs2.mutable._
@@ -64,6 +64,17 @@ class ApplicationSpec extends Specification {
       contentAsString(home) must contain("Your new application is ready.")
     }
 
+    "provide empty list of channels available in TV" in new WithApplication {
+
+      val tvChannelRepository = TVChannelRepository("tvChannel")
+      val collection = tvChannelRepository.collection
+      collection.drop()
+
+      val channels = route(FakeRequest(GET, "/channels")).get
+      status(channels) must equalTo(NOT_FOUND)
+
+    }
+
     "provide the list of channels available in TV" in new WithApplication {
 
             val tvChannelRepository = TVChannelRepository("tvChannel")
@@ -109,6 +120,13 @@ class ApplicationSpec extends Specification {
 
     }
 
+    "return empty all the TV content for a particular channel available today" in new WithApplication {
+
+      val programs = route(FakeRequest(GET, "/channel/channel2/today")).get
+      status(programs) must equalTo(NOT_FOUND)
+
+    }
+
     "return all the TV content for a particular channel available today" in new WithApplication {
 
       val tvContentRepository = TVContentRepository("tvContent")
@@ -150,11 +168,18 @@ class ApplicationSpec extends Specification {
       contentType(programs) must beSome.which(_ == "application/json")
       println(contentAsString(programs))
       val programsInResponse = contentAsJson(programs).as[Seq[TVProgram]]
+      println(programsInResponse)
       programsInResponse must contain(tvProgram1)
       programsInResponse must contain(tvProgram2)
       programsInResponse must contain(tvProgram3)
       programsInResponse must contain(tvProgram4)
       programsInResponse must contain(tvProgram5)
+    }
+
+    "return empty the TV content for a particular channel available now" in new WithApplication {
+
+      val programs = route(FakeRequest(GET, "/channel/channel2/current")).get
+      status(programs) must equalTo(NOT_FOUND)
     }
 
     "return the TV content for a particular channel available now" in new WithApplication {
@@ -249,6 +274,14 @@ class ApplicationSpec extends Specification {
       programsInResponse must contain(tvProgram3)
       programsInResponse must contain(tvProgram4)
       programsInResponse must contain(tvProgram5)
+    }
+
+
+    "return empty the TV content for a particular channel available from now until the end of the day" in new WithApplication {
+
+      val programs = route(FakeRequest(GET, "/channel/channel2/left")).get
+      status(programs) must equalTo(NOT_FOUND)
+
     }
   }
 

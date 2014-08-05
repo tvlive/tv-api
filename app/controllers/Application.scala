@@ -4,6 +4,7 @@ import models._
 import play.api.libs.json._
 import play.api.mvc._
 
+import scala.collection.immutable.::
 import scala.concurrent.ExecutionContext.Implicits.global
 
 
@@ -13,6 +14,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 //}
 //
 
+
+//  todo add 404
 object Application extends Controller {
 
   val channelRepository = TVChannelRepository("tvChannel")
@@ -24,25 +27,31 @@ object Application extends Controller {
 
   def channels = Action.async {
     channelRepository.listOfTVChannels().map {
-      channels => Ok(Json.toJson(channels))
+      case head :: tail => {
+        Ok(Json.toJson(head :: tail))
+      }
+      case Nil => NotFound
     }
   }
 
   def currentContent(channelName: String) = Action.async {
     contentRepository.findCurrentContentByChannel(channelName).map {
-      tvProgram => Ok(Json.toJson(tvProgram))
+      case Some(tvProgram) => Ok(Json.toJson(tvProgram))
+      case None => NotFound
     }
   }
 
   def contentLeft(channelName: String) = Action.async {
     contentRepository.findLeftContentByChannel(channelName).map {
-      tvPrograms => Ok(Json.toJson(tvPrograms))
+      case head :: tail => Ok(Json.toJson(head :: tail))
+      case Nil => NotFound
     }
   }
 
   def allContent(channelName: String) = Action.async {
     contentRepository.findDayContentByChannel(channelName).map {
-      tvPrograms => Ok(Json.toJson(tvPrograms))
+      case head :: tail => Ok(Json.toJson(head :: tail))
+      case Nil => NotFound
     }
   }
 
