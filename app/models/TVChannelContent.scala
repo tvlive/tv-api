@@ -98,11 +98,12 @@ class TVContentRepository(name: String) extends ContentRepository with Connectio
   }
 
   override def findCurrentContentByChannel(channelName: String): Future[Option[TVProgram]] = {
+    val now = currentDate()
     val query = BSONDocument(
       "$query" -> BSONDocument(
         "channelName" -> channelName,
-        "start" -> BSONDocument("$lte" -> currentDate()),
-        "end" -> BSONDocument("$gte" -> currentDate())))
+        "start" -> BSONDocument("$lte" -> now),
+        "end" -> BSONDocument("$gte" -> now)))
 
     collection.find(query).one[TVProgram]
 
