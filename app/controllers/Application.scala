@@ -1,5 +1,7 @@
 package controllers
 
+import java.net.URLDecoder
+
 import models._
 import play.api.libs.json._
 import play.api.mvc._
@@ -35,21 +37,21 @@ object Application extends Controller {
   }
 
   def currentContent(channelName: String) = Action.async {
-    contentRepository.findCurrentContentByChannel(channelName).map {
+    contentRepository.findCurrentContentByChannel(URLDecoder.decode(channelName, "UTF-8")).map {
       case Some(tvProgram) => Ok(Json.toJson(tvProgram))
       case None => NotFound
     }
   }
 
   def contentLeft(channelName: String) = Action.async {
-    contentRepository.findLeftContentByChannel(channelName).map {
+    contentRepository.findLeftContentByChannel(URLDecoder.decode(channelName, "UTF-8")).map {
       case head :: tail => Ok(Json.toJson(head :: tail))
       case Nil => NotFound
     }
   }
 
   def allContent(channelName: String) = Action.async {
-    contentRepository.findDayContentByChannel(channelName).map {
+    contentRepository.findDayContentByChannel(URLDecoder.decode(channelName, "UTF-8")).map {
       case head :: tail => Ok(Json.toJson(head :: tail))
       case Nil => NotFound
     }
