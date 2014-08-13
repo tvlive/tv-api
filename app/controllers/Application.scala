@@ -10,18 +10,15 @@ import scala.collection.immutable.::
 import scala.concurrent.ExecutionContext.Implicits.global
 
 
-//object Application extends Application {
-//  override val channelRepository = TVChannelRepository("tvChannel")
-//  override val contentRepository = TVContentRepository("tvContent")
-//}
-//
+object Application extends Application {
+  override val channelRepository = TVChannelRepository("tvChannel")
+  override val contentRepository = TVContentRepository("tvContent")
+}
 
+trait Application extends Controller {
 
-//  todo add 404
-object Application extends Controller {
-
-  val channelRepository = TVChannelRepository("tvChannel")
-  val contentRepository = TVContentRepository("tvContent")
+  val channelRepository : TVChannelRepository
+  val contentRepository : TVContentRepository
 
   def index = Action {
     Ok(views.html.index("Your new application is ready."))
