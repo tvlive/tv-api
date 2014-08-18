@@ -20,13 +20,13 @@ class TVContentControllerSpec  extends Specification with TVContentSetUpTest {
 
   "TVContentController" should {
 
-    "return empty all the TV content for a particular channel available today" in {
+    "return empty all the TV content for CHANNEL2 available today" in {
 
-      val programsResult: Future[SimpleResult] = controller.allContent("channel2").apply(FakeRequest())
+      val programsResult: Future[SimpleResult] = controller.allContent("CHANNEL2").apply(FakeRequest())
       status(programsResult) must equalTo(NOT_FOUND)
     }
 
-    "return all the TV content for a particular channel available today" in {
+    "return all the TV content for a channel1 available today" in {
 
       val programResult: Future[SimpleResult] = controller.allContent("channel1").apply(FakeRequest())
       status(programResult) must equalTo(OK)
@@ -40,25 +40,52 @@ class TVContentControllerSpec  extends Specification with TVContentSetUpTest {
       programsInResponse must contain(tvProgram4)
       programsInResponse must contain(tvProgram5)
     }
-    //
-    "return empty the TV content for a particular channel available now" in {
 
-      val programsResult: Future[SimpleResult] = controller.currentContent("channel2").apply(FakeRequest())
+    "return all the TV content for a CHANNEL 3 available today" in {
+
+      val programResult: Future[SimpleResult] = controller.allContent("CHANNEL+3").apply(FakeRequest())
+      status(programResult) must equalTo(OK)
+      contentType(programResult) must beSome.which(_ == "application/json")
+      println(contentAsString(programResult))
+      val programsInResponse = contentAsJson(programResult).as[Seq[TVProgram]]
+      println(programsInResponse)
+      programsInResponse must contain(tvProgram6)
+    }
+
+
+    "return all the TV content for a CHANNEL1 available today" in {
+
+      val programResult: Future[SimpleResult] = controller.allContent("CHANNEL1").apply(FakeRequest())
+      status(programResult) must equalTo(OK)
+      contentType(programResult) must beSome.which(_ == "application/json")
+      println(contentAsString(programResult))
+      val programsInResponse = contentAsJson(programResult).as[Seq[TVProgram]]
+      println(programsInResponse)
+      programsInResponse must contain(tvProgram1)
+      programsInResponse must contain(tvProgram2)
+      programsInResponse must contain(tvProgram3)
+      programsInResponse must contain(tvProgram4)
+      programsInResponse must contain(tvProgram5)
+    }
+    //
+    "return empty the TV content for CHANNEL2 available now" in {
+
+      val programsResult: Future[SimpleResult] = controller.currentContent("CHANNEL2").apply(FakeRequest())
       status(programsResult) must equalTo(NOT_FOUND)
     }
 
-    "return the TV content for a particular channel available now" in {
+    "return the TV content for CHANNEL1 available now" in {
 
-      val programsResult: Future[SimpleResult] = controller.currentContent("channel1").apply(FakeRequest())
+      val programsResult: Future[SimpleResult] = controller.currentContent("CHANNEL1").apply(FakeRequest())
       status(programsResult) must equalTo(OK)
       contentType(programsResult) must beSome.which(_ == "application/json")
       val programsInResponse = contentAsJson(programsResult).as[TVProgram]
       programsInResponse must be_==(tvProgram3)
     }
 
-    "return the TV content for a particular channel available from now until the end of the day" in {
+    "return the TV content for CHANNEL1 available from now until the end of the day" in {
 
-      val programsResult: Future[SimpleResult] = controller.contentLeft("channel1").apply(FakeRequest())
+      val programsResult: Future[SimpleResult] = controller.contentLeft("CHANNEL1").apply(FakeRequest())
       status(programsResult) must equalTo(OK)
       contentType(programsResult) must beSome.which(_ == "application/json")
       val programsInResponse = contentAsJson(programsResult).as[Seq[TVProgram]]
@@ -67,9 +94,9 @@ class TVContentControllerSpec  extends Specification with TVContentSetUpTest {
       programsInResponse must contain(tvProgram5)
     }
 
-    "return empty the TV content for a particular channel available from now until the end of the day" in {
+    "return empty the TV content for CHANNEL2 available from now until the end of the day" in {
 
-      val programsResult: Future[SimpleResult] = controller.contentLeft("channel2").apply(FakeRequest())
+      val programsResult: Future[SimpleResult] = controller.contentLeft("CHANNEL2").apply(FakeRequest())
       status(programsResult) must equalTo(NOT_FOUND)
     }
   }
@@ -86,17 +113,20 @@ trait TVContentSetUpTest {
   programs.drop()
   Thread.sleep(5000)
 
-  val tvProgram1 = TVProgram("channel1", "program1", fakeNow.minusHours(3).toDate.getTime, fakeNow.minusHours(2).toDate.getTime, "program_type1", Some(BSONObjectID.generate))
-  val tvProgram2 = TVProgram("channel1", "program2", fakeNow.minusHours(2).toDate.getTime, fakeNow.minusHours(1).toDate.getTime, "program_type2", Some(BSONObjectID.generate))
-  val tvProgram3 = TVProgram("channel1", "program3", fakeNow.minusHours(1).toDate.getTime, fakeNow.plusHours(1).toDate.getTime, "program_type3", Some(BSONObjectID.generate))
-  val tvProgram4 = TVProgram("channel1", "program4", fakeNow.plusHours(1).toDate.getTime, fakeNow.plusHours(3).toDate.getTime, "program_type4", Some(BSONObjectID.generate))
-  val tvProgram5 = TVProgram("channel1", "program5", fakeNow.plusHours(3).toDate.getTime, fakeNow.plusHours(4).toDate.getTime, "program_type5", Some(BSONObjectID.generate))
+  val tvProgram1 = TVProgram("CHANNEL1", "program1", fakeNow.minusHours(3).toDate.getTime, fakeNow.minusHours(2).toDate.getTime, "program_type1", Some(BSONObjectID.generate))
+  val tvProgram2 = TVProgram("CHANNEL1", "program2", fakeNow.minusHours(2).toDate.getTime, fakeNow.minusHours(1).toDate.getTime, "program_type2", Some(BSONObjectID.generate))
+  val tvProgram3 = TVProgram("CHANNEL1", "program3", fakeNow.minusHours(1).toDate.getTime, fakeNow.plusHours(1).toDate.getTime, "program_type3", Some(BSONObjectID.generate))
+  val tvProgram4 = TVProgram("CHANNEL1", "program4", fakeNow.plusHours(1).toDate.getTime, fakeNow.plusHours(3).toDate.getTime, "program_type4", Some(BSONObjectID.generate))
+  val tvProgram5 = TVProgram("CHANNEL1", "program5", fakeNow.plusHours(3).toDate.getTime, fakeNow.plusHours(4).toDate.getTime, "program_type5", Some(BSONObjectID.generate))
+
+  val tvProgram6 = TVProgram("CHANNEL 3", "program5", fakeNow.plusHours(3).toDate.getTime, fakeNow.plusHours(5).toDate.getTime, "program_type5", Some(BSONObjectID.generate))
 
   val p1 = programs.insert[TVProgram](tvProgram1)
   val p2 = programs.insert[TVProgram](tvProgram2)
   val p3 = programs.insert[TVProgram](tvProgram3)
   val p4 = programs.insert[TVProgram](tvProgram4)
   val p5 = programs.insert[TVProgram](tvProgram5)
+  val p6 = programs.insert[TVProgram](tvProgram6)
 
   val resultPrograms = for {
     c1 <- p1
@@ -104,7 +134,8 @@ trait TVContentSetUpTest {
     c3 <- p3
     c4 <- p4
     c5 <- p5
-  } yield (c1.ok && c2.ok && c3.ok && c4.ok && c5.ok)
+    c6 <- p6
+  } yield (c1.ok && c2.ok && c3.ok && c4.ok && c5.ok && c6.ok)
 
   val isOkPrograms = Await.result(resultPrograms, Duration("20 seconds"))
 

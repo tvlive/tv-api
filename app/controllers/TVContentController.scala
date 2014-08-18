@@ -16,21 +16,21 @@ trait TVContentController extends Controller {
   val contentRepository: TVContentRepository
 
   def currentContent(channelName: String) = Action.async {
-    contentRepository.findCurrentContentByChannel(URLDecoder.decode(channelName, "UTF-8")).map {
+    contentRepository.findCurrentContentByChannel(URLDecoder.decode(channelName, "UTF-8").toUpperCase).map {
       case Some(tvProgram) => Ok(Json.toJson(tvProgram))
       case None => NotFound
     }
   }
 
   def contentLeft(channelName: String) = Action.async {
-    contentRepository.findLeftContentByChannel(URLDecoder.decode(channelName, "UTF-8")).map {
+    contentRepository.findLeftContentByChannel(URLDecoder.decode(channelName, "UTF-8").toUpperCase).map {
       case head :: tail => Ok(Json.toJson(head :: tail))
       case Nil => NotFound
     }
   }
 
   def allContent(channelName: String) = Action.async {
-    contentRepository.findDayContentByChannel(URLDecoder.decode(channelName, "UTF-8")).map {
+    contentRepository.findDayContentByChannel(URLDecoder.decode(channelName, "UTF-8").toUpperCase).map {
       case head :: tail => Ok(Json.toJson(head :: tail))
       case Nil => NotFound
     }
