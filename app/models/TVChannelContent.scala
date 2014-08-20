@@ -9,7 +9,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.Try
 
-case class TVProgram(channelName: String, programName: String, start: Long, end: Long, category: Option[String], flags: Option[String], serie: Option[Serie], program: Program, id: Option[BSONObjectID] = Some(BSONObjectID.generate))
+case class TVProgram(channelName: String, programName: String, start: Long, end: Long, category: Option[String], flags: Option[String], serie: Option[Serie], program: Option[Program], id: Option[BSONObjectID] = Some(BSONObjectID.generate))
 
 case class Serie(serieTitle: String, description: Option[String], seasonNumber: Option[String], episodeNumber: Option[String], totalNumber: Option[String])
 
@@ -68,7 +68,7 @@ object TVProgram {
       (__ \ "category").read[Option[String]] and
       (__ \ "flags").read[Option[String]] and
       (__ \ "serie").read[Option[Serie]] and
-      (__ \ "program").read[Program] and
+      (__ \ "program").read[Option[Program]] and
       (__ \ "id").read[Option[BSONObjectID]]
     )(TVProgram.apply _)
 
@@ -80,7 +80,7 @@ object TVProgram {
       (__ \ "category").write[Option[String]] and
       (__ \ "flags").write[Option[String]] and
       (__ \ "serie").write[Option[Serie]] and
-      (__ \ "program").write[Program] and
+      (__ \ "program").write[Option[Program]] and
       (__ \ "id").write[Option[BSONObjectID]]
     )(unlift(TVProgram.unapply))
 
@@ -95,7 +95,7 @@ object TVProgram {
         doc.getAs[BSONString]("category").map(_.value),
         doc.getAs[BSONString]("flags").map(_.value),
         doc.getAs[BSONDocument]("serie").map(SerieBSONReader.read(_)),
-        ProgramBSONReader.read(doc.getAs[BSONDocument]("program").get),
+        doc.getAs[BSONDocument]("program").map(ProgramBSONReader.read(_)),
         doc.getAs[BSONObjectID]("_id")
       )
     }
@@ -113,7 +113,7 @@ object TVProgram {
         "category" -> t.category,
         "flags" -> t.flags,
         "serie" -> t.serie.map(SerieBSONWriter.write(_)),
-        "program" -> ProgramBSONWriter.write(t.program)
+        "program" -> t.program.map(ProgramBSONWriter.write(_))
       )
     }
   }
