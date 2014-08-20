@@ -15,11 +15,11 @@ class MarshallingTVProgram extends PlaySpec with MustMatchers {
     "transform TVProgram object to json" in {
 
       Json.toJson(TVProgram("bbc1", now, now.plusHours(2), Some("documentary"), Some("flags1"), Some(Serie("serie1", "ep1", None, None, None, None)), Some(Program("program1", None)), Some(id))).toString() mustBe
-        s"""{"channel":"bbc1","start":1412931600000,"end":1412938800000,"category":"documentary","flags":"flags1","serie":{"serieTitle":"serie1","episodeTitle":"ep1","description":null,"seasonNumber":null,"episodeNumber":null,"totalNumber":null},"program":{"title":"program1","description":null},"id":\"$idString\"}"""
+        s"""{"channel":"bbc1","start":${now.getMillis},"end":${now.plusHours(2).getMillis},"category":"documentary","flags":"flags1","serie":{"serieTitle":"serie1","episodeTitle":"ep1","description":null,"seasonNumber":null,"episodeNumber":null,"totalNumber":null},"program":{"title":"program1","description":null},"id":\"$idString\"}"""
     }
 
     "transform json to TVProgram object" in {
-      Json.parse(s"""{"channel":"bbc1","start":1412931600000,"end":1412938800000,"category":"documentary","flags":"flags1","serie":{"serieTitle":"serie1","episodeTitle":"ep1","description":null,"seasonNumber":null,"episodeNumber":null,"totalNumber":null},"program":{"title":"program1","description":null},"id":\"$idString\"}""")
+      Json.parse(s"""{"channel":"bbc1","start":${now.getMillis},"end":${now.plusHours(2).getMillis},"category":"documentary","flags":"flags1","serie":{"serieTitle":"serie1","episodeTitle":"ep1","description":null,"seasonNumber":null,"episodeNumber":null,"totalNumber":null},"program":{"title":"program1","description":null},"id":\"$idString\"}""")
         .as[TVProgram] mustBe TVProgram("bbc1", now, now.plusHours(2), Some("documentary"), Some("flags1"), Some(Serie("serie1", "ep1", None, None, None, None)), Some(Program("program1", None)), Some(id))
     }
   }
