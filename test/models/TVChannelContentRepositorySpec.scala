@@ -18,12 +18,12 @@ class TVChannelContentRepositorySpec extends PlaySpec with MustMatchers with Bef
   val tvContentRepository = new TVContentRepository(collectionName) with FakeTimeProvider
   val collection = tvContentRepository.collection
 
-  val p1 = TVProgram("channel1", "programName1", 0, 1, "documentary")
-  val p2 = TVProgram("channel1", "programName2", 1, 2, "documentary")
-  val p3 = TVProgram("channel1", "programName3", 3, 4, "documentary")
-  val p4 = TVProgram("channel1", "programName4", 4, 5, "documentary")
-  val p5 = TVProgram("channel1", "programName5", 5, 6, "documentary")
-  val p6 = TVProgram("channel1", "programName6", 6, 7, "documentary")
+  val p1 = TVProgram("channel1", "programName1", 0, 1, Some("documentary"), Some("flags1"), Serie("serie1", None, None, None, None), Program("program1", None))
+  val p2 = TVProgram("channel1", "programName2", 1, 2, Some("documentary"), Some("flags1"), Serie("serie1", None, None, None, None), Program("program1", None))
+  val p3 = TVProgram("channel1", "programName3", 3, 4, Some("documentary"), Some("flags1"), Serie("serie1", None, None, None, None), Program("program1", None))
+  val p4 = TVProgram("channel1", "programName4", 4, 5, Some("documentary"), Some("flags1"), Serie("serie1", None, None, None, None), Program("program1", None))
+  val p5 = TVProgram("channel1", "programName5", 5, 6, Some("documentary"), Some("flags1"), Serie("serie1", None, None, None, None), Program("program1", None))
+  val p6 = TVProgram("channel1", "programName6", 6, 7, Some("documentary"), Some("flags1"), Serie("serie1", None, None, None, None), Program("program1", None))
 
 
   before {
@@ -56,6 +56,8 @@ class TVChannelContentRepositorySpec extends PlaySpec with MustMatchers with Bef
 
   after {
     collection.drop()
+
+
   }
 
   "findDayContentByChannel" should {

@@ -1,6 +1,6 @@
 package controllers
 
-import models.{TVProgram, TVContentRepository}
+import models.{Program, Serie, TVProgram, TVContentRepository}
 import org.joda.time.DateTime
 import org.junit.runner._
 import org.specs2.mutable.Specification
@@ -113,13 +113,18 @@ trait TVContentSetUpTest {
   programs.drop()
   Thread.sleep(5000)
 
-  val tvProgram1 = TVProgram("CHANNEL1", "program1", fakeNow.minusHours(3).toDate.getTime, fakeNow.minusHours(2).toDate.getTime, "program_type1", Some(BSONObjectID.generate))
-  val tvProgram2 = TVProgram("CHANNEL1", "program2", fakeNow.minusHours(2).toDate.getTime, fakeNow.minusHours(1).toDate.getTime, "program_type2", Some(BSONObjectID.generate))
-  val tvProgram3 = TVProgram("CHANNEL1", "program3", fakeNow.minusHours(1).toDate.getTime, fakeNow.plusHours(1).toDate.getTime, "program_type3", Some(BSONObjectID.generate))
-  val tvProgram4 = TVProgram("CHANNEL1", "program4", fakeNow.plusHours(1).toDate.getTime, fakeNow.plusHours(3).toDate.getTime, "program_type4", Some(BSONObjectID.generate))
-  val tvProgram5 = TVProgram("CHANNEL1", "program5", fakeNow.plusHours(3).toDate.getTime, fakeNow.plusHours(4).toDate.getTime, "program_type5", Some(BSONObjectID.generate))
-
-  val tvProgram6 = TVProgram("CHANNEL 3", "program5", fakeNow.plusHours(3).toDate.getTime, fakeNow.plusHours(5).toDate.getTime, "program_type5", Some(BSONObjectID.generate))
+  val tvProgram1 = TVProgram("CHANNEL1", "program1", fakeNow.minusHours(3).toDate.getTime, fakeNow.minusHours(2).toDate.getTime, Some("program_type1"),
+    Some("flags1"), Serie("serie1", None, None, None, None), Program("program1", None), Some(BSONObjectID.generate))
+  val tvProgram2 = TVProgram("CHANNEL1", "program2", fakeNow.minusHours(2).toDate.getTime, fakeNow.minusHours(1).toDate.getTime, Some("program_type2"),
+    Some("flags1"), Serie("serie1", None, None, None, None), Program("program1", None), Some(BSONObjectID.generate))
+  val tvProgram3 = TVProgram("CHANNEL1", "program3", fakeNow.minusHours(1).toDate.getTime, fakeNow.plusHours(1).toDate.getTime, Some("program_type3"),
+    Some("flags1"), Serie("serie1", None, None, None, None), Program("program1", None), Some(BSONObjectID.generate))
+  val tvProgram4 = TVProgram("CHANNEL1", "program4", fakeNow.plusHours(1).toDate.getTime, fakeNow.plusHours(3).toDate.getTime, Some("program_type4"),
+    Some("flags1"), Serie("serie1", None, None, None, None), Program("program1", None), Some(BSONObjectID.generate))
+  val tvProgram5 = TVProgram("CHANNEL1", "program5", fakeNow.plusHours(3).toDate.getTime, fakeNow.plusHours(4).toDate.getTime, Some("program_type5"),
+    Some("flags1"), Serie("serie1", None, None, None, None), Program("program1", None), Some(BSONObjectID.generate))
+  val tvProgram6 = TVProgram("CHANNEL 3", "program5", fakeNow.plusHours(3).toDate.getTime, fakeNow.plusHours(5).toDate.getTime, Some("program_type5"),
+    Some("flags1"), Serie("serie1", None, None, None, None), Program("program1", None), Some(BSONObjectID.generate))
 
   val p1 = programs.insert[TVProgram](tvProgram1)
   val p2 = programs.insert[TVProgram](tvProgram2)
