@@ -11,7 +11,7 @@ import scala.concurrent.duration.Duration
 
 class TVChannelContentRepositorySpec extends PlaySpec with MustMatchers with BeforeAndAfter {
 
-  val current = new DateTime(2010,10,10,4,0,0)
+  val current = new DateTime(2010,10,10,10,0,0)
   trait FakeTimeProvider extends TimeProvider {
     override def currentDate() = current
   }
@@ -20,12 +20,12 @@ class TVChannelContentRepositorySpec extends PlaySpec with MustMatchers with Bef
   val tvContentRepository = new TVContentRepository(collectionName) with FakeTimeProvider
   val collection = tvContentRepository.collection
 
-  val p1 = TVProgram("channel1", "programName1", current.minusHours(4), current.minusHours(2), Some("documentary"), Some("flags1"), Some(Serie("serie1", None, None, None, None)), Some(Program("program1", None)))
-  val p2 = TVProgram("channel1", "programName2", current.minusHours(2), current, Some("documentary"), Some("flags1"), Some(Serie("serie1", None, None, None, None)), Some(Program("program1", None)))
-  val p3 = TVProgram("channel1", "programName3", current, current.plusHours(1), Some("documentary"), Some("flags1"), Some(Serie("serie1", None, None, None, None)), Some(Program("program1", None)))
-  val p4 = TVProgram("channel1", "programName4", current.plusHours(1), current.plusHours(3), Some("documentary"), Some("flags1"), Some(Serie("serie1", None, None, None, None)), Some(Program("program1", None)))
-  val p5 = TVProgram("channel1", "programName5", current.plusHours(3), current.plusHours(5), Some("documentary"), Some("flags1"), Some(Serie("serie1", None, None, None, None)), Some(Program("program1", None)))
-  val p6 = TVProgram("channel1", "programName6", current.plusHours(5), current.plusHours(7), Some("documentary"), Some("flags1"), Some(Serie("serie1", None, None, None, None)), Some(Program("program1", None)))
+  val p1 = TVProgram("channel1", current.minusHours(4), current.minusHours(2), Some("documentary"), Some("flags1"), Some(Serie("serie1", "ep1", None, None, None, None)), Some(Program("program1", None)))
+  val p2 = TVProgram("channel1", current.minusHours(2), current, Some("documentary"), Some("flags1"), Some(Serie("serie2", "ep1", None, None, None, None)), Some(Program("program1", None)))
+  val p3 = TVProgram("channel1", current, current.plusHours(1), Some("documentary"), Some("flags1"), Some(Serie("serie3", "ep1", None, None, None, None)), Some(Program("program1", None)))
+  val p4 = TVProgram("channel1", current.plusHours(1), current.plusHours(3), Some("documentary"), Some("flags1"), Some(Serie("serie4", "ep1", None, None, None, None)), Some(Program("program1", None)))
+  val p5 = TVProgram("channel1", current.plusHours(3), current.plusHours(5), Some("documentary"), Some("flags1"), Some(Serie("serie5", "ep1", None, None, None, None)), Some(Program("program1", None)))
+  val p6 = TVProgram("channel1", current.plusHours(5), current.plusHours(7), Some("documentary"), Some("flags1"), Some(Serie("serie6", "ep1", None, None, None, None)), Some(Program("program1", None)))
 
 
   before {
