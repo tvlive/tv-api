@@ -1,7 +1,6 @@
 package models
 
 import _root_.utils.TimeProvider
-import org.joda.time.DateTime
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import reactivemongo.bson._
@@ -10,7 +9,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.Try
 
-case class TVProgram(channelName: String, programName: String, start: DateTime, end: DateTime, category: Option[String], flags: Option[String], serie: Option[Serie], program: Option[Program], id: Option[BSONObjectID] = Some(BSONObjectID.generate))
+case class TVProgram(channelName: String, programName: String, start: Long, end: Long, category: Option[String], flags: Option[String], serie: Option[Serie], program: Option[Program], id: Option[BSONObjectID] = Some(BSONObjectID.generate))
 
 case class Serie(serieTitle: String, description: Option[String], seasonNumber: Option[String], episodeNumber: Option[String], totalNumber: Option[String])
 
@@ -64,8 +63,8 @@ object TVProgram {
   implicit val tvProgramReads: Reads[TVProgram] = (
     (__ \ "channelName").read[String] and
       (__ \ "programName").read[String] and
-      (__ \ "start").read[DateTime] and
-      (__ \ "end").read[DateTime] and
+      (__ \ "start").read[Long] and
+      (__ \ "end").read[Long] and
       (__ \ "category").read[Option[String]] and
       (__ \ "flags").read[Option[String]] and
       (__ \ "serie").read[Option[Serie]] and
@@ -76,8 +75,8 @@ object TVProgram {
   implicit val tvProgramWrites: Writes[TVProgram] = (
     (__ \ "channelName").write[String] and
       (__ \ "programName").write[String] and
-      (__ \ "start").write[DateTime] and
-      (__ \ "end").write[DateTime] and
+      (__ \ "start").write[Long] and
+      (__ \ "end").write[Long] and
       (__ \ "category").write[Option[String]] and
       (__ \ "flags").write[Option[String]] and
       (__ \ "serie").write[Option[Serie]] and
@@ -91,8 +90,8 @@ object TVProgram {
       TVProgram(
         doc.getAs[BSONString]("channelName").get.value,
         doc.getAs[BSONString]("programName").get.value,
-        new DateTime(doc.getAs[BSONDateTime]("start").get.value),
-        new DateTime(doc.getAs[BSONDateTime]("end").get.value),
+        doc.getAs[BSONLong]("start").get.value,
+        doc.getAs[BSONLong]("end").get.value,
         doc.getAs[BSONString]("category").map(_.value),
         doc.getAs[BSONString]("flags").map(_.value),
         doc.getAs[BSONDocument]("serie").map(SerieBSONReader.read(_)),
@@ -109,8 +108,8 @@ object TVProgram {
         "_id" -> t.id.getOrElse(BSONObjectID.generate),
         "channelName" -> t.channelName,
         "programName" -> t.programName,
-        "start" -> new BSONDateTime(t.start.getMillis),
-        "end" -> new BSONDateTime(t.end.getMillis),
+        "start" -> t.start,
+        "end" -> t.end,
         "category" -> t.category,
         "flags" -> t.flags,
         "serie" -> t.serie.map(SerieBSONWriter.write(_)),
@@ -194,20 +193,19 @@ class TVContentRepository(name: String) extends ContentRepository with Connectio
     val query = BSONDocument(
       "$query" -> BSONDocument(
         "channelName" -> channelName,
-        "start" -> BSONDocument("$lte" -> BSONDateTime(now.getMillis)),
-        "end" -> BSONDocument("$gt" -> BSONDateTime(now.getMillis))))
+        "start" -> BSONDocument("$lte" -> now),
+        "end" -> BSONDocument("$gte" -> now)))
 
     collection.find(query).one[TVProgram]
 
   }
 
   override def findLeftContentByChannel(channelName: String): Future[Seq[TVProgram]] = {
-    val now = currentDate()
     val query = BSONDocument(
       "$orderby" -> BSONDocument("start" -> 1),
       "$query" -> BSONDocument(
         "channelName" -> channelName,
-        "end" -> BSONDocument("$gt" -> BSONDateTime(now.getMillis))))
+        "end" -> BSONDocument("$gte" -> currentDate())))
 
     val found = collection.find(query).cursor[TVProgram]
     found.collect[Seq]()

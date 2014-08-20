@@ -1,9 +1,9 @@
 package utils
 
-import org.joda.time.DateTime
+import java.util.Date
 
 trait TimeProvider {
 
-  def currentDate() = new DateTime()
+  def currentDate() = new Date().getTime
 
 }
