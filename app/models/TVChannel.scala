@@ -1,5 +1,7 @@
 package models
 
+import java.net.URLEncoder
+
 import reactivemongo.bson._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -7,7 +9,11 @@ import scala.concurrent.Future
 import scala.util.Try
 
 
-case class TVChannel(name: String, language: String, id: Option[BSONObjectID] = Some(BSONObjectID.generate))
+case class TVChannel(name: String, language: String, id: Option[BSONObjectID] = Some(BSONObjectID.generate)) {
+  val uriToday: String = controllers.routes.TVContentController.allContent(URLEncoder.encode(name, "UTF-8")).url
+  val uriCurrent: String = controllers.routes.TVContentController.currentContent(URLEncoder.encode(name, "UTF-8")).url
+  val uriLeft: String = controllers.routes.TVContentController.contentLeft(URLEncoder.encode(name,"UTF-8")).url
+}
 
 object TVChannel {
 
@@ -34,11 +40,16 @@ object TVChannel {
       (__ \ "id").read[Option[BSONObjectID]]
     )(TVChannel.apply _)
 
-  implicit val reviewWrites: Writes[TVChannel] = (
-    (__ \ "name").write[String] and
-      (__ \ "language").write[String] and
-      (__ \ "id").write[Option[BSONObjectID]]
-    )(unlift(TVChannel.unapply))
+  implicit val tvChannelWrites = new Writes[TVChannel] {
+    override def writes(tvchannel: TVChannel): JsValue = Json.obj(
+      "name" -> tvchannel.name,
+      "language" -> tvchannel.language,
+      "id" -> tvchannel.id,
+      "uriToday" -> tvchannel.uriToday,
+      "uriCurrent" -> tvchannel.uriCurrent,
+      "uriLeft" -> tvchannel.uriLeft
+    )
+  }
 
 
   implicit object TVChannelBSONReader extends BSONDocumentReader[TVChannel] {
