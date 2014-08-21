@@ -22,7 +22,7 @@ def channel(name, language):
 
 def content(channel, category, start, end):
     content = {}
-    content['channelName'] = channel
+    content['channel'] = channel
     content['category'] = category
     content['serie'] = {}
     content['serie']['episodeNumber'] = "1"
