@@ -31,7 +31,9 @@ trait TVContentController extends Controller {
 
   def allContent(channelName: String) = Action.async {
     contentRepository.findDayContentByChannel(URLDecoder.decode(channelName, "UTF-8").toUpperCase).map {
-      case head :: tail => Ok(Json.toJson(head :: tail))
+      case head :: tail => {
+        Ok(Json.toJson(head :: tail))
+      }
       case Nil => NotFound
     }
   }

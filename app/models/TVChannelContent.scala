@@ -57,6 +57,7 @@ object TVProgram {
       (__ \ "totalNumber").read[Option[String]]
     )(Serie.apply _)
 
+
   implicit val serieWrites: Writes[Serie] = (
     (__ \ "serieTitle").write[String] and
       (__ \ "episodeTitle").write[String] and
@@ -66,16 +67,22 @@ object TVProgram {
       (__ \ "totalNumber").write[Option[String]]
     )(unlift(Serie.unapply))
 
-    implicit val tvProgramReads: Reads[TVProgram] = (
-      (__ \ "channel").read[String] and
-        (__ \ "start").read[DateTime] and
-        (__ \ "end").read[DateTime] and
-        (__ \ "category").read[Option[String]] and
-        (__ \ "flags").read[Option[String]] and
-        (__ \ "series").read[Option[Serie]] and
-        (__ \ "program").read[Option[Program]] and
-        (__ \ "id").read[Option[BSONObjectID]]
-      )(TVProgram.apply _)
+  val pattern = "yyyy-MM-dd'T'HH:mm:ss"
+
+  implicit val dateFormat = Format[DateTime](
+    Reads.jodaDateReads(pattern),
+    Writes.jodaDateWrites(pattern))
+
+  implicit val tvProgramReads: Reads[TVProgram] = (
+    (__ \ "channel").read[String] and
+      (__ \ "start").read[DateTime] and
+      (__ \ "end").read[DateTime] and
+      (__ \ "category").read[Option[String]] and
+      (__ \ "flags").read[Option[String]] and
+      (__ \ "series").read[Option[Serie]] and
+      (__ \ "program").read[Option[Program]] and
+      (__ \ "id").read[Option[BSONObjectID]]
+    )(TVProgram.apply _)
 
 
   implicit val tvProgramWrites = new Writes[TVProgram] {
