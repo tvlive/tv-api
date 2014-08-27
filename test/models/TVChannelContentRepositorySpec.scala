@@ -3,6 +3,7 @@ package models
 import org.joda.time.DateTime
 import org.scalatest.{BeforeAndAfter, MustMatchers}
 import org.scalatestplus.play.PlaySpec
+import reactivemongo.bson.BSONObjectID
 import utils.TimeProvider
 
 import scala.concurrent.Await
@@ -82,6 +83,20 @@ class TVChannelContentRepositorySpec extends PlaySpec with MustMatchers with Bef
       val content = tvContentRepository.findLeftContentByChannel("channel1")
       val result = Await.result(content, Duration("10 seconds"))
       result mustBe Seq(p3, p4, p5, p6)
+    }
+  }
+
+  "findContentByID" should {
+    "return some TV Content for a particular ID" in {
+      val content = tvContentRepository.findContentByID(p1.id.get.stringify)
+      val result = Await.result(content, Duration("10 seconds"))
+      result.get mustBe p1
+    }
+
+    "return none TV Content for a particular ID" in {
+      val content = tvContentRepository.findContentByID(BSONObjectID.generate.stringify)
+      val result = Await.result(content, Duration("10 seconds"))
+      result mustBe None
     }
   }
 }

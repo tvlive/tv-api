@@ -5,6 +5,7 @@ import java.net.URLDecoder
 import models.TVContentRepository
 import play.api.libs.json.Json
 import play.api.mvc.{Action, Controller}
+
 import scala.concurrent.ExecutionContext.Implicits.global
 
 
@@ -35,6 +36,13 @@ trait TVContentController extends Controller {
         Ok(Json.toJson(head :: tail))
       }
       case Nil => NotFound
+    }
+  }
+
+  def tvContentDetails(tvContentID: String) = Action.async {
+    contentRepository.findContentByID(tvContentID).map {
+      case Some(tvProgram) => Ok(Json.toJson(tvProgram))
+      case None => NotFound
     }
   }
 }

@@ -186,6 +186,8 @@ trait ContentRepository {
 
   def findCurrentContentByChannel(channelName: String): Future[Option[TVProgram]] = ???
 
+  def findContentByID(contentID: String): Future[Option[TVProgram]] = ???
+
 }
 
 class TVContentRepository(name: String) extends ContentRepository with Connection with TimeProvider {
@@ -223,6 +225,14 @@ class TVContentRepository(name: String) extends ContentRepository with Connectio
 
     val found = collection.find(query).cursor[TVProgram]
     found.collect[Seq]()
+  }
+
+  override def findContentByID(contentID: String): Future[Option[TVProgram]] = {
+    val query = BSONDocument(
+      "$query" -> BSONDocument(
+        "_id" -> BSONObjectID(contentID)))
+
+    collection.find(query).one[TVProgram]
   }
 }
 

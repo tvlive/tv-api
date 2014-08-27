@@ -20,7 +20,7 @@ class TVContentControllerSpec  extends Specification with TVContentSetUpTest {
 
   "TVContentController" should {
 
-    "return empty all the TV content for CHANNEL2 available today" in {
+    "return NOT_FOUND if there is no TV content for CHANNEL2 available today" in {
 
       val programsResult: Future[SimpleResult] = controller.allContent("CHANNEL2").apply(FakeRequest())
       status(programsResult) must equalTo(NOT_FOUND)
@@ -68,7 +68,7 @@ class TVContentControllerSpec  extends Specification with TVContentSetUpTest {
       programsInResponse must contain(tvProgram5)
     }
     //
-    "return empty the TV content for CHANNEL2 available now" in {
+    "return NOT_FOUND if there is no TV content for CHANNEL2 available now" in {
 
       val programsResult: Future[SimpleResult] = controller.currentContent("CHANNEL2").apply(FakeRequest())
       status(programsResult) must equalTo(NOT_FOUND)
@@ -94,10 +94,24 @@ class TVContentControllerSpec  extends Specification with TVContentSetUpTest {
       programsInResponse must contain(tvProgram5)
     }
 
-    "return empty the TV content for CHANNEL2 available from now until the end of the day" in {
+    "return NOT_FOUND if there is no TV content for CHANNEL2 available from now until the end of the day" in {
 
       val programsResult: Future[SimpleResult] = controller.contentLeft("CHANNEL2").apply(FakeRequest())
       status(programsResult) must equalTo(NOT_FOUND)
+    }
+
+    "return TV content details for a specific TV Content ID" in {
+
+      val programResult: Future[SimpleResult] = controller.tvContentDetails(tvProgram1.id.get.stringify).apply(FakeRequest())
+      status(programResult) must equalTo(OK)
+      val programInResponse = contentAsJson(programResult).as[TVProgram]
+      programInResponse must be_==(tvProgram1)
+    }
+
+    "return NOT_FOUND if there is no TV content details for a specific TV Content ID" in {
+
+      val programResult: Future[SimpleResult] = controller.tvContentDetails(BSONObjectID.generate.stringify).apply(FakeRequest())
+      status(programResult) must equalTo(NOT_FOUND)
     }
   }
 }
