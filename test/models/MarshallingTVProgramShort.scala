@@ -17,12 +17,13 @@ class MarshallingTVProgramShort extends PlaySpec with MustMatchers {
     import TVProgram.{tvProgramShortWrites, tvProgramShortReads}
 
     "transform TVProgram object to json" in {
-      Json.toJson(TVProgramShort("bbc1", now, now.plusHours(2), Some("documentary"), Some(id))).toString() mustBe
-        s"""{"channel":"bbc1","start":"${fmt.print(now)}","end":"${fmt.print(now.plusHours(2))}","category":"documentary","id":"$idString"}"""
+      println("---" + Json.toJson(TVProgramShort("bbc1", now, now.plusHours(2), Some("documentary"), Some(SerieShort("titleSerie")), Some(ProgramShort("titleProgram")), Some(id))).toString())
+      Json.toJson(TVProgramShort("bbc1", now, now.plusHours(2), Some("documentary"), Some(SerieShort("titleSerie")), Some(ProgramShort("titleProgram")), Some(id))).toString() mustBe
+        s"""{"channel":"bbc1","start":"${fmt.print(now)}","end":"${fmt.print(now.plusHours(2))}","category":"documentary","series":{"serieTitle":"titleSerie"},"program":{"title":"titleProgram"},"uriTVProgramDetails":"/tvprogram/$idString","id":"$idString"}"""
     }
     "transform json to TVProgram object" in {
-      Json.parse(s"""{"channel":"bbc1","start":"${fmt.print(now)}","end":"${fmt.print(now.plusHours(2))}","category":"documentary","id":"$idString"}""")
-        .as[TVProgramShort] mustBe TVProgramShort("bbc1", now, now.plusHours(2), Some("documentary"), Some(id))
+      Json.parse(s"""{"channel":"bbc1","start":"${fmt.print(now)}","end":"${fmt.print(now.plusHours(2))}","category":"documentary","series":{"serieTitle":"titleSerie"},"program":{"title":"titleProgram"},"uriTVProgramDetails":"/tvprogram/$idString","id":"$idString"}""")
+        .as[TVProgramShort] mustBe TVProgramShort("bbc1", now, now.plusHours(2), Some("documentary"), Some(SerieShort("titleSerie")), Some(ProgramShort("titleProgram")), Some(id))
     }
   }
 }

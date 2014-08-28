@@ -67,12 +67,12 @@ class TVChannelContentRepositorySpec extends PlaySpec with MustMatchers with Bef
       val content = tvContentRepository.findDayContentByChannel("channel1")
       val result = Await.result(content, Duration("10 seconds"))
       result mustBe Seq(
-        TVProgramShort(p1.channel, p1.startTime, p1.endTime, p1.category, p1.id),
-        TVProgramShort(p2.channel, p2.startTime, p2.endTime, p2.category, p2.id),
-        TVProgramShort(p3.channel, p3.startTime, p3.endTime, p3.category, p3.id),
-        TVProgramShort(p4.channel, p4.startTime, p4.endTime, p4.category, p4.id),
-        TVProgramShort(p5.channel, p5.startTime, p5.endTime, p5.category, p5.id),
-        TVProgramShort(p6.channel, p6.startTime, p6.endTime, p6.category, p6.id)
+        TVShort(p1),
+        TVShort(p2),
+        TVShort(p3),
+        TVShort(p4),
+        TVShort(p5),
+        TVShort(p6)
       )
 
     }
@@ -92,10 +92,10 @@ class TVChannelContentRepositorySpec extends PlaySpec with MustMatchers with Bef
       val content = tvContentRepository.findLeftContentByChannel("channel1")
       val result = Await.result(content, Duration("10 seconds"))
       result mustBe Seq(
-        TVProgramShort(p3.channel, p3.startTime, p3.endTime, p3.category, p3.id),
-        TVProgramShort(p4.channel, p4.startTime, p4.endTime, p4.category, p4.id),
-        TVProgramShort(p5.channel, p5.startTime, p5.endTime, p5.category, p5.id),
-        TVProgramShort(p6.channel, p6.startTime, p6.endTime, p6.category, p6.id))
+        TVShort(p3),
+        TVShort(p4),
+        TVShort(p5),
+        TVShort(p6))
     }
   }
 

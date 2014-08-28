@@ -13,16 +13,21 @@ import scala.util.Try
 case class TVProgram(channel: String, startTime: DateTime, endTime: DateTime, category: Option[String],
                      flags: Option[String], serie: Option[Serie], program: Option[Program], id: Option[BSONObjectID] = Some(BSONObjectID.generate))
 
-case class TVProgramShort(channel: String, startTime: DateTime, endTime: DateTime, category: Option[String], id: Option[BSONObjectID] = Some(BSONObjectID.generate)) {
+case class TVProgramShort(channel: String, startTime: DateTime, endTime: DateTime, category: Option[String], series: Option[SerieShort], program: Option[ProgramShort], id: Option[BSONObjectID] = Some(BSONObjectID.generate)) {
   val uriTVProgramDetails = controllers.routes.TVContentController.tvContentDetails(id.get.stringify).toString()
 }
 
+
+object TVShort {
+  def apply(tvProgram: TVProgram): TVProgramShort = TVProgramShort(tvProgram.channel, tvProgram.startTime, tvProgram.endTime, tvProgram.category, tvProgram.serie.map(s => SerieShort(s.serieTitle)),
+  tvProgram.program.map(p => ProgramShort(p.title)), tvProgram.id)
+}
 
 case class Serie(serieTitle: String, episodeTitle: String, description: Option[String], seasonNumber: Option[String], episodeNumber: Option[String], totalNumber: Option[String])
 
 case class Program(title: String, description: Option[String])
 
-case class SerieShort(serieTitle: String, aaa: String)
+case class SerieShort(serieTitle: String)
 
 case class ProgramShort(title: String)
 
@@ -106,11 +111,19 @@ object TVProgram {
     )
   }
 
+  implicit val programShortReads = Json.reads[ProgramShort]
+  implicit val seriesShortReads = Json.reads[SerieShort]
+
+  implicit val programShortWrites = Json.writes[ProgramShort]
+  implicit val seriesShortWrites = Json.writes[SerieShort]
+
   implicit val tvProgramShortReads: Reads[TVProgramShort] = (
     (__ \ "channel").read[String] and
       (__ \ "start").read[DateTime] and
       (__ \ "end").read[DateTime] and
       (__ \ "category").read[Option[String]] and
+      (__ \ "series").read[Option[SerieShort]] and
+      (__ \ "program").read[Option[ProgramShort]] and
       (__ \ "id").read[Option[BSONObjectID]]
     )(TVProgramShort.apply _)
 
@@ -121,6 +134,9 @@ object TVProgram {
       "start" -> tvprogram.startTime,
       "end" -> tvprogram.endTime,
       "category" -> tvprogram.category,
+      "series" -> tvprogram.series,
+      "program" -> tvprogram.program,
+      "uriTVProgramDetails" -> tvprogram.uriTVProgramDetails,
       "id" -> tvprogram.id
     )
   }
@@ -147,6 +163,8 @@ object TVProgram {
         new DateTime(doc.getAs[BSONDateTime]("startTime").get.value),
         new DateTime(doc.getAs[BSONDateTime]("endTime").get.value),
         doc.getAs[BSONString]("category").map(_.value),
+        doc.getAs[BSONDocument]("serie").map(SerieShortBSONReader.read(_)),
+        doc.getAs[BSONDocument]("program").map(ProgramShortBSONReader.read(_)),
         doc.getAs[BSONObjectID]("_id")
       )
     }
@@ -207,6 +225,23 @@ object TVProgram {
     }
   }
 
+  implicit object SerieShortBSONReader extends BSONDocumentReader[SerieShort] {
+    def read(doc: BSONDocument): SerieShort = {
+      SerieShort(
+        doc.getAs[BSONString]("serieTitle").get.value
+      )
+    }
+  }
+
+
+  implicit object SerieShortBSONWriter extends BSONDocumentWriter[SerieShort] {
+    override def write(t: SerieShort): BSONDocument = {
+      BSONDocument(
+        "serieTitle" -> t.serieTitle
+      )
+    }
+  }
+
   implicit object ProgramBSONReader extends BSONDocumentReader[Program] {
     def read(doc: BSONDocument): Program = {
       Program(
@@ -225,6 +260,24 @@ object TVProgram {
       )
     }
   }
+
+  implicit object ProgramShortBSONReader extends BSONDocumentReader[ProgramShort] {
+    def read(doc: BSONDocument): ProgramShort = {
+      ProgramShort(
+        doc.getAs[BSONString]("title").get.value
+      )
+    }
+  }
+
+
+  implicit object ProgramShortBSONWriter extends BSONDocumentWriter[ProgramShort] {
+    override def write(t: ProgramShort): BSONDocument = {
+      BSONDocument(
+        "title" -> t.title
+      )
+    }
+  }
+
 
 }
 

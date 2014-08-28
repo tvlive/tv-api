@@ -35,16 +35,12 @@ class TVContentControllerSpec extends Specification with TVContentSetUpTest {
       contentType(programResult) must beSome.which(_ == "application/json")
       println(contentAsString(programResult))
       val programsInResponse = contentAsJson(programResult).as[Seq[TVProgramShort]]
-      programsInResponse must contain(TVProgramShort(
-        tvProgram1.channel, tvProgram1.startTime, tvProgram1.endTime, tvProgram1.category, tvProgram1.id))
-      programsInResponse must contain(TVProgramShort(
-        tvProgram2.channel, tvProgram2.startTime, tvProgram2.endTime, tvProgram2.category, tvProgram2.id))
-        programsInResponse must contain (TVProgramShort(
-        tvProgram3.channel, tvProgram3.startTime, tvProgram3.endTime, tvProgram3.category, tvProgram3.id))
-        programsInResponse must contain (TVProgramShort(
-        tvProgram4.channel, tvProgram4.startTime, tvProgram4.endTime, tvProgram4.category, tvProgram4.id))
-        programsInResponse must contain (TVProgramShort(
-        tvProgram5.channel, tvProgram5.startTime, tvProgram5.endTime, tvProgram5.category, tvProgram5.id))
+      programsInResponse must contain(TVShort(tvProgram1))
+      programsInResponse must contain(TVShort(tvProgram2))
+      programsInResponse must contain(TVShort(tvProgram3))
+      programsInResponse must contain(TVShort(tvProgram4))
+      programsInResponse must contain(TVShort(tvProgram5))
+
     }
 
     "return all the TV content for a CHANNEL 3 available today" in {
@@ -57,8 +53,7 @@ class TVContentControllerSpec extends Specification with TVContentSetUpTest {
       println(contentAsString(programResult))
       val programsInResponse = contentAsJson(programResult).as[Seq[TVProgramShort]]
       println(programsInResponse)
-      programsInResponse must contain (TVProgramShort(
-        tvProgram6.channel, tvProgram6.startTime, tvProgram6.endTime, tvProgram6.category, tvProgram6.id))
+      programsInResponse must contain (TVShort(tvProgram6))
     }
 
 
@@ -71,16 +66,11 @@ class TVContentControllerSpec extends Specification with TVContentSetUpTest {
       contentType(programResult) must beSome.which(_ == "application/json")
       println(contentAsString(programResult))
       val programsInResponse = contentAsJson(programResult).as[Seq[TVProgramShort]]
-      programsInResponse must contain(TVProgramShort(
-        tvProgram1.channel, tvProgram1.startTime, tvProgram1.endTime, tvProgram1.category, tvProgram1.id))
-      programsInResponse must contain(TVProgramShort(
-        tvProgram2.channel, tvProgram2.startTime, tvProgram2.endTime, tvProgram2.category, tvProgram2.id))
-      programsInResponse must contain (TVProgramShort(
-        tvProgram3.channel, tvProgram3.startTime, tvProgram3.endTime, tvProgram3.category, tvProgram3.id))
-      programsInResponse must contain (TVProgramShort(
-        tvProgram4.channel, tvProgram4.startTime, tvProgram4.endTime, tvProgram4.category, tvProgram4.id))
-      programsInResponse must contain (TVProgramShort(
-        tvProgram5.channel, tvProgram5.startTime, tvProgram5.endTime, tvProgram5.category, tvProgram5.id))
+      programsInResponse must contain(TVShort(tvProgram1))
+      programsInResponse must contain(TVShort(tvProgram2))
+      programsInResponse must contain(TVShort(tvProgram3))
+      programsInResponse must contain(TVShort(tvProgram4))
+      programsInResponse must contain(TVShort(tvProgram5))
     }
     //
     "return NOT_FOUND if there is no TV content for CHANNEL2 available now" in {
@@ -106,12 +96,9 @@ class TVContentControllerSpec extends Specification with TVContentSetUpTest {
       status(programsResult) must equalTo(OK)
       contentType(programsResult) must beSome.which(_ == "application/json")
       val programsInResponse = contentAsJson(programsResult).as[Seq[TVProgramShort]]
-      programsInResponse must contain (TVProgramShort(
-        tvProgram3.channel, tvProgram3.startTime, tvProgram3.endTime, tvProgram3.category, tvProgram3.id))
-      programsInResponse must contain (TVProgramShort(
-        tvProgram4.channel, tvProgram4.startTime, tvProgram4.endTime, tvProgram4.category, tvProgram4.id))
-      programsInResponse must contain (TVProgramShort(
-        tvProgram5.channel, tvProgram5.startTime, tvProgram5.endTime, tvProgram5.category, tvProgram5.id))
+      programsInResponse must contain (TVShort(tvProgram3))
+      programsInResponse must contain (TVShort(tvProgram4))
+      programsInResponse must contain (TVShort(tvProgram5))
 
     }
 
