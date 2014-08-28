@@ -13,7 +13,9 @@ import scala.util.Try
 case class TVProgram(channel: String, startTime: DateTime, endTime: DateTime, category: Option[String],
                      flags: Option[String], serie: Option[Serie], program: Option[Program], id: Option[BSONObjectID] = Some(BSONObjectID.generate))
 
-case class TVProgramShort(channel: String, startTime: DateTime, endTime: DateTime, category: Option[String], id: Option[BSONObjectID] = Some(BSONObjectID.generate))
+case class TVProgramShort(channel: String, startTime: DateTime, endTime: DateTime, category: Option[String], id: Option[BSONObjectID] = Some(BSONObjectID.generate)) {
+  val uriTVProgramDetails = controllers.routes.TVContentController.tvContentDetails(id.get.stringify).toString()
+}
 
 
 case class Serie(serieTitle: String, episodeTitle: String, description: Option[String], seasonNumber: Option[String], episodeNumber: Option[String], totalNumber: Option[String])
