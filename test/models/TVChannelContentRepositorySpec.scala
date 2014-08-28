@@ -59,13 +59,22 @@ class TVChannelContentRepositorySpec extends PlaySpec with MustMatchers with Bef
 
   after {
     collection.drop()
+    Thread.sleep(5000)
   }
 
   "findDayContentByChannel" should {
     "return all the TV content for a particular channel available today" in {
       val content = tvContentRepository.findDayContentByChannel("channel1")
       val result = Await.result(content, Duration("10 seconds"))
-      result mustBe Seq(p1, p2, p3, p4, p5, p6)
+      result mustBe Seq(
+        TVProgramShort(p1.channel, p1.startTime, p1.endTime, p1.category, p1.id),
+        TVProgramShort(p2.channel, p2.startTime, p2.endTime, p2.category, p2.id),
+        TVProgramShort(p3.channel, p3.startTime, p3.endTime, p3.category, p3.id),
+        TVProgramShort(p4.channel, p4.startTime, p4.endTime, p4.category, p4.id),
+        TVProgramShort(p5.channel, p5.startTime, p5.endTime, p5.category, p5.id),
+        TVProgramShort(p6.channel, p6.startTime, p6.endTime, p6.category, p6.id)
+      )
+
     }
   }
 
@@ -82,7 +91,11 @@ class TVChannelContentRepositorySpec extends PlaySpec with MustMatchers with Bef
     "return the TV content for a particular channel available from now until the end of the day" in {
       val content = tvContentRepository.findLeftContentByChannel("channel1")
       val result = Await.result(content, Duration("10 seconds"))
-      result mustBe Seq(p3, p4, p5, p6)
+      result mustBe Seq(
+        TVProgramShort(p3.channel, p3.startTime, p3.endTime, p3.category, p3.id),
+        TVProgramShort(p4.channel, p4.startTime, p4.endTime, p4.category, p4.id),
+        TVProgramShort(p5.channel, p5.startTime, p5.endTime, p5.category, p5.id),
+        TVProgramShort(p6.channel, p6.startTime, p6.endTime, p6.category, p6.id))
     }
   }
 
