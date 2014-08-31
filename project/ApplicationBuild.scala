@@ -4,7 +4,7 @@ import scala.util.Properties._
 object ApplicationBuild extends Build {
 
   val appName = "surfersTV"
-  val appVersion = envOrElse("FREEAPI_VIEW_VERSION", "999-SNAPSHOT")
+  val appVersion = envOrElse("TV_API_VIEW_VERSION", "999-SNAPSHOT")
 
   val appDependencies = Seq(
     "org.reactivemongo" %% "reactivemongo" % "0.10.0",
