@@ -9,9 +9,7 @@ import play.api.libs.iteratee.Enumerator
 import reactivemongo.bson.BSONObjectID
 import utils.TimeProvider
 
-import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration.Duration
 
 class TVChannelContentRepositorySpec extends PlaySpec with MustMatchers with BeforeAndAfter with ScalaFutures {
 
@@ -50,43 +48,41 @@ class TVChannelContentRepositorySpec extends PlaySpec with MustMatchers with Bef
 
   "findDayContentByChannel" should {
     "return all the TV content for a particular channel available today" in {
-      val content = tvContentRepository.findDayContentByChannel("channel1")
-      val result = Await.result(content, Duration("10 seconds"))
-      result mustBe Seq(TVShort(p1), TVShort(p2), TVShort(p3), TVShort(p4),
-        TVShort(p5), TVShort(p6)
-      )
-
+      whenReady(tvContentRepository.findDayContentByChannel("channel1")) {
+        _ mustBe Seq(TVShort(p1), TVShort(p2), TVShort(p3), TVShort(p4),
+          TVShort(p5), TVShort(p6))
+      }
     }
   }
 
   "findCurrentContentByChannel" should {
     "return the TV content for a particular channel available now" in {
 
-      val content = tvContentRepository.findCurrentContentByChannel("channel1")
-      val result = Await.result(content, Duration("10 seconds"))
-      result mustBe Some(p3)
+      whenReady(tvContentRepository.findCurrentContentByChannel("channel1")){
+        _ mustBe Some(p3)
+      }
     }
   }
 
   "findLeftContentByChannel" should {
     "return the TV content for a particular channel available from now until the end of the day" in {
-      val content = tvContentRepository.findLeftContentByChannel("channel1")
-      val result = Await.result(content, Duration("10 seconds"))
-      result mustBe Seq(TVShort(p3), TVShort(p4), TVShort(p5), TVShort(p6))
+      whenReady(tvContentRepository.findLeftContentByChannel("channel1")){
+        _ mustBe Seq(TVShort(p3), TVShort(p4), TVShort(p5), TVShort(p6))
+      }
     }
   }
 
   "findContentByID" should {
     "return some TV Content for a particular ID" in {
-      val content = tvContentRepository.findContentByID(p1.id.get.stringify)
-      val result = Await.result(content, Duration("10 seconds"))
-      result.get mustBe p1
+      whenReady(tvContentRepository.findContentByID(p1.id.get.stringify)){
+        _.get mustBe p1
+      }
     }
 
     "return none TV Content for a particular ID" in {
-      val content = tvContentRepository.findContentByID(BSONObjectID.generate.stringify)
-      val result = Await.result(content, Duration("10 seconds"))
-      result mustBe None
+      whenReady(tvContentRepository.findContentByID(BSONObjectID.generate.stringify)){
+        _ mustBe None
+      }
     }
   }
 }

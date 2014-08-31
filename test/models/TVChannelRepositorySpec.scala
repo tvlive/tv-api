@@ -6,9 +6,7 @@ import org.scalatest.{BeforeAndAfter, MustMatchers}
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.iteratee.Enumerator
 
-import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration.Duration
 
 class TVChannelRepositorySpec extends PlaySpec with MustMatchers with BeforeAndAfter with ScalaFutures {
 
@@ -38,10 +36,9 @@ class TVChannelRepositorySpec extends PlaySpec with MustMatchers with BeforeAndA
 
   "listOfTVChannels" should {
     "return the list of TV Channels available today" in {
-      val allTVChannels = tvChannelRepository.listOfTVChannels()
-      val channels = Await.result(allTVChannels, Duration("20 seconds"))
-
-      channels mustBe Seq( tvChannel1, tvChannel2, tvChannel3, tvChannel4)
+      whenReady(tvChannelRepository.listOfTVChannels()) {
+        _ mustBe Seq(tvChannel1, tvChannel2, tvChannel3, tvChannel4)
+      }
     }
   }
 
