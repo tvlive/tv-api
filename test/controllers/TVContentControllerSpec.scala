@@ -138,9 +138,8 @@ trait TVContentSetUpTest extends ScalaFutures {
     override def currentDate() = fakeNow
   }
   val programs = tvContentRepository.collection
-  whenReady(programs.drop()) {
-    response => println(s"Collection 'tvContentTest' has been drop: $response")
-  }
+  programs.drop()
+  Thread.sleep(5000)
 
   val tvProgram1 = TVProgram("CHANNEL1", fakeNow.minusHours(3), fakeNow.minusHours(2), Some("program_type1"),
     Some("flags1"), Some(Serie("serie1", "ep1", None, None, None, None)), Some(Program("program1", None)), Some(BSONObjectID.generate))

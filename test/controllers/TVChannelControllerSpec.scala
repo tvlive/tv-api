@@ -68,9 +68,8 @@ trait TVChannelSetUpTest extends ScalaFutures {
 
   val tvChannelRepository = TVChannelRepository("tvChannelTest")
   val channels = tvChannelRepository.collection
-  whenReady(channels.drop()) {
-    response => println(s"Collection 'tvChannelTest' has been drop: $response")
-  }
+  channels.drop()
+  Thread.sleep(5000)
 
   val tvChannel1 = TVChannel("testTvChannel1", "EN", Some(BSONObjectID.generate))
   val tvChannel2 = TVChannel("testTvChannel2", "EN", Some(BSONObjectID.generate))
