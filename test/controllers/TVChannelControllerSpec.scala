@@ -2,19 +2,21 @@ package controllers
 
 import models.{TVChannel, TVChannelRepository}
 import org.junit.runner._
+import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.time.{Millis, Seconds, Span}
 import org.specs2.mutable.Specification
 import org.specs2.runner._
+import play.api.libs.iteratee.Enumerator
 import play.api.mvc.SimpleResult
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import reactivemongo.bson.BSONObjectID
 
-import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 @RunWith(classOf[JUnitRunner])
-class TVChannelControllerTest extends Specification with TVChannelSetUpTest {
+class TVChannelControllerSpec extends Specification with TVChannelSetUpTest {
 
 
   "TVChannelController" should {
@@ -57,39 +59,28 @@ class TVChannelControllerTest extends Specification with TVChannelSetUpTest {
   }
 
 }
-trait TVChannelSetUpTest {
+trait TVChannelSetUpTest extends ScalaFutures {
+
+  self:Specification =>
+
+  implicit val defaultPatience =
+    PatienceConfig(timeout = Span(1, Seconds), interval = Span(5, Millis))
 
   val tvChannelRepository = TVChannelRepository("tvChannelTest")
   val channels = tvChannelRepository.collection
-  channels.drop()
-  Thread.sleep(5000)
+  whenReady(channels.drop()) {
+    response => println(s"Collection 'tvChannelTest' has been drop: $response")
+  }
 
   val tvChannel1 = TVChannel("testTvChannel1", "EN", Some(BSONObjectID.generate))
   val tvChannel2 = TVChannel("testTvChannel2", "EN", Some(BSONObjectID.generate))
   val tvChannel3 = TVChannel("testTvChannel3", "EN", Some(BSONObjectID.generate))
   val tvChannel4 = TVChannel("testTvChannel4", "EN", Some(BSONObjectID.generate))
 
-  val channel1 = channels.insert[TVChannel](tvChannel1)
-  val channel2 = channels.insert[TVChannel](tvChannel2)
-  val channel3 = channels.insert[TVChannel](tvChannel3)
-  val channel4 = channels.insert[TVChannel](tvChannel4)
-
-  val resultChannels = for {
-    c1 <- channel1
-    c2 <- channel2
-    c3 <- channel3
-    c4 <- channel4
-  } yield (c1.ok && c2.ok && c3.ok && c4.ok)
-
-  val isOkChannels = Await.result(resultChannels, Duration("20 seconds"))
-
-  isOkChannels match {
-    case true => println("Elements inserted")
-    case false => {
-      channels.drop()
-      throw new Exception("Error inserting elements")
-    }
+  whenReady(channels.bulkInsert(Enumerator(tvChannel1, tvChannel2, tvChannel3, tvChannel4))) {
+    response => response must_== 4
   }
+
 
   class App extends controllers.TVChannelController {
     override val channelRepository: TVChannelRepository = tvChannelRepository

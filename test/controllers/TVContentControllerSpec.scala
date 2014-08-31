@@ -3,16 +3,18 @@ package controllers
 import models._
 import org.joda.time.DateTime
 import org.junit.runner._
+import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.time.{Millis, Seconds, Span}
 import org.specs2.mutable.Specification
 import org.specs2.runner._
+import play.api.libs.iteratee.Enumerator
 import play.api.mvc.SimpleResult
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import reactivemongo.bson.BSONObjectID
 
-import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 @RunWith(classOf[JUnitRunner])
 class TVContentControllerSpec extends Specification with TVContentSetUpTest {
@@ -28,7 +30,7 @@ class TVContentControllerSpec extends Specification with TVContentSetUpTest {
 
     "return all the TV content for a channel1 available today" in {
 
-      import TVProgram.tvProgramShortReads
+      import models.TVProgram.tvProgramShortReads
 
       val programResult: Future[SimpleResult] = controller.allContent("channel1").apply(FakeRequest())
       status(programResult) must equalTo(OK)
@@ -45,7 +47,7 @@ class TVContentControllerSpec extends Specification with TVContentSetUpTest {
 
     "return all the TV content for a CHANNEL 3 available today" in {
 
-      import TVProgram.tvProgramShortReads
+      import models.TVProgram.tvProgramShortReads
 
       val programResult: Future[SimpleResult] = controller.allContent("CHANNEL+3").apply(FakeRequest())
       status(programResult) must equalTo(OK)
@@ -53,13 +55,13 @@ class TVContentControllerSpec extends Specification with TVContentSetUpTest {
       println(contentAsString(programResult))
       val programsInResponse = contentAsJson(programResult).as[Seq[TVProgramShort]]
       println(programsInResponse)
-      programsInResponse must contain (TVShort(tvProgram6))
+      programsInResponse must contain(TVShort(tvProgram6))
     }
 
 
     "return all the TV content for a CHANNEL1 available today" in {
 
-      import TVProgram.tvProgramShortReads
+      import models.TVProgram.tvProgramShortReads
 
       val programResult: Future[SimpleResult] = controller.allContent("CHANNEL1").apply(FakeRequest())
       status(programResult) must equalTo(OK)
@@ -90,15 +92,15 @@ class TVContentControllerSpec extends Specification with TVContentSetUpTest {
 
     "return the TV content for CHANNEL1 available from now until the end of the day" in {
 
-      import TVProgram.tvProgramShortReads
+      import models.TVProgram.tvProgramShortReads
 
       val programsResult: Future[SimpleResult] = controller.contentLeft("CHANNEL1").apply(FakeRequest())
       status(programsResult) must equalTo(OK)
       contentType(programsResult) must beSome.which(_ == "application/json")
       val programsInResponse = contentAsJson(programsResult).as[Seq[TVProgramShort]]
-      programsInResponse must contain (TVShort(tvProgram3))
-      programsInResponse must contain (TVShort(tvProgram4))
-      programsInResponse must contain (TVShort(tvProgram5))
+      programsInResponse must contain(TVShort(tvProgram3))
+      programsInResponse must contain(TVShort(tvProgram4))
+      programsInResponse must contain(TVShort(tvProgram5))
 
     }
 
@@ -124,16 +126,21 @@ class TVContentControllerSpec extends Specification with TVContentSetUpTest {
   }
 }
 
+trait TVContentSetUpTest extends ScalaFutures {
 
-trait TVContentSetUpTest {
+  self:Specification =>
+
+  implicit val defaultPatience =
+    PatienceConfig(timeout = Span(1, Seconds), interval = Span(5, Millis))
 
   val fakeNow = new DateTime(2014, 4, 4, 10, 0, 0)
   val tvContentRepository = new TVContentRepository("tvContentTest") {
     override def currentDate() = fakeNow
   }
   val programs = tvContentRepository.collection
-  programs.drop()
-  Thread.sleep(5000)
+  whenReady(programs.drop()) {
+    response => println(s"Collection 'tvContentTest' has been drop: $response")
+  }
 
   val tvProgram1 = TVProgram("CHANNEL1", fakeNow.minusHours(3), fakeNow.minusHours(2), Some("program_type1"),
     Some("flags1"), Some(Serie("serie1", "ep1", None, None, None, None)), Some(Program("program1", None)), Some(BSONObjectID.generate))
@@ -148,30 +155,8 @@ trait TVContentSetUpTest {
   val tvProgram6 = TVProgram("CHANNEL 3", fakeNow.plusHours(3), fakeNow.plusHours(5), Some("program_type5"),
     Some("flags1"), Some(Serie("serie1", "ep1", None, None, None, None)), Some(Program("program1", None)), Some(BSONObjectID.generate))
 
-  val p1 = programs.insert[TVProgram](tvProgram1)
-  val p2 = programs.insert[TVProgram](tvProgram2)
-  val p3 = programs.insert[TVProgram](tvProgram3)
-  val p4 = programs.insert[TVProgram](tvProgram4)
-  val p5 = programs.insert[TVProgram](tvProgram5)
-  val p6 = programs.insert[TVProgram](tvProgram6)
-
-  val resultPrograms = for {
-    c1 <- p1
-    c2 <- p2
-    c3 <- p3
-    c4 <- p4
-    c5 <- p5
-    c6 <- p6
-  } yield (c1.ok && c2.ok && c3.ok && c4.ok && c5.ok && c6.ok)
-
-  val isOkPrograms = Await.result(resultPrograms, Duration("20 seconds"))
-
-  isOkPrograms match {
-    case true => println("Elements inserted")
-    case false => {
-      programs.drop()
-      throw new Exception("Error inserting elements")
-    }
+  whenReady(programs.bulkInsert(Enumerator(tvProgram1, tvProgram2, tvProgram3, tvProgram4, tvProgram5, tvProgram6))) {
+    response => response must_== 6
   }
 
   class App extends TVContentController {

@@ -1,8 +1,11 @@
 package models
 
 import org.joda.time.DateTime
+import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.time.{Millis, Seconds, Span}
 import org.scalatest.{BeforeAndAfter, MustMatchers}
 import org.scalatestplus.play.PlaySpec
+import play.api.libs.iteratee.Enumerator
 import reactivemongo.bson.BSONObjectID
 import utils.TimeProvider
 
@@ -10,9 +13,13 @@ import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
 
-class TVChannelContentRepositorySpec extends PlaySpec with MustMatchers with BeforeAndAfter {
+class TVChannelContentRepositorySpec extends PlaySpec with MustMatchers with BeforeAndAfter with ScalaFutures {
 
-  val current = new DateTime(2010,10,10,10,0,0)
+  implicit val defaultPatience =
+    PatienceConfig(timeout = Span(1, Seconds), interval = Span(5, Millis))
+
+  val current = new DateTime(2010, 10, 10, 10, 0, 0)
+
   trait FakeTimeProvider extends TimeProvider {
     override def currentDate() = current
   }
@@ -30,49 +37,23 @@ class TVChannelContentRepositorySpec extends PlaySpec with MustMatchers with Bef
 
 
   before {
-    val content1 = collection.insert(p1)
-    val content2 = collection.insert(p2)
-    val content3 = collection.insert(p3)
-    val content4 = collection.insert(p4)
-    val content5 = collection.insert(p5)
-    val content6 = collection.insert(p6)
-
-    val result = for {
-      c1 <- content1
-      c2 <- content2
-      c3 <- content3
-      c4 <- content4
-      c5 <- content5
-      c6 <- content6
-    } yield c1.ok && c2.ok && c3.ok && c4.ok && c5.ok && c6.ok
-
-    val isOk = Await.result(result, Duration("20 seconds"))
-
-    isOk match {
-      case true => println("Elements inserted")
-      case false => {
-        collection.drop()
-        throw new Exception("Error inserting elements")
-      }
+    whenReady(collection.bulkInsert(Enumerator(p1, p2, p3, p4, p5, p6))) {
+      response => response mustBe 6
     }
   }
 
   after {
-    collection.drop()
-    Thread.sleep(5000)
+    whenReady(collection.drop()) {
+      response => println(s"Collection $collectionName has been drop: $response")
+    }
   }
 
   "findDayContentByChannel" should {
     "return all the TV content for a particular channel available today" in {
       val content = tvContentRepository.findDayContentByChannel("channel1")
       val result = Await.result(content, Duration("10 seconds"))
-      result mustBe Seq(
-        TVShort(p1),
-        TVShort(p2),
-        TVShort(p3),
-        TVShort(p4),
-        TVShort(p5),
-        TVShort(p6)
+      result mustBe Seq(TVShort(p1), TVShort(p2), TVShort(p3), TVShort(p4),
+        TVShort(p5), TVShort(p6)
       )
 
     }
@@ -91,11 +72,7 @@ class TVChannelContentRepositorySpec extends PlaySpec with MustMatchers with Bef
     "return the TV content for a particular channel available from now until the end of the day" in {
       val content = tvContentRepository.findLeftContentByChannel("channel1")
       val result = Await.result(content, Duration("10 seconds"))
-      result mustBe Seq(
-        TVShort(p3),
-        TVShort(p4),
-        TVShort(p5),
-        TVShort(p6))
+      result mustBe Seq(TVShort(p3), TVShort(p4), TVShort(p5), TVShort(p6))
     }
   }
 
