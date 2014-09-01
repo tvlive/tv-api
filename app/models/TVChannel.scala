@@ -9,7 +9,7 @@ import scala.concurrent.Future
 import scala.util.Try
 
 
-case class TVChannel(name: String, language: String, id: Option[BSONObjectID] = Some(BSONObjectID.generate)) {
+case class TVChannel(name: String, genre: String, language: String, id: Option[BSONObjectID] = Some(BSONObjectID.generate)) {
   val uriToday: String = controllers.routes.TVContentController.allContent(URLEncoder.encode(name, "UTF-8")).url
   val uriCurrent: String = controllers.routes.TVContentController.currentContent(URLEncoder.encode(name, "UTF-8")).url
   val uriLeft: String = controllers.routes.TVContentController.contentLeft(URLEncoder.encode(name,"UTF-8")).url
@@ -36,6 +36,7 @@ object TVChannel {
 
   implicit val reviewReads: Reads[TVChannel] = (
     (__ \ "name").read[String] and
+    (__ \ "genre").read[String] and
       (__ \ "language").read[String] and
       (__ \ "id").read[Option[BSONObjectID]]
     )(TVChannel.apply _)
@@ -43,6 +44,7 @@ object TVChannel {
   implicit val tvChannelWrites = new Writes[TVChannel] {
     override def writes(tvchannel: TVChannel): JsValue = Json.obj(
       "name" -> tvchannel.name,
+      "genre" -> tvchannel.genre,
       "language" -> tvchannel.language,
       "id" -> tvchannel.id,
       "uriToday" -> tvchannel.uriToday,
@@ -56,6 +58,7 @@ object TVChannel {
     def read(doc: BSONDocument): TVChannel = {
       TVChannel(
         doc.getAs[BSONString]("name").get.value,
+        doc.getAs[BSONString]("genre").get.value,
         doc.getAs[BSONString]("language").get.value,
         doc.getAs[BSONObjectID]("_id"))
     }
@@ -66,6 +69,7 @@ object TVChannel {
       BSONDocument(
         "_id" -> t.id.getOrElse(BSONObjectID.generate),
         "name" -> t.name,
+        "genre" -> t.genre,
         "language" -> t.language
       )
     }

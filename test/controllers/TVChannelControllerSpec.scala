@@ -71,10 +71,10 @@ trait TVChannelSetUpTest extends ScalaFutures {
   channels.drop()
   Thread.sleep(5000)
 
-  val tvChannel1 = TVChannel("testTvChannel1", "EN", Some(BSONObjectID.generate))
-  val tvChannel2 = TVChannel("testTvChannel2", "EN", Some(BSONObjectID.generate))
-  val tvChannel3 = TVChannel("testTvChannel3", "EN", Some(BSONObjectID.generate))
-  val tvChannel4 = TVChannel("testTvChannel4", "EN", Some(BSONObjectID.generate))
+  val tvChannel1 = TVChannel("testTvChannel1", "genre1", "EN", Some(BSONObjectID.generate))
+  val tvChannel2 = TVChannel("testTvChannel2", "genre1", "EN", Some(BSONObjectID.generate))
+  val tvChannel3 = TVChannel("testTvChannel3", "genre1", "EN", Some(BSONObjectID.generate))
+  val tvChannel4 = TVChannel("testTvChannel4", "genre1", "EN", Some(BSONObjectID.generate))
 
   whenReady(channels.bulkInsert(Enumerator(tvChannel1, tvChannel2, tvChannel3, tvChannel4))) {
     response => response must_== 4

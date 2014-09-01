@@ -17,10 +17,10 @@ class TVChannelRepositorySpec extends PlaySpec with MustMatchers with BeforeAndA
   val tvChannelRepository = TVChannelRepository(tvChannelCollectionName)
   val collection = tvChannelRepository.collection
 
-  val tvChannel1 = TVChannel("testTvChannel1", "EN")
-  val tvChannel2 = TVChannel("testTvChannel2", "EN")
-  val tvChannel3 = TVChannel("testTvChannel3", "EN")
-  val tvChannel4 = TVChannel("testTvChannel4", "EN")
+  val tvChannel1 = TVChannel("testTvChannel1", "genre1", "EN")
+  val tvChannel2 = TVChannel("testTvChannel2", "genre1", "EN")
+  val tvChannel3 = TVChannel("testTvChannel3", "genre1", "EN")
+  val tvChannel4 = TVChannel("testTvChannel4", "genre1", "EN")
 
   before {
     whenReady(collection.bulkInsert(Enumerator(tvChannel1, tvChannel2, tvChannel3, tvChannel4))) {
