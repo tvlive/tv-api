@@ -10,10 +10,10 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.Try
 
-case class TVProgram(channel: String, startTime: DateTime, endTime: DateTime, category: Option[String],
+case class TVProgram(channel: String, startTime: DateTime, endTime: DateTime, category: Option[List[String]],
                      flags: Option[String], serie: Option[Serie], program: Option[Program], id: Option[BSONObjectID] = Some(BSONObjectID.generate))
 
-case class TVProgramShort(channel: String, startTime: DateTime, endTime: DateTime, category: Option[String], series: Option[SerieShort], program: Option[ProgramShort], id: Option[BSONObjectID] = Some(BSONObjectID.generate)) {
+case class TVProgramShort(channel: String, startTime: DateTime, endTime: DateTime, category: Option[List[String]], series: Option[SerieShort], program: Option[ProgramShort], id: Option[BSONObjectID] = Some(BSONObjectID.generate)) {
   val uriTVProgramDetails = controllers.routes.TVContentController.tvContentDetails(id.get.stringify).toString()
 }
 
@@ -90,7 +90,7 @@ object TVProgram {
     (__ \ "channel").read[String] and
       (__ \ "start").read[DateTime] and
       (__ \ "end").read[DateTime] and
-      (__ \ "category").read[Option[String]] and
+      (__ \ "category").read[Option[List[String]]] and
       (__ \ "flags").read[Option[String]] and
       (__ \ "series").read[Option[Serie]] and
       (__ \ "program").read[Option[Program]] and
@@ -121,7 +121,7 @@ object TVProgram {
     (__ \ "channel").read[String] and
       (__ \ "start").read[DateTime] and
       (__ \ "end").read[DateTime] and
-      (__ \ "category").read[Option[String]] and
+      (__ \ "category").read[Option[List[String]]] and
       (__ \ "series").read[Option[SerieShort]] and
       (__ \ "program").read[Option[ProgramShort]] and
       (__ \ "id").read[Option[BSONObjectID]]
@@ -147,7 +147,7 @@ object TVProgram {
         doc.getAs[BSONString]("channel").get.value,
         new DateTime(doc.getAs[BSONDateTime]("startTime").get.value),
         new DateTime(doc.getAs[BSONDateTime]("endTime").get.value),
-        doc.getAs[BSONString]("category").map(_.value),
+        Option(doc.getAs[List[String]]("category").toList.flatten),
         doc.getAs[BSONString]("flags").map(_.value),
         doc.getAs[BSONDocument]("serie").map(SerieBSONReader.read(_)),
         doc.getAs[BSONDocument]("program").map(ProgramBSONReader.read(_)),
@@ -162,7 +162,7 @@ object TVProgram {
         doc.getAs[BSONString]("channel").get.value,
         new DateTime(doc.getAs[BSONDateTime]("startTime").get.value),
         new DateTime(doc.getAs[BSONDateTime]("endTime").get.value),
-        doc.getAs[BSONString]("category").map(_.value),
+        Option(doc.getAs[List[String]]("category").toList.flatten),
         doc.getAs[BSONDocument]("serie").map(SerieShortBSONReader.read(_)),
         doc.getAs[BSONDocument]("program").map(ProgramShortBSONReader.read(_)),
         doc.getAs[BSONObjectID]("_id")
