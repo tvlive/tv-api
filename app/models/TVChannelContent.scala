@@ -11,7 +11,7 @@ import scala.concurrent.Future
 import scala.util.Try
 
 case class TVProgram(channel: String, startTime: DateTime, endTime: DateTime, category: Option[List[String]],
-                     flags: Option[String], serie: Option[Serie], program: Option[Program], id: Option[BSONObjectID] = Some(BSONObjectID.generate))
+                     accessibility: Option[List[String]], serie: Option[Serie], program: Option[Program], id: Option[BSONObjectID] = Some(BSONObjectID.generate))
 
 case class TVProgramShort(channel: String, startTime: DateTime, endTime: DateTime, category: Option[List[String]], series: Option[SerieShort], program: Option[ProgramShort], id: Option[BSONObjectID] = Some(BSONObjectID.generate)) {
   val uriTVProgramDetails = controllers.routes.TVContentController.tvContentDetails(id.get.stringify).toString()
@@ -91,7 +91,7 @@ object TVProgram {
       (__ \ "start").read[DateTime] and
       (__ \ "end").read[DateTime] and
       (__ \ "category").read[Option[List[String]]] and
-      (__ \ "flags").read[Option[String]] and
+      (__ \ "accessibility").read[Option[List[String]]] and
       (__ \ "series").read[Option[Serie]] and
       (__ \ "program").read[Option[Program]] and
       (__ \ "id").read[Option[BSONObjectID]]
@@ -104,7 +104,7 @@ object TVProgram {
       "start" -> tvprogram.startTime,
       "end" -> tvprogram.endTime,
       "category" -> tvprogram.category,
-      "flags" -> tvprogram.flags,
+      "accessibility" -> tvprogram.accessibility,
       "series" -> tvprogram.serie,
       "program" -> tvprogram.program,
       "id" -> tvprogram.id
@@ -148,7 +148,7 @@ object TVProgram {
         new DateTime(doc.getAs[BSONDateTime]("startTime").get.value),
         new DateTime(doc.getAs[BSONDateTime]("endTime").get.value),
         Option(doc.getAs[List[String]]("category").toList.flatten),
-        doc.getAs[BSONString]("flags").map(_.value),
+        Option(doc.getAs[List[String]]("accessibility").toList.flatten),
         doc.getAs[BSONDocument]("serie").map(SerieBSONReader.read(_)),
         doc.getAs[BSONDocument]("program").map(ProgramBSONReader.read(_)),
         doc.getAs[BSONObjectID]("_id")
@@ -190,7 +190,7 @@ object TVProgram {
         "startTime" -> new BSONDateTime(t.startTime.getMillis),
         "endTime" -> new BSONDateTime(t.endTime.getMillis),
         "category" -> t.category,
-        "flags" -> t.flags,
+        "accessibility" -> t.accessibility,
         "serie" -> t.serie.map(SerieBSONWriter.write(_)),
         "program" -> t.program.map(ProgramBSONWriter.write(_))
       )
