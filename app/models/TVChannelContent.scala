@@ -10,8 +10,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.Try
 
-case class TVProgram(channel: String, startTime: DateTime, endTime: DateTime, category: Option[List[String]],
-                     accessibility: Option[List[String]], serie: Option[Serie], program: Option[Program], id: Option[BSONObjectID] = Some(BSONObjectID.generate))
+case class TVProgram(channel: String, start: DateTime, end: DateTime, category: Option[List[String]],
+                     accessibility: Option[List[String]], series: Option[Serie], program: Option[Program], id: Option[BSONObjectID] = Some(BSONObjectID.generate))
 
 case class TVProgramShort(channel: String, startTime: DateTime, endTime: DateTime, category: Option[List[String]], series: Option[SerieShort], program: Option[ProgramShort], id: Option[BSONObjectID] = Some(BSONObjectID.generate)) {
   val uriTVProgramDetails = controllers.routes.TVContentController.tvContentDetails(id.get.stringify).toString()
@@ -19,8 +19,8 @@ case class TVProgramShort(channel: String, startTime: DateTime, endTime: DateTim
 
 
 object TVShort {
-  def apply(tvProgram: TVProgram): TVProgramShort = TVProgramShort(tvProgram.channel, tvProgram.startTime, tvProgram.endTime, tvProgram.category, tvProgram.serie.map(s => SerieShort(s.serieTitle)),
-  tvProgram.program.map(p => ProgramShort(p.title)), tvProgram.id)
+  def apply(tvProgram: TVProgram): TVProgramShort = TVProgramShort(tvProgram.channel, tvProgram.start, tvProgram.end, tvProgram.category, tvProgram.series.map(s => SerieShort(s.serieTitle)),
+    tvProgram.program.map(p => ProgramShort(p.title)), tvProgram.id)
 }
 
 case class Serie(serieTitle: String, episodeTitle: String, description: Option[String], seasonNumber: Option[String], episodeNumber: Option[String], totalNumber: Option[String])
@@ -50,72 +50,17 @@ object TVProgram {
     }
   }
 
-
-  implicit val programReads: Reads[Program] = (
-    (__ \ "title").read[String] and
-      (__ \ "description").read[Option[String]]
-    )(Program.apply _)
-
-  implicit val programWrites: Writes[Program] = (
-    (__ \ "title").write[String] and
-      (__ \ "description").write[Option[String]]
-    )(unlift(Program.unapply))
-
-  implicit val serieReads: Reads[Serie] = (
-    (__ \ "serieTitle").read[String] and
-      (__ \ "episodeTitle").read[String] and
-      (__ \ "description").read[Option[String]] and
-      (__ \ "seasonNumber").read[Option[String]] and
-      (__ \ "episodeNumber").read[Option[String]] and
-      (__ \ "totalNumber").read[Option[String]]
-    )(Serie.apply _)
-
-
-  implicit val serieWrites: Writes[Serie] = (
-    (__ \ "serieTitle").write[String] and
-      (__ \ "episodeTitle").write[String] and
-      (__ \ "description").write[Option[String]] and
-      (__ \ "seasonNumber").write[Option[String]] and
-      (__ \ "episodeNumber").write[Option[String]] and
-      (__ \ "totalNumber").write[Option[String]]
-    )(unlift(Serie.unapply))
-
+  implicit val programFmt = Json.format[Program]
+  implicit val serieFmt = Json.format[Serie]
   val pattern = "yyyy-MM-dd'T'HH:mm:ss"
 
   implicit val dateFormat = Format[DateTime](
     Reads.jodaDateReads(pattern),
     Writes.jodaDateWrites(pattern))
 
-  implicit val tvProgramReads: Reads[TVProgram] = (
-    (__ \ "channel").read[String] and
-      (__ \ "start").read[DateTime] and
-      (__ \ "end").read[DateTime] and
-      (__ \ "category").read[Option[List[String]]] and
-      (__ \ "accessibility").read[Option[List[String]]] and
-      (__ \ "series").read[Option[Serie]] and
-      (__ \ "program").read[Option[Program]] and
-      (__ \ "id").read[Option[BSONObjectID]]
-    )(TVProgram.apply _)
-
-
-  implicit val tvProgramWrites = new Writes[TVProgram] {
-    override def writes(tvprogram: TVProgram): JsValue = Json.obj(
-      "channel" -> tvprogram.channel,
-      "start" -> tvprogram.startTime,
-      "end" -> tvprogram.endTime,
-      "category" -> tvprogram.category,
-      "accessibility" -> tvprogram.accessibility,
-      "series" -> tvprogram.serie,
-      "program" -> tvprogram.program,
-      "id" -> tvprogram.id
-    )
-  }
-
-  implicit val programShortReads = Json.reads[ProgramShort]
-  implicit val seriesShortReads = Json.reads[SerieShort]
-
-  implicit val programShortWrites = Json.writes[ProgramShort]
-  implicit val seriesShortWrites = Json.writes[SerieShort]
+  implicit val tvProgramFmt = Json.format[TVProgram]
+  implicit val programShortFmt = Json.format[ProgramShort]
+  implicit val serieShortFmt = Json.format[SerieShort]
 
   implicit val tvProgramShortReads: Reads[TVProgramShort] = (
     (__ \ "channel").read[String] and
@@ -187,11 +132,11 @@ object TVProgram {
       BSONDocument(
         "_id" -> t.id.getOrElse(BSONObjectID.generate),
         "channel" -> t.channel,
-        "startTime" -> new BSONDateTime(t.startTime.getMillis),
-        "endTime" -> new BSONDateTime(t.endTime.getMillis),
+        "startTime" -> new BSONDateTime(t.start.getMillis),
+        "endTime" -> new BSONDateTime(t.end.getMillis),
         "category" -> t.category,
         "accessibility" -> t.accessibility,
-        "serie" -> t.serie.map(SerieBSONWriter.write(_)),
+        "serie" -> t.series.map(SerieBSONWriter.write(_)),
         "program" -> t.program.map(ProgramBSONWriter.write(_))
       )
     }
@@ -299,7 +244,7 @@ class TVContentRepository(name: String) extends ContentRepository with Connectio
 
   override def findDayContentByChannel(channelName: String): Future[Seq[TVProgramShort]] = {
 
-    import TVProgram.TVProgramShortContentBSONReader
+    import models.TVProgram.TVProgramShortContentBSONReader
 
     val query = BSONDocument(
       "$orderby" -> BSONDocument("startTime" -> 1),
@@ -322,7 +267,7 @@ class TVContentRepository(name: String) extends ContentRepository with Connectio
   }
 
   override def findLeftContentByChannel(channelName: String): Future[Seq[TVProgramShort]] = {
-    import TVProgram.TVProgramShortContentBSONReader
+    import models.TVProgram.TVProgramShortContentBSONReader
 
     val now = currentDate()
     val query = BSONDocument(
