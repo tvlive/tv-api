@@ -6,7 +6,6 @@ import reactivemongo.bson._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.util.Try
 
 
 case class TVChannel(name: String, genre: String, language: String, id: Option[BSONObjectID] = Some(BSONObjectID.generate)) {

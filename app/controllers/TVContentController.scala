@@ -2,7 +2,7 @@ package controllers
 
 import java.net.URLDecoder
 
-import models.{TVProgram, TVContentRepository}
+import models.TVContentRepository
 import play.api.libs.json.Json
 import play.api.mvc.{Action, Controller}
 

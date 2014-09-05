@@ -2,13 +2,10 @@ package models
 
 import _root_.utils.TimeProvider
 import org.joda.time.DateTime
-import play.api.libs.functional.syntax._
-import play.api.libs.json._
 import reactivemongo.bson._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.util.Try
 
 case class TVProgram(channel: String, start: DateTime, end: DateTime, category: Option[List[String]],
                      accessibility: Option[List[String]], series: Option[Serie], program: Option[Program], id: Option[BSONObjectID] = Some(BSONObjectID.generate))

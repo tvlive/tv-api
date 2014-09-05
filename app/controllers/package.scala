@@ -22,7 +22,7 @@ package object controllers {
       case _ => JsError("Expected BSONObjectID as JsString")
     }
   }
-  
+
   implicit val reviewReads: Reads[TVChannel] = (
     (__ \ "name").read[String] and
       (__ \ "genre").read[String] and
