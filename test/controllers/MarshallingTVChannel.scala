@@ -1,5 +1,6 @@
-package models
+package controllers
 
+import models.TVChannel
 import org.scalatest.MustMatchers
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json

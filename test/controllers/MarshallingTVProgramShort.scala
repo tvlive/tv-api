@@ -1,5 +1,6 @@
-package models
+package controllers
 
+import models.{ProgramShort, SerieShort, TVProgramShort}
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 import org.scalatest.MustMatchers
@@ -14,8 +15,6 @@ class MarshallingTVProgramShort extends PlaySpec with MustMatchers {
   val fmt = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
 
   "Write and reads" should {
-    import TVProgram.{tvProgramShortWrites, tvProgramShortReads}
-
     "transform TVProgram object to json" in {
       println("---" + Json.toJson(TVProgramShort("bbc1", now, now.plusHours(2), Some(List("documentary")), Some(SerieShort("titleSerie")), Some(ProgramShort("titleProgram")), Some(id))).toString())
       Json.toJson(TVProgramShort("bbc1", now, now.plusHours(2), Some(List("documentary")), Some(SerieShort("titleSerie")), Some(ProgramShort("titleProgram")), Some(id))).toString() mustBe

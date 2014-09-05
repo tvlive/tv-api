@@ -24,7 +24,6 @@ trait TVContentController extends Controller {
   }
 
   def contentLeft(channelName: String) = Action.async {
-    import TVProgram.tvProgramShortWrites
     contentRepository.findLeftContentByChannel(URLDecoder.decode(channelName, "UTF-8").toUpperCase).map {
       case head :: tail => Ok(Json.toJson(head :: tail))
       case Nil => NotFound
@@ -33,7 +32,6 @@ trait TVContentController extends Controller {
 
   def allContent(channelName: String) = Action.async {
 
-    import TVProgram.tvProgramShortWrites
     contentRepository.findDayContentByChannel(URLDecoder.decode(channelName, "UTF-8").toUpperCase).map {
       case head :: tail => {
         Ok(Json.toJson(head :: tail))

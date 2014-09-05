@@ -30,8 +30,6 @@ class TVContentControllerSpec extends Specification with TVContentSetUpTest {
 
     "return all the TV content for a channel1 available today" in {
 
-      import models.TVProgram.tvProgramShortReads
-
       val programResult: Future[SimpleResult] = controller.allContent("channel1").apply(FakeRequest())
       status(programResult) must equalTo(OK)
       contentType(programResult) must beSome.which(_ == "application/json")
@@ -47,8 +45,6 @@ class TVContentControllerSpec extends Specification with TVContentSetUpTest {
 
     "return all the TV content for a CHANNEL 3 available today" in {
 
-      import models.TVProgram.tvProgramShortReads
-
       val programResult: Future[SimpleResult] = controller.allContent("CHANNEL+3").apply(FakeRequest())
       status(programResult) must equalTo(OK)
       contentType(programResult) must beSome.which(_ == "application/json")
@@ -60,8 +56,6 @@ class TVContentControllerSpec extends Specification with TVContentSetUpTest {
 
 
     "return all the TV content for a CHANNEL1 available today" in {
-
-      import models.TVProgram.tvProgramShortReads
 
       val programResult: Future[SimpleResult] = controller.allContent("CHANNEL1").apply(FakeRequest())
       status(programResult) must equalTo(OK)
@@ -91,8 +85,6 @@ class TVContentControllerSpec extends Specification with TVContentSetUpTest {
     }
 
     "return the TV content for CHANNEL1 available from now until the end of the day" in {
-
-      import models.TVProgram.tvProgramShortReads
 
       val programsResult: Future[SimpleResult] = controller.contentLeft("CHANNEL1").apply(FakeRequest())
       status(programsResult) must equalTo(OK)

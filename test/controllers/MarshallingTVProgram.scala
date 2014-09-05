@@ -1,5 +1,6 @@
-package models
+package controllers
 
+import models.{Program, Serie, TVProgram}
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 import org.scalatest.MustMatchers
