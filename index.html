@@ -52,15 +52,112 @@
 <h3>
 <a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Let's test it</h3>
 
-<pre>List of TV channels: <a href="#" id="channels">curl http://beta.tvlive.io/channels</a></pre>
+<pre>List of TV channels: 
 
-<pre>TV programs today for a channel: <a href="#" id="today">curl http://beta.tvlive.io/channel/CHANNEL+4/today</a></pre>
+<code>$curl http://beta.tvlive.io/channels
+[{"name":"5 STAR",
+  "genre":"ENTERTAINMENT",
+  "language":"EN",
+  "id":"540c0277a3d9bd4ae35dbd0d",
+  "uriToday":"/channel/5+STAR/today",
+  "uriCurrent":"/channel/5+STAR/current",
+  "uriLeft":"/channel/5+STAR/left"},
+ {"name":"5 USA",
+  "genre":"ENTERTAINMENT",
+  "language":"EN",
+  "id":"540c027da3d9bd4ae35dbd19",
+  "uriToday":"/channel/5+USA/today",
+  "uriCurrent":"/channel/5+USA/current",
+  "uriLeft":"/channel/5+USA/left"},
+{"name":"ALIBI",
+ "genre":"ENTERTAINMENT",
+ "language":"EN",
+ "id":"540c027da3d9bd4ae35dbd29",
+ "uriToday":"/channel/ALIBI/today",
+ "uriCurrent":"/channel/ALIBI/current",
+ "uriLeft":"/channel/ALIBI/left"},
+{"name":"ANIMAL PLANET",
+"genre":"DOCUMENTARIES",
+"language":"EN",
+"id":"540c027da3d9bd4ae35dbd3c",
+"uriToday":"/channel/ANIMAL+PLANET/today",
+"uriCurrent":"/channel/ANIMAL+PLANET/current",
+"uriLeft":"/channel/ANIMAL+PLANET/left"}
+]
+</code></pre>
 
-<pre>TV programs left today for a channel: <a href="#" id="left">curl http://beta.tvlive.io/channel/CHANNEL+4/left</a></pre>
 
-<pre>What's on TV channel: <a href="#" id="current">curl http://beta.tvlive.io/channel/CHANNEL+4/current></a></pre>
+<pre>TV programs today in BBC 1 London: 
 
-<pre>TV program details: <a href="#" id="details">curl http://beta.tvlive.io/tvprogram/540c028aa3d9bd4ae35dbfbe</a></pre>
+<code>$curl http://http://beta.tvlive.io/channel/BBC+1+LONDON/today
+[{"channel":"BBC 1 LONDON",
+"start":"2014-09-07T20:15:00",
+"end":"2014-09-07T21:15:00",
+"category":["General Movie","Drama"],
+"series":{"serieTitle":"The Village"},
+"uriTVProgramDetails":"/tvprogram/540c027fa3d9bd4ae35dbd84",
+"id":"540c027fa3d9bd4ae35dbd84"},
+{"channel":"BBC 1 LONDON",
+"start":"2014-09-07T21:15:00",
+"end":"2014-09-07T21:40:00",
+"category":["News","Regional News","Weather"],
+"program":{"title":"BBC News; Regional News and Weather"},
+"uriTVProgramDetails":"/tvprogram/540c027fa3d9bd4ae35dbd85",
+"id":"540c027fa3d9bd4ae35dbd85"}]
+</code></pre>
+
+<pre>TV programs left today in BBC 1 London: 
+
+<code>$curl http://beta.tvlive.io/channel/BBC+1+LONDON/left
+
+[{"channel":"BBC 1 LONDON",
+"start":"2014-09-07T21:40:00",
+"end":"2014-09-07T22:10:00",
+"category":["General Movie","Drama"],
+"series":{"serieTitle":"The Secrets"},
+"uriTVProgramDetails":"/tvprogram/540c027fa3d9bd4ae35dbd86",
+"id":"540c027fa3d9bd4ae35dbd86"},
+{"channel":"BBC 1 LONDON",
+"start":"2014-09-07T22:10:00",
+"end":"2014-09-08T02:00:00",
+"category":["General Education","Science","Factual Topics"],
+"series":{"serieTitle":"21 Up New Generation"},
+"uriTVProgramDetails":"/tvprogram/540c027fa3d9bd4ae35dbd87",
+"id":"540c027fa3d9bd4ae35dbd87"}]
+</code></pre>
+
+<pre>What's on in BBC 1 London: 
+
+<code>$curl http://beta.tvlive.io/channel/BBC+1+LONDON/current>
+
+{"channel":"BBC 1 LONDON"
+,"start":"2014-09-07T19:00:00",
+"end":"2014-09-07T20:15:00",
+"category":["General Show","Game Show"],
+"accessibility":["Subtitles","High definition"],
+"series":{"serieTitle":"Strictly Come Dancing: The Launch Show",
+    "episodeTitle":"Strictly Come Dancing: The Launch Show",
+    "description":"New series. As a curtain-raiser to the new series, which starts in a couple of weeks, Tess Daly and Claudia Winkleman host a red-carpet event in which this year's celebrities are paired up with their professional partners. The celebrity women shaking a leg or two are Frankie Bridge from girl band the Saturdays, tennis coach Judy Murray - best known as mother of 2013 men's Wimbledon champion Andy - This Morning reporter Alison Hammond, Casualty actress Sunetra Sarker, chart star Pixie Lott, TV presenter Caroline Flack and Mrs Brown's Boys actress Jennifer Gibney. The men donning their dancing shoes are former rugby player Thom Evans, one-time TOWIE star Mark Wright, EastEnders star Jake Wood, wildlife presenter Steve Backshall, Radio 1 DJ Scott Mills, MasterChef judge Gregg Wallace, Bargain Hunt presenter Tim Wonnacott and Blue singer Simon Webbe, who is not a Strictly novice, having appeared on the 2011 Christmas special. Together, the celebrities will give their first group performance, allowing an inkling of their various talents. Last year's winners Abbey Clancy and Aljaz Skorjanec will also repeat their waltz and there is music by Smokey Robinson with Imelda May and Five Seconds of Summer.",
+    "seasonNumber":"12",
+    "episodeNumber":"1",
+    "totalNumber":"15"},
+"id":"540c027fa3d9bd4ae35dbd83"}
+
+</code></pre>
+
+<pre>TV program details: 
+
+<code>curl http://beta.tvlive.io/tvprogram/540c028aa3d9bd4ae35dbfbe
+
+{"channel":"CHANNEL 4",
+"start":"2014-09-07T21:50:00",
+"end":"2014-09-08T02:00:00",
+"category":["Film","Comedy","Romance"],
+"accessibility":["Subtitles","Audio described","High definition"],
+"program":{"title":"The Ugly Truth",
+           "description":"A single TV producer is appalled when a chauvinistic presenter is hired for her morning news show. However, she is forced to seek his help when she meets the man of her dreams, and begins testing his theories on what men find attractive. Romantic comedy, starring Gerard Butler, Katherine Heigl, Bree Turner and Eric Winter."},
+"id":"540c028aa3d9bd4ae35dbfbe"}
+</code></pre>
 
 <h3>
 <a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
