@@ -51,10 +51,7 @@ class TVChannelControllerSpec extends Specification with TVChannelSetUpTest {
       contentType(channelResult) must beSome.which(_ == "application/json")
       println(contentAsString(channelResult))
       val channelsInResponse = contentAsJson(channelResult).as[Seq[TVChannel]]
-      channelsInResponse must contain(tvChannel1)
-      channelsInResponse must contain(tvChannel2)
-      channelsInResponse must contain(tvChannel3)
-      channelsInResponse must contain(tvChannel4)
+      channelsInResponse mustEqual Seq(tvChannel1, tvChannel2, tvChannel3, tvChannel4)
     }
 
     "provide the list of channels for that contains genre ENTERTAINMENT" in {
@@ -64,8 +61,7 @@ class TVChannelControllerSpec extends Specification with TVChannelSetUpTest {
       contentType(channelResult) must beSome.which(_ == "application/json")
       println(contentAsString(channelResult))
       val channelsInResponse = contentAsJson(channelResult).as[Seq[TVChannel]]
-      channelsInResponse must contain(tvChannel2)
-      channelsInResponse must contain(tvChannel4)
+      channelsInResponse mustEqual Seq(tvChannel2, tvChannel4)
     }
   }
 }

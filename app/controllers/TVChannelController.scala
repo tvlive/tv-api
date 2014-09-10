@@ -23,6 +23,11 @@ trait TVChannelController extends Controller {
   }
 
   def channelsByGenre(genre: String) = Action.async {
-    Future.successful(BadRequest(""))
+    channelRepository.listOfTVChannelsByGenre(genre).map {
+      case head :: tail => {
+        Ok(Json.toJson(head :: tail))
+      }
+      case Nil => NotFound
+    }
   }
 }
