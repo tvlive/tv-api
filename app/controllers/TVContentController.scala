@@ -46,4 +46,13 @@ trait TVContentController extends Controller {
       case None => NotFound
     }
   }
+
+  def contentByGenre(genre: String) = Action.async {
+    contentRepository.findContentByGenre(genre.toUpperCase()).map {
+      case head :: tail => {
+        Ok(Json.toJson(head :: tail))
+      }
+      case Nil => NotFound
+    }
+  }
 }

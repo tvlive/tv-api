@@ -3,19 +3,22 @@
 # ~~~~
 
 # Home page
-GET     /                               controllers.Application.index
+GET     /                                   controllers.Application.index
 
-GET     /channels                       controllers.TVChannelController.channels
+GET     /channels                           controllers.TVChannelController.channels
 
-GET     /channels/:genre                 controllers.TVChannelController.channelsByGenre(genre)
+GET     /channels/:genre                    controllers.TVChannelController.channelsByGenre(genre)
 
-GET     /channel/:channelName/current   controllers.TVContentController.currentContent(channelName)
+GET     /channel/:channelName/current       controllers.TVContentController.currentContent(channelName)
 
-GET     /channel/:channelName/today     controllers.TVContentController.allContent(channelName)
+GET     /channel/:channelName/today         controllers.TVContentController.allContent(channelName)
 
-GET     /channel/:channelName/left      controllers.TVContentController.contentLeft(channelName)
+GET     /channel/:channelName/left          controllers.TVContentController.contentLeft(channelName)
 
-GET     /tvprogram/:id                  controllers.TVContentController.tvContentDetails(id)
+GET     /tvprogram/:id                      controllers.TVContentController.tvContentDetails(id)
+
+GET     /tvprogram/genre/:genre              controllers.TVContentController.contentByGenre(genre)
+
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

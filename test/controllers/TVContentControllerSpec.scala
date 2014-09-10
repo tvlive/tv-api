@@ -115,6 +115,22 @@ class TVContentControllerSpec extends Specification with TVContentSetUpTest {
       val programResult: Future[SimpleResult] = controller.tvContentDetails(BSONObjectID.generate.stringify).apply(FakeRequest())
       status(programResult) must equalTo(NOT_FOUND)
     }
+
+    "return all the TV content available today by genre ENTERTAINMENT with upper case" in {
+      val programResult: Future[SimpleResult] = controller.contentByGenre("entertainment").apply(FakeRequest())
+      status(programResult) must equalTo(OK)
+      val programInResponse = contentAsJson(programResult).as[Seq[TVProgramShort]]
+      programInResponse mustEqual Seq(TVShort(tvProgram1),TVShort(tvProgram3))
+
+    }
+
+    "return all the TV content available today by genre sports with lower case" in {
+      val programResult: Future[SimpleResult] = controller.contentByGenre("sports").apply(FakeRequest())
+      status(programResult) must equalTo(OK)
+      val programInResponse = contentAsJson(programResult).as[Seq[TVProgramShort]]
+      programInResponse mustEqual Seq(TVShort(tvProgram2),TVShort(tvProgram4))
+
+    }
   }
 }
 
@@ -133,13 +149,13 @@ trait TVContentSetUpTest extends ScalaFutures {
   programs.drop()
   Thread.sleep(5000)
 
-  val tvProgram1 = TVProgram("CHANNEL1", fakeNow.minusHours(3), fakeNow.minusHours(2), Some(List("program_type1")),
+  val tvProgram1 = TVProgram("CHANNEL1", fakeNow.minusHours(3), fakeNow.minusHours(2), Some(List("program_type1", "ENTERTAINMENT")),
     Some(List("flags1")), Some(Serie("serie1", "ep1", None, None, None, None)), Some(Program("program1", None)), Some(BSONObjectID.generate))
-  val tvProgram2 = TVProgram("CHANNEL1", fakeNow.minusHours(2), fakeNow.minusHours(1), Some(List("program_type2")),
+  val tvProgram2 = TVProgram("CHANNEL1", fakeNow.minusHours(2), fakeNow.minusHours(1), Some(List("program_type2", "SPORTS")),
     Some(List("flags1")), Some(Serie("serie1", "ep1", None, None, None, None)), Some(Program("program1", None)), Some(BSONObjectID.generate))
-  val tvProgram3 = TVProgram("CHANNEL1", fakeNow.minusHours(1), fakeNow.plusHours(1), Some(List("program_type3")),
+  val tvProgram3 = TVProgram("CHANNEL1", fakeNow.minusHours(1), fakeNow.plusHours(1), Some(List("program_type3", "ENTERTAINMENT")),
     Some(List("flags1")), Some(Serie("serie1", "ep1", None, None, None, None)), Some(Program("program1", None)), Some(BSONObjectID.generate))
-  val tvProgram4 = TVProgram("CHANNEL1", fakeNow.plusHours(1), fakeNow.plusHours(3), Some(List("program_type4")),
+  val tvProgram4 = TVProgram("CHANNEL1", fakeNow.plusHours(1), fakeNow.plusHours(3), Some(List("program_type4", "SPORTS")),
     Some(List("flags1")), Some(Serie("serie1", "ep1", None, None, None, None)), Some(Program("program1", None)), Some(BSONObjectID.generate))
   val tvProgram5 = TVProgram("CHANNEL1", fakeNow.plusHours(3), fakeNow.plusHours(4), Some(List("program_type5")),
     Some(List("flags1")), Some(Serie("serie1", "ep1", None, None, None, None)), Some(Program("program1", None)), Some(BSONObjectID.generate))
