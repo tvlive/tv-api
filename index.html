@@ -45,8 +45,13 @@
 
 <p>Currently there are 2 components deployed in the cloud.</p>
 <pre>
-  <code>tv-api version 0.7.0
-  tv-crawler version 0.1.0
+  <code>tv-api version 0.9.0
+    Issue 13 - List of channels by genre
+    Issue 16 - List of tv programs current on tv by genre
+  
+  tv-crawler version 0.1.1
+    Issue 9 - Transform to uppercase the genres in the tvcontent
+
 </code></pre>
 
 <h3>
@@ -85,6 +90,33 @@
 "uriCurrent":"/channel/ANIMAL+PLANET/current",
 "uriLeft":"/channel/ANIMAL+PLANET/left"}
 ]
+</code></pre>
+
+<pre>List of TV channels by genre: 
+
+<code>$curl http://beta.tvlive.io/channels/kids
+
+[{"name":"NICKELODEON",
+  "genre":"KIDS",
+  "language":"EN",
+  "id":"54107844a3d9bd02c0f5238b",
+  "uriToday":"/channel/NICKELODEON/today",
+  "uriCurrent":"/channel/NICKELODEON/current",
+  "uriLeft":"/channel/NICKELODEON/left"},
+  {"name":"NICKTOONS",
+  "genre":"KIDS",
+  "language":"EN",
+  "id":"54107845a3d9bd02c0f523b9",
+  "uriToday":"/channel/NICKTOONS/today",
+  "uriCurrent":"/channel/NICKTOONS/current",
+  "uriLeft":"/channel/NICKTOONS/left"},
+  {"name":"PLAY DISNEY",
+  "genre":"KIDS",
+  "language":"EN",
+  "id":"54107859a3d9bd02c0f52807",
+  "uriToday":"/channel/PLAY+DISNEY/today",
+  "uriCurrent":"/channel/PLAY+DISNEY/current",
+  "uriLeft":"/channel/PLAY+DISNEY/left"}]
 </code></pre>
 
 
@@ -146,6 +178,28 @@
 "id":"540c027fa3d9bd4ae35dbd83"}
 
 </code></pre>
+
+<pre>TV guide by genre: 
+
+<code>curl http://beta.tvlive.io/tvprogram/genre/western
+
+  [{"channel":"SKY MOVIES MODERN GREATS HD",
+"start":"2014-09-10T12:45:00",
+"end":"2014-09-10T14:50:00",
+"category":["FILM","WESTERN"],
+"program":{
+    "title":"Warlock"},
+"uriTVProgramDetails":"/tvprogram/54107857a3d9bd02c0f5278b",
+"id":"54107857a3d9bd02c0f5278b"},
+{"channel":"TG4",
+"start":"2014-09-10T09:00:00",
+"end":"2014-09-10T10:00:00",
+"category":["WESTERN"],
+"series":{
+    "serieTitle":"Bonanza"},
+"uriTVProgramDetails":"/tvprogram/54107869a3d9bd02c0f52ba2",
+"id":"54107869a3d9bd02c0f52ba2"}]
+
 
 <pre>TV program details: 
 
