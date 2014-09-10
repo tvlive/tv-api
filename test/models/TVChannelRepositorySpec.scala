@@ -18,9 +18,9 @@ class TVChannelRepositorySpec extends PlaySpec with MustMatchers with BeforeAndA
   val collection = tvChannelRepository.collection
 
   val tvChannel1 = TVChannel("testTvChannel1", "genre1", "EN")
-  val tvChannel2 = TVChannel("testTvChannel2", "genre1", "EN")
+  val tvChannel2 = TVChannel("testTvChannel2", "ENTERTAINMENT", "EN")
   val tvChannel3 = TVChannel("testTvChannel3", "genre1", "EN")
-  val tvChannel4 = TVChannel("testTvChannel4", "genre1", "EN")
+  val tvChannel4 = TVChannel("testTvChannel4", "ENTERTAINMENT", "EN")
 
   before {
     whenReady(collection.bulkInsert(Enumerator(tvChannel1, tvChannel2, tvChannel3, tvChannel4))) {
@@ -38,6 +38,12 @@ class TVChannelRepositorySpec extends PlaySpec with MustMatchers with BeforeAndA
     "return the list of TV Channels available today" in {
       whenReady(tvChannelRepository.listOfTVChannels()) {
         _ mustBe Seq(tvChannel1, tvChannel2, tvChannel3, tvChannel4)
+      }
+    }
+
+    "return the list of TV Channels by genre ENTERTAINMENT" in {
+      whenReady(tvChannelRepository.listOfTVChannelsByGenre("ENTERTAINMENT")) {
+        _ mustBe Seq(tvChannel2, tvChannel4)
       }
     }
   }

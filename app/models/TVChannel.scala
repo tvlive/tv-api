@@ -17,6 +17,7 @@ case class TVChannel(name: String, genre: String, language: String, id: Option[B
 trait ChannelRepository {
 
   def listOfTVChannels(): Future[Seq[TVChannel]] = ???
+  def listOfTVChannelsByGenre(genre: String): Future[Seq[TVChannel]] = ???
 
 }
 
@@ -32,6 +33,17 @@ class TVChannelRepository(name: String) extends ChannelRepository with Connectio
     val found = collection.find(query).cursor[TVChannel]
     found.collect[Seq]()
   }
+
+  override def listOfTVChannelsByGenre(genre: String): Future[Seq[TVChannel]] = {
+    val query = BSONDocument(
+      "$orderby" -> BSONDocument("name" -> 1),
+      "$query" -> BSONDocument("genre" -> genre)
+    )
+
+    val found = collection.find(query).cursor[TVChannel]
+    found.collect[Seq]()
+  }
+
 }
 
 object TVChannelRepository {
