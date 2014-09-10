@@ -7,6 +7,8 @@ GET     /                               controllers.Application.index
 
 GET     /channels                       controllers.TVChannelController.channels
 
+GET     /channels/:genre                 controllers.TVChannelController.channelsByGenre(genre)
+
 GET     /channel/:channelName/current   controllers.TVContentController.currentContent(channelName)
 
 GET     /channel/:channelName/today     controllers.TVContentController.allContent(channelName)
