@@ -56,8 +56,18 @@ class TVChannelControllerSpec extends Specification with TVChannelSetUpTest {
       channelsInResponse must contain(tvChannel3)
       channelsInResponse must contain(tvChannel4)
     }
-  }
 
+    "provide the list of channels for that contains genre ENTERTAINMENT" in {
+
+      val channelResult: Future[SimpleResult] = controller.channelsByGenre("ENTERTAINMENT").apply(FakeRequest())
+      status(channelResult) must equalTo(OK)
+      contentType(channelResult) must beSome.which(_ == "application/json")
+      println(contentAsString(channelResult))
+      val channelsInResponse = contentAsJson(channelResult).as[Seq[TVChannel]]
+      channelsInResponse must contain(tvChannel2)
+      channelsInResponse must contain(tvChannel4)
+    }
+  }
 }
 trait TVChannelSetUpTest extends ScalaFutures {
 
@@ -72,9 +82,9 @@ trait TVChannelSetUpTest extends ScalaFutures {
   Thread.sleep(5000)
 
   val tvChannel1 = TVChannel("testTvChannel1", "genre1", "EN", Some(BSONObjectID.generate))
-  val tvChannel2 = TVChannel("testTvChannel2", "genre1", "EN", Some(BSONObjectID.generate))
+  val tvChannel2 = TVChannel("testTvChannel2", "ENTERTAINMENT", "EN", Some(BSONObjectID.generate))
   val tvChannel3 = TVChannel("testTvChannel3", "genre1", "EN", Some(BSONObjectID.generate))
-  val tvChannel4 = TVChannel("testTvChannel4", "genre1", "EN", Some(BSONObjectID.generate))
+  val tvChannel4 = TVChannel("testTvChannel4", "ENTERTAINMENT", "EN", Some(BSONObjectID.generate))
 
   whenReady(channels.bulkInsert(Enumerator(tvChannel1, tvChannel2, tvChannel3, tvChannel4))) {
     response => response must_== 4
