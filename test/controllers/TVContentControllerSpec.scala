@@ -128,8 +128,23 @@ class TVContentControllerSpec extends Specification with TVContentSetUpTest {
       val programResult: Future[SimpleResult] = controller.contentByGenre("sports").apply(FakeRequest())
       status(programResult) must equalTo(OK)
       val programInResponse = contentAsJson(programResult).as[Seq[TVProgramShort]]
-      programInResponse mustEqual Seq(TVShort(tvProgram2),TVShort(tvProgram4))
+      programInResponse mustEqual Seq(TVShort(tvProgram2),TVShort(tvProgram4), TVShort(tvProgram7), TVShort(tvProgram8))
 
+    }
+
+    "return NOT_FOUND if there is no TV content for genre FILM available now" in {
+
+      val programsResult: Future[SimpleResult] = controller.currentContentByGenre("FILM").apply(FakeRequest())
+      status(programsResult) must equalTo(NOT_FOUND)
+    }
+
+    "return the TV content for genre SPORTS available now" in {
+
+      val programsResult: Future[SimpleResult] = controller.currentContentByGenre("SPORTS").apply(FakeRequest())
+      status(programsResult) must equalTo(OK)
+      contentType(programsResult) must beSome.which(_ == "application/json")
+      val programsInResponse = contentAsJson(programsResult).as[Seq[TVProgramShort]]
+      programsInResponse mustEqual Seq(TVShort(tvProgram7), TVShort(tvProgram8))
     }
   }
 }
@@ -161,9 +176,14 @@ trait TVContentSetUpTest extends ScalaFutures {
     Some(List("flags1")), Some(Serie("serie1", "ep1", None, None, None, None)), Some(Program("program1", None)), Some(BSONObjectID.generate))
   val tvProgram6 = TVProgram("CHANNEL 3", fakeNow.plusHours(3), fakeNow.plusHours(5), Some(List("program_type5")),
     Some(List("flags1")), Some(Serie("serie1", "ep1", None, None, None, None)), Some(Program("program1", None)), Some(BSONObjectID.generate))
+  val tvProgram7 = TVProgram("CHANNEL4", fakeNow.minusHours(1), fakeNow.plusHours(2), Some(List("program_type3", "SPORTS")),
+    Some(List("flags1")), Some(Serie("serie1", "ep1", None, None, None, None)), Some(Program("program1", None)), Some(BSONObjectID.generate))
+  val tvProgram8 = TVProgram("CHANNEL5", fakeNow.minusHours(1), fakeNow.plusHours(2), Some(List("program_type8", "SPORTS")),
+    Some(List("flags1")), Some(Serie("serie1", "ep1", None, None, None, None)), Some(Program("program1", None)), Some(BSONObjectID.generate))
 
-  whenReady(programs.bulkInsert(Enumerator(tvProgram1, tvProgram2, tvProgram3, tvProgram4, tvProgram5, tvProgram6))) {
-    response => response must_== 6
+  whenReady(programs.bulkInsert(Enumerator(tvProgram1, tvProgram2, tvProgram3,
+    tvProgram4, tvProgram5, tvProgram6, tvProgram7, tvProgram8))) {
+    response => response must_== 8
   }
 
   class App extends TVContentController {

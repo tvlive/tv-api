@@ -55,4 +55,13 @@ trait TVContentController extends Controller {
       case Nil => NotFound
     }
   }
+
+  def currentContentByGenre(genre: String) = Action.async {
+    contentRepository.findCurrentContentByGenre(genre.toUpperCase()).map {
+      case head :: tail => {
+        Ok(Json.toJson(head :: tail))
+      }
+      case Nil => NotFound
+    }
+  }
 }

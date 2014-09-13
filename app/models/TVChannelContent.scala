@@ -40,6 +40,8 @@ trait ContentRepository {
 
   def findDayContentByGenre(genre: String): Future[Seq[TVProgramShort]] = ???
 
+  def findCurrentContentByGenre(genre: String): Future[Seq[TVProgramShort]] = ???
+
 }
 
 class TVContentRepository(name: String) extends ContentRepository with Connection with TimeProvider {
@@ -65,7 +67,6 @@ class TVContentRepository(name: String) extends ContentRepository with Connectio
         "endTime" -> BSONDocument("$gt" -> BSONDateTime(now.getMillis))))
 
     collection.find(query).one[TVProgram]
-
   }
 
   override def findLeftContentByChannel(channelName: String): Future[Seq[TVProgramShort]] = {
@@ -93,7 +94,19 @@ class TVContentRepository(name: String) extends ContentRepository with Connectio
     val query = BSONDocument(
       "$orderby" -> BSONDocument("channel" -> 1),
       "$query" -> BSONDocument("category" -> genre)
-        )
+    )
+
+    val found = collection.find(query).cursor[TVProgramShort]
+    found.collect[Seq]()
+  }
+
+  override def findCurrentContentByGenre(genre: String): Future[Seq[TVProgramShort]] = {
+    val now = currentDate()
+    val query = BSONDocument(
+      "$query" -> BSONDocument(
+        "category" -> genre,
+        "startTime" -> BSONDocument("$lte" -> BSONDateTime(now.getMillis)),
+        "endTime" -> BSONDocument("$gt" -> BSONDateTime(now.getMillis))))
 
     val found = collection.find(query).cursor[TVProgramShort]
     found.collect[Seq]()

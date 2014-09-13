@@ -28,7 +28,7 @@ class TVChannelContentRepositorySpec extends PlaySpec with MustMatchers with Bef
 
   val p1 = TVProgram("channel1", current.minusHours(4), current.minusHours(2), Some(List("documentary", "ENTERTAINMENT")), Some(List("flags1")), Some(Serie("serie1", "ep1", None, None, None, None)), Some(Program("program1", None)))
   val p2 = TVProgram("channel1", current.minusHours(2), current, Some(List("documentary")), Some(List("flags1")), Some(Serie("serie2", "ep1", None, None, None, None)), Some(Program("program1", None)))
-  val p3 = TVProgram("channel1", current, current.plusHours(1), Some(List("documentary", "ENTERTAINMENT")), Some(List("flags1")), Some(Serie("serie3", "ep1", None, None, None, None)), Some(Program("program1", None)))
+  val p3 = TVProgram("channel1", current, current.plusHours(1), Some(List("FILM", "ENTERTAINMENT")), Some(List("flags1")), Some(Serie("serie3", "ep1", None, None, None, None)), Some(Program("program1", None)))
   val p4 = TVProgram("channel1", current.plusHours(1), current.plusHours(3), Some(List("documentary")), Some(List("flags1")), Some(Serie("serie4", "ep1", None, None, None, None)), Some(Program("program1", None)))
   val p5 = TVProgram("channel1", current.plusHours(3), current.plusHours(5), Some(List("documentary")), Some(List("flags1")), Some(Serie("serie5", "ep1", None, None, None, None)), Some(Program("program1", None)))
   val p6 = TVProgram("channel1", current.plusHours(5), current.plusHours(7), Some(List("documentary")), Some(List("flags1")), Some(Serie("serie6", "ep1", None, None, None, None)), Some(Program("program1", None)))
@@ -86,7 +86,7 @@ class TVChannelContentRepositorySpec extends PlaySpec with MustMatchers with Bef
     }
   }
 
-  "findContentByGenre" should {
+  "findDayContentByGenre" should {
     "return all the TV content for a genre ENTERTAINMENT" in {
       whenReady(tvContentRepository.findDayContentByGenre("ENTERTAINMENT")){
         _ mustBe Seq(TVShort(p1), TVShort(p3))
@@ -99,5 +99,22 @@ class TVChannelContentRepositorySpec extends PlaySpec with MustMatchers with Bef
       }
     }
   }
+
+  "findCurrentContentByGenre" should {
+    "return the TV content for a genre FILM available now" in {
+
+      whenReady(tvContentRepository.findCurrentContentByGenre("FILM")){
+        _ mustBe Seq(TVShort(p3))
+      }
+    }
+
+    "return none TV Content for a genre NEWS" in {
+      whenReady(tvContentRepository.findCurrentContentByGenre("NEWS")){
+        _ mustBe List()
+      }
+    }
+  }
+
+
 
 }

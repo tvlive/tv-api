@@ -17,7 +17,9 @@ GET     /channel/:channelName/left          controllers.TVContentController.cont
 
 GET     /tvprogram/:id                      controllers.TVContentController.tvContentDetails(id)
 
-GET     /tvprogram/genre/:genre              controllers.TVContentController.contentByGenre(genre)
+GET     /tvprogram/genre/:genre             controllers.TVContentController.contentByGenre(genre)
+
+GET     /tvprogram/genre/:genre/current     controllers.TVContentController.currentContentByGenre(genre)
 
 
 # Map static resources from the /public folder to the /assets URL path
