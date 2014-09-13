@@ -48,7 +48,7 @@ trait TVContentController extends Controller {
   }
 
   def contentByGenre(genre: String) = Action.async {
-    contentRepository.findContentByGenre(genre.toUpperCase()).map {
+    contentRepository.findDayContentByGenre(genre.toUpperCase()).map {
       case head :: tail => {
         Ok(Json.toJson(head :: tail))
       }

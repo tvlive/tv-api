@@ -38,7 +38,7 @@ trait ContentRepository {
 
   def findContentByID(contentID: String): Future[Option[TVProgram]] = ???
 
-  def findContentByGenre(genre: String): Future[Seq[TVProgramShort]] = ???
+  def findDayContentByGenre(genre: String): Future[Seq[TVProgramShort]] = ???
 
 }
 
@@ -89,7 +89,7 @@ class TVContentRepository(name: String) extends ContentRepository with Connectio
     collection.find(query).one[TVProgram]
   }
 
-  override def findContentByGenre(genre: String): Future[Seq[TVProgramShort]] = {
+  override def findDayContentByGenre(genre: String): Future[Seq[TVProgramShort]] = {
     val query = BSONDocument(
       "$orderby" -> BSONDocument("channel" -> 1),
       "$query" -> BSONDocument("category" -> genre)

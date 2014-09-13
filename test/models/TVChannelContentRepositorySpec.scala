@@ -88,13 +88,13 @@ class TVChannelContentRepositorySpec extends PlaySpec with MustMatchers with Bef
 
   "findContentByGenre" should {
     "return all the TV content for a genre ENTERTAINMENT" in {
-      whenReady(tvContentRepository.findContentByGenre("ENTERTAINMENT")){
+      whenReady(tvContentRepository.findDayContentByGenre("ENTERTAINMENT")){
         _ mustBe Seq(TVShort(p1), TVShort(p3))
       }
     }
 
     "return none TV Content for a genre FOOTBALL" in {
-      whenReady(tvContentRepository.findContentByGenre("FOOTBALL")){
+      whenReady(tvContentRepository.findDayContentByGenre("FOOTBALL")){
         _ mustBe List()
       }
     }
