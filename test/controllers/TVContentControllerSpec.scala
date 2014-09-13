@@ -146,6 +146,23 @@ class TVContentControllerSpec extends Specification with TVContentSetUpTest {
       val programsInResponse = contentAsJson(programsResult).as[Seq[TVProgramShort]]
       programsInResponse mustEqual Seq(TVShort(tvProgram7), TVShort(tvProgram8))
     }
+
+    "return NOT_FOUND if there is no TV content for genre FILM available from now until the end of the day" in {
+
+      val programsResult: Future[SimpleResult] = controller.contentLeftByGenre("FILM").apply(FakeRequest())
+      status(programsResult) must equalTo(NOT_FOUND)
+    }
+
+    "return the TV content for genre HORROR available from now until the end of the day" in {
+
+      val programsResult: Future[SimpleResult] = controller.contentLeftByGenre("HORROR").apply(FakeRequest())
+      status(programsResult) must equalTo(OK)
+      contentType(programsResult) must beSome.which(_ == "application/json")
+      val programsInResponse = contentAsJson(programsResult).as[Seq[TVProgramShort]]
+      programsInResponse mustEqual Seq(TVShort(tvProgram6), TVShort(tvProgram5), TVShort(tvProgram9))
+    }
+
+
   }
 }
 
@@ -172,18 +189,20 @@ trait TVContentSetUpTest extends ScalaFutures {
     Some(List("flags1")), Some(Serie("serie1", "ep1", None, None, None, None)), Some(Program("program1", None)), Some(BSONObjectID.generate))
   val tvProgram4 = TVProgram("CHANNEL1", fakeNow.plusHours(1), fakeNow.plusHours(3), Some(List("program_type4", "SPORTS")),
     Some(List("flags1")), Some(Serie("serie1", "ep1", None, None, None, None)), Some(Program("program1", None)), Some(BSONObjectID.generate))
-  val tvProgram5 = TVProgram("CHANNEL1", fakeNow.plusHours(3), fakeNow.plusHours(4), Some(List("program_type5")),
+  val tvProgram5 = TVProgram("CHANNEL1", fakeNow.plusHours(3), fakeNow.plusHours(4), Some(List("HORROR", "program_type5")),
     Some(List("flags1")), Some(Serie("serie1", "ep1", None, None, None, None)), Some(Program("program1", None)), Some(BSONObjectID.generate))
-  val tvProgram6 = TVProgram("CHANNEL 3", fakeNow.plusHours(3), fakeNow.plusHours(5), Some(List("program_type5")),
+  val tvProgram6 = TVProgram("CHANNEL 3", fakeNow.plusHours(3), fakeNow.plusHours(5), Some(List("HORROR")),
     Some(List("flags1")), Some(Serie("serie1", "ep1", None, None, None, None)), Some(Program("program1", None)), Some(BSONObjectID.generate))
   val tvProgram7 = TVProgram("CHANNEL4", fakeNow.minusHours(1), fakeNow.plusHours(2), Some(List("program_type3", "SPORTS")),
     Some(List("flags1")), Some(Serie("serie1", "ep1", None, None, None, None)), Some(Program("program1", None)), Some(BSONObjectID.generate))
   val tvProgram8 = TVProgram("CHANNEL5", fakeNow.minusHours(1), fakeNow.plusHours(2), Some(List("program_type8", "SPORTS")),
     Some(List("flags1")), Some(Serie("serie1", "ep1", None, None, None, None)), Some(Program("program1", None)), Some(BSONObjectID.generate))
+  val tvProgram9 = TVProgram("CHANNEL5", fakeNow.minusHours(4), fakeNow.plusHours(5), Some(List("program_type8", "HORROR")),
+    Some(List("flags1")), Some(Serie("serie1", "ep1", None, None, None, None)), Some(Program("program1", None)), Some(BSONObjectID.generate))
 
   whenReady(programs.bulkInsert(Enumerator(tvProgram1, tvProgram2, tvProgram3,
-    tvProgram4, tvProgram5, tvProgram6, tvProgram7, tvProgram8))) {
-    response => response must_== 8
+    tvProgram4, tvProgram5, tvProgram6, tvProgram7, tvProgram8, tvProgram9))) {
+    response => response must_== 9
   }
 
   class App extends TVContentController {

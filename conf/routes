@@ -21,6 +21,8 @@ GET     /tvprogram/genre/:genre             controllers.TVContentController.cont
 
 GET     /tvprogram/genre/:genre/current     controllers.TVContentController.currentContentByGenre(genre)
 
+GET     /tvprogram/genre/:genre/left        controllers.TVContentController.contentLeftByGenre(genre)
+
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

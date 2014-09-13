@@ -115,6 +115,21 @@ class TVChannelContentRepositorySpec extends PlaySpec with MustMatchers with Bef
     }
   }
 
+  "findLeftContentByGenre" should {
+    "return the TV content for a genre documentary available  from now until the end of the day" in {
+
+      whenReady(tvContentRepository.findLeftContentByGenre("documentary")){
+        _ mustBe Seq(TVShort(p4), TVShort(p5), TVShort(p6))
+      }
+    }
+
+    "return none TV Content for a genre NEWS from now until the end of the day" in {
+      whenReady(tvContentRepository.findLeftContentByGenre("NEWS")){
+        _ mustBe List()
+      }
+    }
+  }
+
 
 
 }
