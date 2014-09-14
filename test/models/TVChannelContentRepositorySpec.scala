@@ -1,6 +1,6 @@
 package models
 
-import org.joda.time.DateTime
+import org.joda.time.{DateTimeZone, DateTime}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Millis, Seconds, Span}
 import org.scalatest.{BeforeAndAfter, MustMatchers}
@@ -16,7 +16,7 @@ class TVChannelContentRepositorySpec extends PlaySpec with MustMatchers with Bef
   implicit val defaultPatience =
     PatienceConfig(timeout = Span(1, Seconds), interval = Span(5, Millis))
 
-  val current = new DateTime(2010, 10, 10, 10, 0, 0)
+  val current = new DateTime(2010, 10, 10, 10, 0, 0, DateTimeZone.forID("Europe/London"))
 
   trait FakeTimeProvider extends TimeProvider {
     override def currentDate() = current
