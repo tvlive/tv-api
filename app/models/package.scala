@@ -1,4 +1,4 @@
-import org.joda.time.{DateTimeZone, DateTime}
+import org.joda.time.DateTime
 import reactivemongo.bson._
 
 package object models {
@@ -29,8 +29,8 @@ package object models {
     def read(doc: BSONDocument): TVProgram = {
       TVProgram(
         doc.getAs[BSONString]("channel").get.value,
-        new DateTime(doc.getAs[BSONDateTime]("startTime").get.value, DateTimeZone.forID("Europe/London")),
-        new DateTime(doc.getAs[BSONDateTime]("endTime").get.value, DateTimeZone.forID("Europe/London")),
+        new DateTime(doc.getAs[BSONDateTime]("startTime").get.value),
+        new DateTime(doc.getAs[BSONDateTime]("endTime").get.value),
         Option(doc.getAs[List[String]]("category").toList.flatten),
         Option(doc.getAs[List[String]]("accessibility").toList.flatten),
         doc.getAs[BSONDocument]("serie").map(SerieBSONReader.read(_)),
@@ -44,8 +44,8 @@ package object models {
     def read(doc: BSONDocument): TVProgramShort = {
       TVProgramShort(
         doc.getAs[BSONString]("channel").get.value,
-        new DateTime(doc.getAs[BSONDateTime]("startTime").get.value, DateTimeZone.forID("Europe/London")),
-        new DateTime(doc.getAs[BSONDateTime]("endTime").get.value, DateTimeZone.forID("Europe/London")),
+        new DateTime(doc.getAs[BSONDateTime]("startTime").get.value),
+        new DateTime(doc.getAs[BSONDateTime]("endTime").get.value),
         Option(doc.getAs[List[String]]("category").toList.flatten),
         doc.getAs[BSONDocument]("serie").map(SerieShortBSONReader.read(_)),
         doc.getAs[BSONDocument]("program").map(ProgramShortBSONReader.read(_)),
