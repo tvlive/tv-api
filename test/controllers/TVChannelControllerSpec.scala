@@ -49,7 +49,6 @@ class TVChannelControllerSpec extends Specification with TVChannelSetUpTest {
       val channelResult: Future[SimpleResult] = controller.channels().apply(FakeRequest())
       status(channelResult) must equalTo(OK)
       contentType(channelResult) must beSome.which(_ == "application/json")
-      println(contentAsString(channelResult))
       val channelsInResponse = contentAsJson(channelResult).as[Seq[TVChannel]]
       channelsInResponse mustEqual Seq(tvChannel1, tvChannel2, tvChannel3, tvChannel4)
     }
@@ -59,7 +58,6 @@ class TVChannelControllerSpec extends Specification with TVChannelSetUpTest {
       val channelResult: Future[SimpleResult] = controller.channelsByGenre("ENTERTAINMENT").apply(FakeRequest())
       status(channelResult) must equalTo(OK)
       contentType(channelResult) must beSome.which(_ == "application/json")
-      println(contentAsString(channelResult))
       val channelsInResponse = contentAsJson(channelResult).as[Seq[TVChannel]]
       channelsInResponse mustEqual Seq(tvChannel2, tvChannel4)
     }
@@ -69,7 +67,6 @@ class TVChannelControllerSpec extends Specification with TVChannelSetUpTest {
       val channelResult: Future[SimpleResult] = controller.channelsByGenre("documentary").apply(FakeRequest())
       status(channelResult) must equalTo(OK)
       contentType(channelResult) must beSome.which(_ == "application/json")
-      println(contentAsString(channelResult))
       val channelsInResponse = contentAsJson(channelResult).as[Seq[TVChannel]]
       channelsInResponse mustEqual Seq(tvChannel1, tvChannel3)
     }

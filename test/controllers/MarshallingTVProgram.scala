@@ -1,7 +1,7 @@
 package controllers
 
 import models.{Program, Serie, TVProgram}
-import org.joda.time.DateTime
+import org.joda.time.{DateTimeZone, DateTime}
 import org.joda.time.format.DateTimeFormat
 import org.scalatest.MustMatchers
 import org.scalatestplus.play.PlaySpec
@@ -11,17 +11,17 @@ import reactivemongo.bson.BSONObjectID
 class MarshallingTVProgram extends PlaySpec with MustMatchers {
   val id = BSONObjectID.generate
   val idString = id.stringify
-  val now = new DateTime(2014,10,10,10,0,0)
+  val now = new DateTime(2014,10,10,10,0,0, DateTimeZone.forID("UTC"))
   val fmt = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
 
   "Write and reads" should {
     "transform TVProgram object to json" in {
       Json.toJson(TVProgram("bbc1", now, now.plusHours(2), Some(List("documentary")), Some(List("flags1")), Some(Serie("serie1", "ep1", None, None, None, None)), Some(Program("program1", None)), Some(id))).toString() mustBe
-        s"""{"channel":"bbc1","start":"${fmt.print(now)}","end":"${fmt.print(now.plusHours(2))}","category":["documentary"],"accessibility":["flags1"],"series":{"serieTitle":"serie1","episodeTitle":"ep1"},"program":{"title":"program1"},"id":"$idString"}"""
+        s"""{"channel":"bbc1","start":"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}","end":"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}","category":["documentary"],"accessibility":["flags1"],"series":{"serieTitle":"serie1","episodeTitle":"ep1"},"program":{"title":"program1"},"id":"$idString"}"""
     }
     "transform json to TVProgram object" in {
-      Json.parse(s"""{"channel":"bbc1","start":"${fmt.print(now)}","end":"${fmt.print(now.plusHours(2))}","category":["documentary"],"accessibility":["flags1"],"series":{"serieTitle":"serie1","episodeTitle":"ep1"},"program":{"title":"program1"},"id":"$idString"}""")
-        .as[TVProgram] mustBe TVProgram("bbc1", now, now.plusHours(2), Some(List("documentary")), Some(List("flags1")), Some(Serie("serie1", "ep1", None, None, None, None)), Some(Program("program1", None)), Some(id))
+      Json.parse(s"""{"channel":"bbc1","start":"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}","end":"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}","category":["documentary"],"accessibility":["flags1"],"series":{"serieTitle":"serie1","episodeTitle":"ep1"},"program":{"title":"program1"},"id":"$idString"}""")
+        .as[TVProgram] mustBe TVProgram("bbc1", now.withZone(DateTimeZone.forID("Europe/London")), now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")), Some(List("documentary")), Some(List("flags1")), Some(Serie("serie1", "ep1", None, None, None, None)), Some(Program("program1", None)), Some(id))
     }
   }
 }

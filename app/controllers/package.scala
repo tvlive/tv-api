@@ -1,10 +1,10 @@
-import _root_.utils.TimeProvider
-import org.joda.time.DateTime
+import models._
+import org.joda.time.{DateTime, DateTimeZone}
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import reactivemongo.bson._
+
 import scala.util.Try
-import models._
 
 package object controllers {
 
@@ -50,14 +50,36 @@ package object controllers {
     Reads.jodaDateReads(pattern),
     Writes.jodaDateWrites(pattern))
 
-  implicit val tvProgramFmt = Json.format[TVProgram]
   implicit val programShortFmt = Json.format[ProgramShort]
   implicit val serieShortFmt = Json.format[SerieShort]
 
+  implicit val tvProgramReads: Reads[TVProgram] = ((__ \ "channel").read[String] and
+      (__ \ "start").read[DateTime].map[DateTime]{ dt => dt.withZoneRetainFields(DateTimeZone.forID("Europe/London"))} and
+      (__ \ "end").read[DateTime].map[DateTime](dt => dt.withZoneRetainFields(DateTimeZone.forID("Europe/London"))) and
+      (__ \ "category").read[Option[List[String]]] and
+      (__ \ "accessibility").read[Option[List[String]]] and
+      (__ \ "series").read[Option[Serie]] and
+      (__ \ "program").read[Option[Program]] and
+      (__ \ "id").read[Option[BSONObjectID]]
+      )(TVProgram.apply _)
+
+  implicit val tvProgramWrites = new Writes[TVProgram] {
+    override def writes(tvprogram: TVProgram): JsValue = Json.obj(
+      "channel" -> tvprogram.channel,
+      "start" -> tvprogram.start.toDateTime(DateTimeZone.forID("Europe/London")),
+      "end" -> tvprogram.end.toDateTime(DateTimeZone.forID("Europe/London")),
+      "category" -> tvprogram.category,
+      "accessibility" -> tvprogram.accessibility,
+      "series" -> tvprogram.series,
+      "program" -> tvprogram.program,
+      "id" -> tvprogram.id
+    )
+  }
+
   implicit val tvProgramShortReads: Reads[TVProgramShort] = (
     (__ \ "channel").read[String] and
-      (__ \ "start").read[DateTime] and
-      (__ \ "end").read[DateTime] and
+      (__ \ "start").read[DateTime].map[DateTime](dt => dt.withZoneRetainFields(DateTimeZone.forID("Europe/London"))) and
+      (__ \ "end").read[DateTime].map[DateTime](dt => dt.withZoneRetainFields(DateTimeZone.forID("Europe/London"))) and
       (__ \ "category").read[Option[List[String]]] and
       (__ \ "series").read[Option[SerieShort]] and
       (__ \ "program").read[Option[ProgramShort]] and
@@ -68,8 +90,8 @@ package object controllers {
   implicit val tvProgramShortWrites = new Writes[TVProgramShort] {
     override def writes(tvprogram: TVProgramShort): JsValue = Json.obj(
       "channel" -> tvprogram.channel,
-      "start" -> tvprogram.startTime,
-      "end" -> tvprogram.endTime,
+      "start" -> tvprogram.startTime.toDateTime(DateTimeZone.forID("Europe/London")),
+      "end" -> tvprogram.endTime.toDateTime(DateTimeZone.forID("Europe/London")),
       "category" -> tvprogram.category,
       "series" -> tvprogram.series,
       "program" -> tvprogram.program,

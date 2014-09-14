@@ -1,12 +1,13 @@
 package models
 
-import org.joda.time.DateTime
+import org.joda.time.{DateTime, DateTimeZone}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Millis, Seconds, Span}
 import org.scalatest.{BeforeAndAfter, MustMatchers}
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.iteratee.Enumerator
 import reactivemongo.bson.BSONObjectID
+import utils.DomainBuilder.TVShort
 import utils.TimeProvider
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -16,7 +17,7 @@ class TVChannelContentRepositorySpec extends PlaySpec with MustMatchers with Bef
   implicit val defaultPatience =
     PatienceConfig(timeout = Span(1, Seconds), interval = Span(5, Millis))
 
-  val current = new DateTime(2010, 10, 10, 10, 0, 0)
+  val current = new DateTime(2010, 10, 10, 10, 0, 0, DateTimeZone.forID("UTC"))
 
   trait FakeTimeProvider extends TimeProvider {
     override def currentDate() = current

@@ -15,11 +15,6 @@ case class TVProgramShort(channel: String, startTime: DateTime, endTime: DateTim
 }
 
 
-object TVShort {
-  def apply(tvProgram: TVProgram): TVProgramShort = TVProgramShort(tvProgram.channel, tvProgram.start, tvProgram.end, tvProgram.category, tvProgram.series.map(s => SerieShort(s.serieTitle)),
-    tvProgram.program.map(p => ProgramShort(p.title)), tvProgram.id)
-}
-
 case class Serie(serieTitle: String, episodeTitle: String, description: Option[String], seasonNumber: Option[String], episodeNumber: Option[String], totalNumber: Option[String])
 
 case class Program(title: String, description: Option[String])
