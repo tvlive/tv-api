@@ -1,10 +1,10 @@
-import _root_.utils.TimeProvider
-import org.joda.time.DateTime
+import models._
+import org.joda.time.{DateTime, DateTimeZone}
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import reactivemongo.bson._
+
 import scala.util.Try
-import models._
 
 package object controllers {
 
@@ -68,8 +68,8 @@ package object controllers {
   implicit val tvProgramShortWrites = new Writes[TVProgramShort] {
     override def writes(tvprogram: TVProgramShort): JsValue = Json.obj(
       "channel" -> tvprogram.channel,
-      "start" -> tvprogram.startTime,
-      "end" -> tvprogram.endTime,
+      "start" -> tvprogram.startTime.toDateTime(DateTimeZone.forID("Europe/London")),
+      "end" -> tvprogram.endTime.toDateTime(DateTimeZone.forID("Europe/London")),
       "category" -> tvprogram.category,
       "series" -> tvprogram.series,
       "program" -> tvprogram.program,
