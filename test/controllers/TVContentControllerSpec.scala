@@ -1,7 +1,7 @@
 package controllers
 
 import models._
-import org.joda.time.{DateTimeZone, DateTime}
+import org.joda.time.DateTime
 import org.junit.runner._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Millis, Seconds, Span}
@@ -173,7 +173,7 @@ trait TVContentSetUpTest extends ScalaFutures {
   implicit val defaultPatience =
     PatienceConfig(timeout = Span(1, Seconds), interval = Span(5, Millis))
 
-  val fakeNow = new DateTime(2014, 4, 4, 10, 0, 0, DateTimeZone.forID("Europe/London"))
+  val fakeNow = new DateTime(2014, 4, 4, 10, 0, 0)
   val tvContentRepository = new TVContentRepository("tvContentTest") {
     override def currentDate() = fakeNow
   }
