@@ -5,23 +5,23 @@
 # Home page
 GET     /                                   controllers.Application.index
 
-GET     /channels                           controllers.TVChannelController.channels
+GET     /channels                           			controllers.TVChannelController.channels
 
-GET     /channels/:genre                    controllers.TVChannelController.channelsByGenre(genre)
+GET     /channels/:genre                    			controllers.TVChannelController.channelsByGenre(genre)
 
-GET     /channel/:channelName/current       controllers.TVContentController.currentContent(channelName)
+GET     /tvcontent/channel/:channelName/current       	controllers.TVContentController.currentContent(channelName)
 
-GET     /channel/:channelName/today         controllers.TVContentController.allContent(channelName)
+GET     /tvcontent/channel/:channelName/today         	controllers.TVContentController.allContent(channelName)
 
-GET     /channel/:channelName/left          controllers.TVContentController.contentLeft(channelName)
+GET     /tvcontent/channel/:channelName/left          	controllers.TVContentController.contentLeft(channelName)
 
-GET     /tvprogram/:id                      controllers.TVContentController.tvContentDetails(id)
+GET     /tvcontent/:id                      			controllers.TVContentController.tvContentDetails(id)
 
-GET     /tvprogram/genre/:genre             controllers.TVContentController.contentByGenre(genre)
+GET     /tvcontent/genre/:genre/today             		controllers.TVContentController.contentByGenre(genre)
 
-GET     /tvprogram/genre/:genre/current     controllers.TVContentController.currentContentByGenre(genre)
+GET     /tvcontent/genre/:genre/current     			controllers.TVContentController.currentContentByGenre(genre)
 
-GET     /tvprogram/genre/:genre/left        controllers.TVContentController.contentLeftByGenre(genre)
+GET     /tvcontent/genre/:genre/left        			controllers.TVContentController.contentLeftByGenre(genre)
 
 
 # Map static resources from the /public folder to the /assets URL path
