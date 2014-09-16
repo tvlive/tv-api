@@ -12,11 +12,11 @@ class MarshallingTVChannel extends PlaySpec with MustMatchers {
 
   "Write and reads" should {
     "transform TVChannel object to json" in {
-      Json.toJson(TVChannel("bbc1", "genre1", "en", Some(id))).toString() mustBe s"""{"name":"bbc1","genre":"genre1","language":"en","id":\"$idString\","uriToday":"/channel/bbc1/today","uriCurrent":"/channel/bbc1/current","uriLeft":"/channel/bbc1/left"}"""
+      Json.toJson(TVChannel("bbc1", "genre1", "en", Some(id))).toString() mustBe s"""{"name":"bbc1","genre":"genre1","language":"en","id":\"$idString\","uriToday":"/tvcontent/channel/bbc1/today","uriCurrent":"/tvcontent/channel/bbc1/current","uriLeft":"/tvcontent/channel/bbc1/left"}"""
     }
 
     "transform json to TVChannel object" in {
-      Json.parse(s"""{"name":"bbc1","genre":"genre1","language":"en","id":\"$idString\","uriToday":"/channel/bbc1/today","uriCurrent":"/channel/bbc1/current","uriLeft":"/channel/bbc1/left"}""").as[TVChannel] mustBe TVChannel("bbc1", "genre1", "en", Some(id))
+      Json.parse(s"""{"name":"bbc1","genre":"genre1","language":"en","id":\"$idString\","uriToday":"/tvcontent/channel/bbc1/today","uriCurrent":"/tvcontent/channel/bbc1/current","uriLeft":"/tvcontent/channel/bbc1/left"}""").as[TVChannel] mustBe TVChannel("bbc1", "genre1", "en", Some(id))
     }
   }
 }

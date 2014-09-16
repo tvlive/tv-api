@@ -17,10 +17,10 @@ class MarshallingTVProgramShort extends PlaySpec with MustMatchers {
   "Write and reads" should {
     "transform TVProgram object to json" in {
       Json.toJson(TVProgramShort("bbc1", now, now.plusHours(2), Some(List("documentary")), Some(SerieShort("titleSerie")), Some(ProgramShort("titleProgram")), Some(id))).toString() mustBe
-        s"""{"channel":"bbc1","start":"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}","end":"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}","category":["documentary"],"series":{"serieTitle":"titleSerie"},"program":{"title":"titleProgram"},"uriTVProgramDetails":"/tvprogram/$idString","id":"$idString"}"""
+        s"""{"channel":"bbc1","start":"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}","end":"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}","category":["documentary"],"series":{"serieTitle":"titleSerie"},"program":{"title":"titleProgram"},"uriTVProgramDetails":"/tvcontent/$idString","id":"$idString"}"""
     }
     "transform json to TVProgram object" in {
-      Json.parse(s"""{"channel":"bbc1","start":"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}","end":"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}","category":["documentary"],"series":{"serieTitle":"titleSerie"},"program":{"title":"titleProgram"},"uriTVProgramDetails":"/tvprogram/$idString","id":"$idString"}""")
+      Json.parse(s"""{"channel":"bbc1","start":"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}","end":"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}","category":["documentary"],"series":{"serieTitle":"titleSerie"},"program":{"title":"titleProgram"},"uriTVProgramDetails":"/tvcontent  /$idString","id":"$idString"}""")
         .as[TVProgramShort] mustBe TVProgramShort("bbc1", now.withZone(DateTimeZone.forID("Europe/London")), now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")), Some(List("documentary")), Some(SerieShort("titleSerie")), Some(ProgramShort("titleProgram")), Some(id))
     }
   }
