@@ -19,7 +19,7 @@
   <body>
     <header>
       <div class="inner">
-        <h1>TVLIVE</h1>
+        <h1>TVLIVE.IO</h1>
         <h2>TV guide API for FREEEVIEW and SATELLITE television in UK</h2>
       </div>
     </header>
@@ -41,15 +41,24 @@
 <p>Everybody can use the service deployed in <a href="http://beta.tvlive.io">http://beta.tvlive.io</a> by free.
 
 
-<h3>Components and versions</h3>
+<h3>Versions</h3>
 
-<p>Currently there are 2 components deployed in the cloud.</p>
 <pre>
-  <code>tv-api version 0.9.0
+  <code>tv-api version 0.13.0  - Deployed 16 Septemer 2014
+    Issue 19 - Renaming routes
+    Issue 15 - List of tv programs left today by genre
+    Issue 7 - Fix production problem with dates (UTC vs Europe/London)
+  
+</code></pre>
+
+<p>Previous versions</p>
+
+<pre>
+  <code>tv-api version 0.9.0 - Deployed 10 Septemer 2014
     Issue 13 - List of channels by genre
     Issue 16 - List of tv programs current on tv by genre
   
-  tv-crawler version 0.1.1
+  tv-crawler version 0.1.1 - Deployed 10 Septemer 2014
     Issue 9 - Transform to uppercase the genres in the tvcontent
 
 </code></pre>
@@ -59,161 +68,39 @@
 
 <pre>List of TV channels: 
 
-<code>$curl http://beta.tvlive.io/channels
-
-[{"name":"5 STAR",
-  "genre":"ENTERTAINMENT",
-  "language":"EN",
-  "id":"540c0277a3d9bd4ae35dbd0d",
-  "uriToday":"/channel/5+STAR/today",
-  "uriCurrent":"/channel/5+STAR/current",
-  "uriLeft":"/channel/5+STAR/left"},
- {"name":"5 USA",
-  "genre":"ENTERTAINMENT",
-  "language":"EN",
-  "id":"540c027da3d9bd4ae35dbd19",
-  "uriToday":"/channel/5+USA/today",
-  "uriCurrent":"/channel/5+USA/current",
-  "uriLeft":"/channel/5+USA/left"},
-{"name":"ALIBI",
- "genre":"ENTERTAINMENT",
- "language":"EN",
- "id":"540c027da3d9bd4ae35dbd29",
- "uriToday":"/channel/ALIBI/today",
- "uriCurrent":"/channel/ALIBI/current",
- "uriLeft":"/channel/ALIBI/left"},
-{"name":"ANIMAL PLANET",
-"genre":"DOCUMENTARIES",
-"language":"EN",
-"id":"540c027da3d9bd4ae35dbd3c",
-"uriToday":"/channel/ANIMAL+PLANET/today",
-"uriCurrent":"/channel/ANIMAL+PLANET/current",
-"uriLeft":"/channel/ANIMAL+PLANET/left"}
-]
-</code></pre>
+<code>$curl http://beta.tvlive.io/channels</code></pre>
 
 <pre>List of TV channels by genre: 
 
-<code>$curl http://beta.tvlive.io/channels/kids
+<code>$curl http://beta.tvlive.io/channels/kids</code></pre>
 
-[{"name":"NICKELODEON",
-  "genre":"KIDS",
-  "language":"EN",
-  "id":"54107844a3d9bd02c0f5238b",
-  "uriToday":"/channel/NICKELODEON/today",
-  "uriCurrent":"/channel/NICKELODEON/current",
-  "uriLeft":"/channel/NICKELODEON/left"},
-  {"name":"NICKTOONS",
-  "genre":"KIDS",
-  "language":"EN",
-  "id":"54107845a3d9bd02c0f523b9",
-  "uriToday":"/channel/NICKTOONS/today",
-  "uriCurrent":"/channel/NICKTOONS/current",
-  "uriLeft":"/channel/NICKTOONS/left"},
-  {"name":"PLAY DISNEY",
-  "genre":"KIDS",
-  "language":"EN",
-  "id":"54107859a3d9bd02c0f52807",
-  "uriToday":"/channel/PLAY+DISNEY/today",
-  "uriCurrent":"/channel/PLAY+DISNEY/current",
-  "uriLeft":"/channel/PLAY+DISNEY/left"}]
-</code></pre>
+<pre>TV content today in BBC 1 London: 
 
+<code>$curl http://beta.tvlive.io/tvcontent/channel/BBC+1+LONDON/today</code></pre>
 
-<pre>TV programs today in BBC 1 London: 
+<pre>TV content left today in BBC 1 London: 
 
-<code>$curl http://http://beta.tvlive.io/channel/BBC+1+LONDON/today
-  
-[{"channel":"BBC 1 LONDON",
-"start":"2014-09-07T20:15:00",
-"end":"2014-09-07T21:15:00",
-"category":["General Movie","Drama"],
-"series":{"serieTitle":"The Village"},
-"uriTVProgramDetails":"/tvprogram/540c027fa3d9bd4ae35dbd84",
-"id":"540c027fa3d9bd4ae35dbd84"},
-{"channel":"BBC 1 LONDON",
-"start":"2014-09-07T21:15:00",
-"end":"2014-09-07T21:40:00",
-"category":["News","Regional News","Weather"],
-"program":{"title":"BBC News; Regional News and Weather"},
-"uriTVProgramDetails":"/tvprogram/540c027fa3d9bd4ae35dbd85",
-"id":"540c027fa3d9bd4ae35dbd85"}]
-</code></pre>
-
-<pre>TV programs left today in BBC 1 London: 
-
-<code>$curl http://beta.tvlive.io/channel/BBC+1+LONDON/left
-
-[{"channel":"BBC 1 LONDON",
-"start":"2014-09-07T21:40:00",
-"end":"2014-09-07T22:10:00",
-"category":["General Movie","Drama"],
-"series":{"serieTitle":"The Secrets"},
-"uriTVProgramDetails":"/tvprogram/540c027fa3d9bd4ae35dbd86",
-"id":"540c027fa3d9bd4ae35dbd86"},
-{"channel":"BBC 1 LONDON",
-"start":"2014-09-07T22:10:00",
-"end":"2014-09-08T02:00:00",
-"category":["General Education","Science","Factual Topics"],
-"series":{"serieTitle":"21 Up New Generation"},
-"uriTVProgramDetails":"/tvprogram/540c027fa3d9bd4ae35dbd87",
-"id":"540c027fa3d9bd4ae35dbd87"}]
-</code></pre>
+<code>$curl http://beta.tvlive.io/tvcontent/channel/BBC+1+LONDON/left</code></pre>
 
 <pre>What's on in BBC 1 London: 
 
-<code>$curl http://beta.tvlive.io/channel/BBC+1+LONDON/current>
+<code>$curl http://beta.tvlive.io/tvcontent/channel/BBC+1+LONDON/current></code></pre>
 
-{"channel":"BBC 1 LONDON"
-,"start":"2014-09-07T19:00:00",
-"end":"2014-09-07T20:15:00",
-"category":["General Show","Game Show"],
-"accessibility":["Subtitles","High definition"],
-"series":{"serieTitle":"Strictly Come Dancing: The Launch Show",
-    "episodeTitle":"Strictly Come Dancing: The Launch Show",
-    "description":"New series. As a curtain-raiser to the new series, which starts in a couple of weeks, Tess Daly and Claudia Winkleman host a red-carpet event in which this year's celebrities are paired up with their professional partners. The celebrity women shaking a leg or two are Frankie Bridge from girl band the Saturdays, tennis coach Judy Murray - best known as mother of 2013 men's Wimbledon champion Andy - This Morning reporter Alison Hammond, Casualty actress Sunetra Sarker, chart star Pixie Lott, TV presenter Caroline Flack and Mrs Brown's Boys actress Jennifer Gibney. The men donning their dancing shoes are former rugby player Thom Evans, one-time TOWIE star Mark Wright, EastEnders star Jake Wood, wildlife presenter Steve Backshall, Radio 1 DJ Scott Mills, MasterChef judge Gregg Wallace, Bargain Hunt presenter Tim Wonnacott and Blue singer Simon Webbe, who is not a Strictly novice, having appeared on the 2011 Christmas special. Together, the celebrities will give their first group performance, allowing an inkling of their various talents. Last year's winners Abbey Clancy and Aljaz Skorjanec will also repeat their waltz and there is music by Smokey Robinson with Imelda May and Five Seconds of Summer.",
-    "seasonNumber":"12",
-    "episodeNumber":"1",
-    "totalNumber":"15"},
-"id":"540c027fa3d9bd4ae35dbd83"}
+<pre>Western TV content today: 
 
-</code></pre>
+<code>curl http://beta.tvlive.io/tvcontent/genre/western/today</code></pre>
 
-<pre>TV guide by genre: 
+<pre>Horror TV content left today: 
 
-<code>curl http://beta.tvlive.io/tvprogram/genre/western
+<code>curl http://beta.tvlive.io/tvcontent/genre/horror/left</code></pre>
 
-  [{"channel":"SKY MOVIES MODERN GREATS HD",
-"start":"2014-09-10T12:45:00",
-"end":"2014-09-10T14:50:00",
-"category":["FILM","WESTERN"],
-"program":{
-    "title":"Warlock"},
-"uriTVProgramDetails":"/tvprogram/54107857a3d9bd02c0f5278b",
-"id":"54107857a3d9bd02c0f5278b"},
-{"channel":"TG4",
-"start":"2014-09-10T09:00:00",
-"end":"2014-09-10T10:00:00",
-"category":["WESTERN"],
-"series":{
-    "serieTitle":"Bonanza"},
-"uriTVProgramDetails":"/tvprogram/54107869a3d9bd02c0f52ba2",
-"id":"54107869a3d9bd02c0f52ba2"}]
+<pre>What documentaries are on TV now: 
 
+<code>curl http://beta.tvlive.io/tvcontent/genre/documentary/current</code></pre>
 
 <pre>TV program details: 
 
-<code>curl http://beta.tvlive.io/tvprogram/540c028aa3d9bd4ae35dbfbe
-
-{"channel":"CHANNEL 4",
-"start":"2014-09-07T21:50:00",
-"end":"2014-09-08T02:00:00",
-"category":["Film","Comedy","Romance"],
-"accessibility":["Subtitles","Audio described","High definition"],
-"program":{"title":"The Ugly Truth",
-           "description":"A single TV producer is appalled when a chauvinistic presenter is hired for her morning news show. However, she is forced to seek his help when she meets the man of her dreams, and begins testing his theories on what men find attractive. Romantic comedy, starring Gerard Butler, Katherine Heigl, Bree Turner and Eric Winter."},
-"id":"540c028aa3d9bd4ae35dbfbe"}
-</code></pre>
+<code>curl http://beta.tvlive.io/tvcontent/540c028aa3d9bd4ae35dbfbe</code></pre>
 
 <h3>
 <a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
@@ -223,16 +110,15 @@
         </section>
 
         <aside id="sidebar">
-          <a href="https://github.com/tvlive/tv-api/zipball/master" class="button">
-            <small>Download</small>
-            .zip file
-          </a>
-          <a href="https://github.com/tvlive/tv-api/tarball/master" class="button">
-            <small>Download</small>
-            .tar.gz file
+           <a href="https://github.com/tvlive/tv-api">
+            <img src="images/tvliveio_icono.png" />
           </a>
 
-          <p class="repo-owner"><a href="https://github.com/tvlive/tv-api"></a> is maintained by <a href="https://github.com/tvlive">tvlive</a>.</p>      
+          <a href="https://twitter.com/tvliveio" >
+            <img src="images/twitter_icono.png"/>Follow @tvliveio            
+          </a> 
+          
+          <!-- <p class="repo-owner"><a src= href="https://github.com/tvlive/tv-api"></a> is maintained by <a href="https://github.com/tvlive">tvlive</a>.</p>       -->
         </aside>
       </div>
     </div>
