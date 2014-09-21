@@ -5,17 +5,16 @@ import org.scalatest.time.{Millis, Seconds, Span}
 import org.scalatest.{BeforeAndAfter, MustMatchers}
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.iteratee.Enumerator
+import utils.MongoSugar
 
-import scala.concurrent.ExecutionContext.Implicits.global
-
-class TVChannelRepositorySpec extends PlaySpec with MustMatchers with BeforeAndAfter with ScalaFutures {
+class TVChannelRepositorySpec extends PlaySpec with MustMatchers with BeforeAndAfter with ScalaFutures with MongoSugar {
 
   implicit val defaultPatience =
     PatienceConfig(timeout = Span(1, Seconds), interval = Span(5, Millis))
 
-  val tvChannelCollectionName = this.getClass.getName
-  val tvChannelRepository = TVChannelRepository(tvChannelCollectionName)
-  val collection = tvChannelRepository.collection
+  val tvChannelRepository = new TVChannelRepository(this.getClass.getCanonicalName)
+  tvChannelRepository.drop()
+  Thread.sleep(5000)
 
   val tvChannel1 = TVChannel("testTvChannel1", "genre1", "EN")
   val tvChannel2 = TVChannel("testTvChannel2", "ENTERTAINMENT", "EN")
@@ -23,14 +22,14 @@ class TVChannelRepositorySpec extends PlaySpec with MustMatchers with BeforeAndA
   val tvChannel4 = TVChannel("testTvChannel4", "ENTERTAINMENT", "EN")
 
   before {
-    whenReady(collection.bulkInsert(Enumerator(tvChannel1, tvChannel2, tvChannel3, tvChannel4))) {
+    whenReady(tvChannelRepository.insertBulk(Enumerator(tvChannel1, tvChannel2, tvChannel3, tvChannel4))) {
       response => response mustBe 4
     }
   }
 
   after {
-    whenReady(collection.drop()) {
-      response => println(s"Collection $tvChannelCollectionName has been drop: $response")
+    whenReady(tvChannelRepository.drop()) {
+      response => println(s"Collection ${this.getClass.getCanonicalName} has been drop: $response")
     }
   }
 

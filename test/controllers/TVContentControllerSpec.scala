@@ -14,8 +14,8 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import reactivemongo.bson.BSONObjectID
 import utils.DomainBuilder._
+import utils.MongoSugar
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @RunWith(classOf[JUnitRunner])
@@ -175,7 +175,7 @@ class TVContentControllerSpec extends Specification with TVContentSetUpTest {
   }
 }
 
-trait TVContentSetUpTest extends ScalaFutures {
+trait TVContentSetUpTest extends ScalaFutures with MongoSugar {
 
   self:Specification =>
 
@@ -183,11 +183,11 @@ trait TVContentSetUpTest extends ScalaFutures {
     PatienceConfig(timeout = Span(1, Seconds), interval = Span(5, Millis))
 
   val fakeNow = new DateTime(2014, 4, 4, 10, 0, 0, DateTimeZone.forID("UTC"))
-  val tvContentRepository = new TVContentRepository("tvContentTest") {
+
+  val tvContentRepository = new TVContentRepository(this.getClass.getCanonicalName) {
     override def currentDate() = fakeNow
   }
-  val programs = tvContentRepository.collection
-  programs.drop()
+  tvContentRepository.drop()
   Thread.sleep(5000)
 
   val tvProgram1 = TVProgram("CHANNEL1", fakeNow.minusHours(3), fakeNow.minusHours(2), Some(List("program_type1", "ENTERTAINMENT")),
@@ -209,7 +209,7 @@ trait TVContentSetUpTest extends ScalaFutures {
   val tvProgram9 = TVProgram("CHANNEL5", fakeNow.minusHours(4), fakeNow.plusHours(5), Some(List("program_type8", "HORROR")),
     Some(List("flags1")), Some(Serie("serie1", "ep1", None, None, None, None)), Some(Program("program1", None)), Some(BSONObjectID.generate))
 
-  whenReady(programs.bulkInsert(Enumerator(tvProgram1, tvProgram2, tvProgram3,
+  whenReady(tvContentRepository.insertBulk(Enumerator(tvProgram1, tvProgram2, tvProgram3,
     tvProgram4, tvProgram5, tvProgram6, tvProgram7, tvProgram8, tvProgram9))) {
     response => response must_== 9
   }

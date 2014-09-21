@@ -2,6 +2,7 @@ package models
 
 import _root_.utils.TimeProvider
 import org.joda.time.DateTime
+import play.api.libs.iteratee.Enumerator
 import reactivemongo.bson._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -39,11 +40,20 @@ trait ContentRepository {
 
   def findLeftContentByGenre(genre: String): Future[Seq[TVProgramShort]] = ???
 
+  def drop(): Future[Boolean] = ???
+
+  def insertBulk(enumerator: Enumerator[TVProgram]): Future[Int] = ???
+
+
 }
 
-class TVContentRepository(name: String) extends ContentRepository with Connection with TimeProvider {
+class TVContentRepository(collectionName: String)(implicit val con: String => APIMongoConnection) extends ContentRepository with TimeProvider {
 
-  override lazy val collectionName = name
+  private val collection = con(collectionName).collection
+
+  override def drop(): Future[Boolean] = collection.drop()
+
+  override def insertBulk(channels: Enumerator[TVProgram]): Future[Int] = collection.bulkInsert(channels)
 
   override def findDayContentByChannel(channelName: String): Future[Seq[TVProgramShort]] = {
 
@@ -121,10 +131,6 @@ class TVContentRepository(name: String) extends ContentRepository with Connectio
     val found = collection.find(query).cursor[TVProgramShort]
     found.collect[Seq]()
   }
-}
-
-object TVContentRepository {
-  def apply(collectionName: String) = new TVContentRepository(collectionName)
 }
 
 

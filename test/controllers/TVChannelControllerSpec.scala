@@ -11,8 +11,8 @@ import play.api.mvc.SimpleResult
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import reactivemongo.bson.BSONObjectID
+import utils.MongoSugar
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @RunWith(classOf[JUnitRunner])
@@ -72,16 +72,16 @@ class TVChannelControllerSpec extends Specification with TVChannelSetUpTest {
     }
   }
 }
-trait TVChannelSetUpTest extends ScalaFutures {
 
-  self:Specification =>
+trait TVChannelSetUpTest extends ScalaFutures with MongoSugar {
+
+  self: Specification =>
 
   implicit val defaultPatience =
     PatienceConfig(timeout = Span(1, Seconds), interval = Span(5, Millis))
 
-  val tvChannelRepository = TVChannelRepository("tvChannelTest")
-  val channels = tvChannelRepository.collection
-  channels.drop()
+  val tvChannelRepository = new TVChannelRepository(this.getClass.getCanonicalName)
+  tvChannelRepository.drop()
   Thread.sleep(5000)
 
   val tvChannel1 = TVChannel("testTvChannel1", "DOCUMENTARY", "EN", Some(BSONObjectID.generate))
@@ -89,7 +89,7 @@ trait TVChannelSetUpTest extends ScalaFutures {
   val tvChannel3 = TVChannel("testTvChannel3", "DOCUMENTARY", "EN", Some(BSONObjectID.generate))
   val tvChannel4 = TVChannel("testTvChannel4", "ENTERTAINMENT", "EN", Some(BSONObjectID.generate))
 
-  whenReady(channels.bulkInsert(Enumerator(tvChannel1, tvChannel2, tvChannel3, tvChannel4))) {
+  whenReady(tvChannelRepository.insertBulk(Enumerator(tvChannel1, tvChannel2, tvChannel3, tvChannel4))) {
     response => response must_== 4
   }
 

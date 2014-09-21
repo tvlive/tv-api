@@ -4,16 +4,17 @@ import java.net.URLDecoder
 
 import models.TVContentRepository
 import play.api.libs.json.Json
-import play.api.mvc.{Action, Controller}
+import play.api.mvc.Action
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
 
 object TVContentController extends TVContentController {
-  override val contentRepository = TVContentRepository("tvContent")
+  override val contentRepository = new TVContentRepository("tvContent")
 }
 
-trait TVContentController extends Controller {
+trait TVContentController extends BaseController {
+
   val contentRepository: TVContentRepository
 
   def currentContent(channelName: String) = Action.async {

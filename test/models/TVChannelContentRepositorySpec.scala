@@ -8,11 +8,9 @@ import org.scalatestplus.play.PlaySpec
 import play.api.libs.iteratee.Enumerator
 import reactivemongo.bson.BSONObjectID
 import utils.DomainBuilder.TVShort
-import utils.TimeProvider
+import utils.{MongoSugar, TimeProvider}
 
-import scala.concurrent.ExecutionContext.Implicits.global
-
-class TVChannelContentRepositorySpec extends PlaySpec with MustMatchers with BeforeAndAfter with ScalaFutures {
+class TVChannelContentRepositorySpec extends PlaySpec with MustMatchers with BeforeAndAfter with ScalaFutures with MongoSugar {
 
   implicit val defaultPatience =
     PatienceConfig(timeout = Span(1, Seconds), interval = Span(5, Millis))
@@ -23,9 +21,9 @@ class TVChannelContentRepositorySpec extends PlaySpec with MustMatchers with Bef
     override def currentDate() = current
   }
 
-  val collectionName = this.getClass.getName
-  val tvContentRepository = new TVContentRepository(collectionName) with FakeTimeProvider
-  val collection = tvContentRepository.collection
+  val tvContentRepository = new TVContentRepository(this.getClass.getCanonicalName) with FakeTimeProvider
+  tvContentRepository.drop()
+  Thread.sleep(5000)
 
   val p1 = TVProgram("channel1", current.minusHours(4), current.minusHours(2), Some(List("documentary", "ENTERTAINMENT")), Some(List("flags1")), Some(Serie("serie1", "ep1", None, None, None, None)), Some(Program("program1", None)))
   val p2 = TVProgram("channel1", current.minusHours(2), current, Some(List("documentary")), Some(List("flags1")), Some(Serie("serie2", "ep1", None, None, None, None)), Some(Program("program1", None)))
@@ -36,14 +34,14 @@ class TVChannelContentRepositorySpec extends PlaySpec with MustMatchers with Bef
 
 
   before {
-    whenReady(collection.bulkInsert(Enumerator(p1, p2, p3, p4, p5, p6))) {
+    whenReady(tvContentRepository.insertBulk(Enumerator(p1, p2, p3, p4, p5, p6))) {
       response => response mustBe 6
     }
   }
 
   after {
-    whenReady(collection.drop()) {
-      response => println(s"Collection $collectionName has been drop: $response")
+    whenReady(tvContentRepository.drop()) {
+      response => println(s"Collection ${this.getClass.getCanonicalName} has been drop: $response")
     }
   }
 

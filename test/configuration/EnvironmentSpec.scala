@@ -8,7 +8,8 @@ class EnvironmentSpec extends PlaySpec {
 
   "Environment" should {
     "be configured with all the values" in
-      new WithApplication(FakeApplication(additionalConfiguration = Map("mongodbURI" -> "someURI", "mongodbDatabaseName" -> "someDatabaseName"))) {
+      new WithApplication(FakeApplication(additionalConfiguration =
+        Map("mongodbURI" -> "someURI", "mongodbDatabaseName" -> "someDatabaseName"))) {
         val env = new Environment(){}
         env.mongodbURI mustBe("someURI")
         env.mongodbDatabaseName mustBe("someDatabaseName")

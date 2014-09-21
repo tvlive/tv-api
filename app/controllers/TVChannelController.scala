@@ -2,14 +2,15 @@ package controllers
 
 import models.TVChannelRepository
 import play.api.libs.json.Json
-import play.api.mvc.{Action, Controller}
+import play.api.mvc.Action
+
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 object TVChannelController extends TVChannelController {
-  override val channelRepository = TVChannelRepository("tvChannel")
+
+  override val channelRepository = new TVChannelRepository("tvChannel")
 }
-trait TVChannelController extends Controller {
+trait TVChannelController extends BaseController {
 
   val channelRepository : TVChannelRepository
 

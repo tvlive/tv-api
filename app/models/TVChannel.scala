@@ -2,6 +2,7 @@ package models
 
 import java.net.URLEncoder
 
+import play.api.libs.iteratee.Enumerator
 import reactivemongo.bson._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -18,11 +19,17 @@ trait ChannelRepository {
 
   def listOfTVChannels(): Future[Seq[TVChannel]] = ???
   def listOfTVChannelsByGenre(genre: String): Future[Seq[TVChannel]] = ???
-
+  def drop(): Future[Boolean] = ???
+  def insertBulk(enumerator: Enumerator[TVChannel]): Future[Int] = ???
 }
 
-class TVChannelRepository(name: String) extends ChannelRepository with Connection {
-  override lazy val collectionName = name
+class TVChannelRepository(collectionName: String)(implicit val con: String => APIMongoConnection) extends ChannelRepository{
+
+  private val collection = con(collectionName).collection
+
+  override def drop(): Future[Boolean] = collection.drop()
+
+  override def insertBulk(channels: Enumerator[TVChannel]): Future[Int] = collection.bulkInsert(channels)
 
   override def listOfTVChannels(): Future[Seq[TVChannel]] = {
     val query = BSONDocument(
@@ -44,10 +51,6 @@ class TVChannelRepository(name: String) extends ChannelRepository with Connectio
     found.collect[Seq]()
   }
 
-}
-
-object TVChannelRepository {
-  def apply(collectionName: String) = new TVChannelRepository(collectionName)
 }
 
 
