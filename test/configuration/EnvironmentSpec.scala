@@ -9,14 +9,14 @@ class EnvironmentSpec extends PlaySpec {
   "Environment" should {
     "be configured with all the values" in
       new WithApplication(FakeApplication(additionalConfiguration =
-        Map("mongodbURI" -> "someURI", "mongodbDatabaseName" -> "someDatabaseName"))) {
+        Map("Test.mongodbURI" -> "someURI", "Test.mongodbDatabaseName" -> "someDatabaseName"))) {
         val env = new Environment(){}
         env.mongodbURI mustBe("someURI")
         env.mongodbDatabaseName mustBe("someDatabaseName")
     }
 
     "throw an IllegalArgumentException when no properyty mongodbURI defined" in
-      new WithApplication(FakeApplication(additionalConfiguration = Map("mongodbDatabaseName" -> "someDatabaseName"))) {
+      new WithApplication(FakeApplication(additionalConfiguration = Map("Test.mongodbDatabaseName" -> "someDatabaseName"))) {
         val ex = intercept[IllegalArgumentException] {
           val env = new Environment(){}
         }
@@ -24,7 +24,7 @@ class EnvironmentSpec extends PlaySpec {
       }
 
     "throw an IllegalArgumentException when no properyty mongodbDatabaseName defined" in
-      new WithApplication(FakeApplication(additionalConfiguration = Map("mongodbURI" -> "someURI"))) {
+      new WithApplication(FakeApplication(additionalConfiguration = Map("Test.mongodbURI" -> "someURI"))) {
         val ex = intercept[IllegalArgumentException] {
           val env = new Environment(){}
         }
