@@ -41,7 +41,20 @@
 <p>Everybody can use the service deployed in <a href="http://beta.tvlive.io">http://beta.tvlive.io</a> by free.
 
 
-<h3>Versions</h3>
+<h3>Current version</h3>
+
+<pre>
+  <code>tv-api version 0.15.0  - Deployed 24 Septemer 2014
+    Issue 26 - List of genres for channels
+    Issue 24 - Remove configuration hardcoded
+    Issue 25 - Refactoring Connection trait
+    Issue 17 - Adding Filter for auditing purposes
+
+  tv-crawler version 0.2.0 - Deployed 24 Septemer 2014
+      Issue 10 - Collection for genre for channels
+</code></pre>
+
+<h3>Previous versions</h3>
 
 <pre>
   <code>tv-api version 0.13.0  - Deployed 16 Septemer 2014
@@ -49,12 +62,7 @@
     Issue 15 - List of tv programs left today by genre
     Issue 7 - Fix production problem with dates (UTC vs Europe/London)
   
-</code></pre>
-
-<p>Previous versions</p>
-
-<pre>
-  <code>tv-api version 0.9.0 - Deployed 10 Septemer 2014
+  tv-api version 0.9.0 - Deployed 10 Septemer 2014
     Issue 13 - List of channels by genre
     Issue 16 - List of tv programs current on tv by genre
   
@@ -69,6 +77,10 @@
 <pre>List of TV channels: 
 
 <code>$curl http://beta.tvlive.io/channels</code></pre>
+
+<pre>List of genres for tv channels: 
+
+<code>$curl http://beta.tvlive.io/genres</code></pre>
 
 <pre>List of TV channels by genre: 
 
