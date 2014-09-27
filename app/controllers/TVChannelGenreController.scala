@@ -1,16 +1,16 @@
 package controllers
 
-import models.TVChannelGenreRepository
+import models.{ChannelGenreRepository, TVChannelGenreRepository}
 import play.api.libs.json.Json
 import play.api.mvc.Action
 import scala.concurrent.ExecutionContext.Implicits.global
 
 object TVChannelGenreController extends TVChannelGenreController {
-  override val channelGenreReporitory: TVChannelGenreRepository = new TVChannelGenreRepository("tvChannelGenre")
+  override val channelGenreReporitory = new TVChannelGenreRepository("tvChannelGenre")
 }
 
 trait TVChannelGenreController extends BaseController {
-  val channelGenreReporitory: TVChannelGenreRepository
+  val channelGenreReporitory: ChannelGenreRepository
 
   def genres() = Action.async {
     channelGenreReporitory.findAll().map{

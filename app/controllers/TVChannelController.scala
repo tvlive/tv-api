@@ -1,6 +1,6 @@
 package controllers
 
-import models.TVChannelRepository
+import models.{ChannelRepository, TVChannelRepository}
 import play.api.libs.json.Json
 import play.api.mvc.Action
 
@@ -12,7 +12,7 @@ object TVChannelController extends TVChannelController {
 }
 trait TVChannelController extends BaseController {
 
-  val channelRepository : TVChannelRepository
+  val channelRepository : ChannelRepository
 
   def channels = Action.async {
     channelRepository.listOfTVChannels().map {

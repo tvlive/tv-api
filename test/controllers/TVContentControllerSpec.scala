@@ -3,18 +3,14 @@ package controllers
 import models._
 import org.joda.time.{DateTime, DateTimeZone}
 import org.junit.runner._
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.time.{Millis, Seconds, Span}
 import org.specs2.mutable.Specification
 import org.specs2.runner._
-import play.api.libs.iteratee.Enumerator
 import play.api.libs.json.Json
 import play.api.mvc.SimpleResult
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import reactivemongo.bson.BSONObjectID
 import utils.DomainBuilder._
-import utils.MongoSugar
 
 import scala.concurrent.Future
 
@@ -117,7 +113,7 @@ class TVContentControllerSpec extends Specification with TVContentSetUpTest {
 
     "return NOT_FOUND if there is no TV content details for a specific TV Content ID" in {
 
-      val programResult: Future[SimpleResult] = controller.tvContentDetails(BSONObjectID.generate.stringify).apply(FakeRequest())
+      val programResult: Future[SimpleResult] = controller.tvContentDetails("noExistID").apply(FakeRequest())
       status(programResult) must equalTo(NOT_FOUND)
     }
 
@@ -126,7 +122,7 @@ class TVContentControllerSpec extends Specification with TVContentSetUpTest {
       status(programsResult) must equalTo(OK)
       val programInResponse = contentAsString(programsResult)
       val tvprograms = Json.parse(programInResponse).as[Seq[TVProgramShort]]
-      tvprograms mustEqual Seq(TVShortWithTimeZone(tvProgram1),TVShortWithTimeZone(tvProgram3))
+      tvprograms mustEqual Seq(TVShortWithTimeZone(tvProgram1), TVShortWithTimeZone(tvProgram3))
 
     }
 
@@ -135,7 +131,7 @@ class TVContentControllerSpec extends Specification with TVContentSetUpTest {
       status(programsResult) must equalTo(OK)
       val programInResponse = contentAsString(programsResult)
       val tvprograms = Json.parse(programInResponse).as[Seq[TVProgramShort]]
-      tvprograms mustEqual Seq(TVShortWithTimeZone(tvProgram2),TVShortWithTimeZone(tvProgram4), TVShortWithTimeZone(tvProgram7), TVShortWithTimeZone(tvProgram8))
+      tvprograms mustEqual Seq(TVShortWithTimeZone(tvProgram2), TVShortWithTimeZone(tvProgram4), TVShortWithTimeZone(tvProgram7), TVShortWithTimeZone(tvProgram8))
 
     }
 
@@ -175,20 +171,11 @@ class TVContentControllerSpec extends Specification with TVContentSetUpTest {
   }
 }
 
-trait TVContentSetUpTest extends ScalaFutures with MongoSugar {
+trait TVContentSetUpTest {
 
-  self:Specification =>
-
-  implicit val defaultPatience =
-    PatienceConfig(timeout = Span(1, Seconds), interval = Span(5, Millis))
+  self: Specification =>
 
   val fakeNow = new DateTime(2014, 4, 4, 10, 0, 0, DateTimeZone.forID("UTC"))
-
-  val tvContentRepository = new TVContentRepository(this.getClass.getCanonicalName) {
-    override def currentDate() = fakeNow
-  }
-  tvContentRepository.drop()
-  Thread.sleep(5000)
 
   val tvProgram1 = TVProgram("CHANNEL1", fakeNow.minusHours(3), fakeNow.minusHours(2), Some(List("program_type1", "ENTERTAINMENT")),
     Some(List("flags1")), Some(Serie("serie1", "ep1", None, None, None, None)), Some(Program("program1", None)), Some(BSONObjectID.generate))
@@ -209,13 +196,83 @@ trait TVContentSetUpTest extends ScalaFutures with MongoSugar {
   val tvProgram9 = TVProgram("CHANNEL5", fakeNow.minusHours(4), fakeNow.plusHours(5), Some(List("program_type8", "HORROR")),
     Some(List("flags1")), Some(Serie("serie1", "ep1", None, None, None, None)), Some(Program("program1", None)), Some(BSONObjectID.generate))
 
-  whenReady(tvContentRepository.insertBulk(Enumerator(tvProgram1, tvProgram2, tvProgram3,
-    tvProgram4, tvProgram5, tvProgram6, tvProgram7, tvProgram8, tvProgram9))) {
-    response => response must_== 9
+  val tvContentRepository = new ContentRepository() {
+    override def findLeftContentByChannel(channelName: String): Future[Seq[TVProgramShort]] = {
+      channelName match {
+        case "CHANNEL1" => Future.successful(Seq(TVShortWithTimeZone(tvProgram3),
+          TVShortWithTimeZone(tvProgram4),
+          TVShortWithTimeZone(tvProgram5)))
+        case "CHANNEL3" => Future.successful(Seq(TVShortWithTimeZone(tvProgram6)))
+        case "CHANNEL4" => Future.successful(Seq(TVShortWithTimeZone(tvProgram7),
+          TVShortWithTimeZone(tvProgram8)))
+        case "CHANNEL5" => Future.successful(Seq(TVShortWithTimeZone(tvProgram9)))
+        case _ => Future.successful(Seq())
+      }
+    }
+
+    override def findDayContentByChannel(channelName: String): Future[Seq[TVProgramShort]] = {
+      channelName match {
+        case "CHANNEL1" => Future.successful(Seq(TVShortWithTimeZone(tvProgram1),
+          TVShortWithTimeZone(tvProgram2),
+          TVShortWithTimeZone(tvProgram3),
+          TVShortWithTimeZone(tvProgram4),
+          TVShortWithTimeZone(tvProgram5)))
+        case "CHANNEL 3" => Future.successful(Seq(TVShortWithTimeZone(tvProgram6)))
+        case "CHANNEL4" => Future.successful(Seq(TVShortWithTimeZone(tvProgram7),
+          TVShortWithTimeZone(tvProgram8)))
+        case "CHANNEL5" => Future.successful(Seq(TVShortWithTimeZone(tvProgram9)))
+        case _ => Future.successful(Seq())
+      }
+    }
+
+    override def findCurrentContentByChannel(channelName: String): Future[Option[TVProgram]] = {
+      channelName match {
+        case "CHANNEL1" => Future.successful(Some(tvProgram3))
+        case "CHANNEL3" => Future.successful(Some(tvProgram6))
+        case "CHANNEL4" => Future.successful(Some(tvProgram7))
+        case "CHANNEL5" => Future.successful(Some(tvProgram9))
+        case _ => Future.successful(None)
+      }
+    }
+
+    override def findContentByID(contentID: String): Future[Option[TVProgram]] = {
+      if (contentID == tvProgram1.id.get.stringify)
+        Future.successful(Some(tvProgram1))
+      else Future.successful(None)
+    }
+
+    override def findDayContentByGenre(genre: String): Future[Seq[TVProgramShort]] = {
+      genre match {
+        case "ENTERTAINMENT" => Future.successful(Seq(TVShortWithTimeZone(tvProgram1),
+          TVShortWithTimeZone(tvProgram3)))
+        case "SPORTS" => Future.successful(Seq(TVShortWithTimeZone(tvProgram2),
+          TVShortWithTimeZone(tvProgram4),
+          TVShortWithTimeZone(tvProgram7),
+          TVShortWithTimeZone(tvProgram8)))
+        case _ => Future.successful(Seq())
+      }
+    }
+
+    override def findCurrentContentByGenre(genre: String): Future[Seq[TVProgramShort]] = {
+      genre match {
+        case "SPORTS" => Future.successful(Seq(TVShortWithTimeZone(tvProgram7),
+          TVShortWithTimeZone(tvProgram8)))
+        case _ => Future.successful(Seq())
+      }
+    }
+
+    override def findLeftContentByGenre(genre: String): Future[Seq[TVProgramShort]] = {
+      genre match {
+        case "HORROR" => Future.successful(Seq(TVShortWithTimeZone(tvProgram6),
+          TVShortWithTimeZone(tvProgram5),
+          TVShortWithTimeZone(tvProgram9)))
+        case _ => Future.successful(Seq())
+      }
+    }
   }
 
   class App extends TVContentController {
-    override val contentRepository: TVContentRepository = tvContentRepository
+    override val contentRepository = tvContentRepository
   }
 
   val controller = new App

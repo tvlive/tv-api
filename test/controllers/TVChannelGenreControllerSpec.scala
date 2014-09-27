@@ -1,17 +1,13 @@
 package controllers
 
-import models.{TVChannelGenreRepository, TVChannelGenre}
+import models.{ChannelGenreRepository, TVChannelGenre}
 import org.junit.runner.RunWith
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.time.{Seconds, Span, Millis}
 import org.specs2.mutable.Specification
 import org.specs2.runner.JUnitRunner
-import play.api.libs.iteratee.Enumerator
 import play.api.mvc.SimpleResult
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import reactivemongo.bson.BSONObjectID
-import utils.MongoSugar
 
 import scala.concurrent.Future
 
@@ -33,34 +29,23 @@ class TVChannelGenreControllerSpec extends Specification with TVChannelGenreSetU
 }
 
 
-trait TVChannelGenreSetUpTest extends ScalaFutures with MongoSugar {
+trait TVChannelGenreSetUpTest {
 
   self: Specification =>
 
-  implicit val defaultPatience =
-    PatienceConfig(timeout = Span(1, Seconds), interval = Span(5, Millis))
-
-  val tvChannelGenreRepository = new TVChannelGenreRepository(this.getClass.getCanonicalName)
-  tvChannelGenreRepository.drop()
-  Thread.sleep(5000)
-//
   val tvChannelGenre1 = TVChannelGenre("SPORTS", Some(BSONObjectID.generate))
   val tvChannelGenre2 = TVChannelGenre("ENTERTAINMENT", Some(BSONObjectID.generate))
   val tvChannelGenre3 = TVChannelGenre("DOCUMENTARY", Some(BSONObjectID.generate))
   val tvChannelGenre4 = TVChannelGenre("NEWS", Some(BSONObjectID.generate))
 
-  whenReady(tvChannelGenreRepository.insertBulk(
-    Enumerator(
-      tvChannelGenre1,
-      tvChannelGenre2,
-      tvChannelGenre3,
-      tvChannelGenre4))) {
-    response => response must_== 4
+  val tvChannelGenreRepository = new ChannelGenreRepository() {
+    override def findAll(): Future[Seq[TVChannelGenre]] = {
+      Future.successful(Seq(tvChannelGenre3, tvChannelGenre2, tvChannelGenre4, tvChannelGenre1))
+    }
   }
 
-
   class App extends controllers.TVChannelGenreController {
-    override val channelGenreReporitory: TVChannelGenreRepository = tvChannelGenreRepository
+    override val channelGenreReporitory = tvChannelGenreRepository
   }
 
   val controller = new App

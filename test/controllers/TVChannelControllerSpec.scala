@@ -1,17 +1,13 @@
 package controllers
 
-import models.{TVChannel, TVChannelRepository}
+import models.{ChannelRepository, TVChannel}
 import org.junit.runner._
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.time.{Millis, Seconds, Span}
 import org.specs2.mutable.Specification
 import org.specs2.runner._
-import play.api.libs.iteratee.Enumerator
 import play.api.mvc.SimpleResult
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import reactivemongo.bson.BSONObjectID
-import utils.MongoSugar
 
 import scala.concurrent.Future
 
@@ -73,29 +69,30 @@ class TVChannelControllerSpec extends Specification with TVChannelSetUpTest {
   }
 }
 
-trait TVChannelSetUpTest extends ScalaFutures with MongoSugar {
+trait TVChannelSetUpTest {
 
   self: Specification =>
-
-  implicit val defaultPatience =
-    PatienceConfig(timeout = Span(1, Seconds), interval = Span(5, Millis))
-
-  val tvChannelRepository = new TVChannelRepository(this.getClass.getCanonicalName)
-  tvChannelRepository.drop()
-  Thread.sleep(5000)
 
   val tvChannel1 = TVChannel("testTvChannel1", "DOCUMENTARY", "EN", Some(BSONObjectID.generate))
   val tvChannel2 = TVChannel("testTvChannel2", "ENTERTAINMENT", "EN", Some(BSONObjectID.generate))
   val tvChannel3 = TVChannel("testTvChannel3", "DOCUMENTARY", "EN", Some(BSONObjectID.generate))
   val tvChannel4 = TVChannel("testTvChannel4", "ENTERTAINMENT", "EN", Some(BSONObjectID.generate))
 
-  whenReady(tvChannelRepository.insertBulk(Enumerator(tvChannel1, tvChannel2, tvChannel3, tvChannel4))) {
-    response => response must_== 4
+  val tvChannelRepository = new ChannelRepository {
+    override def listOfTVChannels(): Future[Seq[TVChannel]] = {
+      Future.successful(Seq(tvChannel1, tvChannel2, tvChannel3, tvChannel4))
+    }
+
+    override def listOfTVChannelsByGenre(genre: String): Future[Seq[TVChannel]] = {
+      genre match {
+        case "ENTERTAINMENT" => Future.successful(Seq(tvChannel2, tvChannel4))
+        case "DOCUMENTARY" => Future.successful(Seq(tvChannel1, tvChannel3))
+      }
+    }
   }
 
-
   class App extends controllers.TVChannelController {
-    override val channelRepository: TVChannelRepository = tvChannelRepository
+    override val channelRepository: ChannelRepository = tvChannelRepository
   }
 
   val controller = new App

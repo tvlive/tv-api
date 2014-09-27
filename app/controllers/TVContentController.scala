@@ -2,7 +2,7 @@ package controllers
 
 import java.net.URLDecoder
 
-import models.TVContentRepository
+import models.{ContentRepository, TVContentRepository}
 import play.api.libs.json.Json
 import play.api.mvc.Action
 
@@ -15,7 +15,7 @@ object TVContentController extends TVContentController {
 
 trait TVContentController extends BaseController {
 
-  val contentRepository: TVContentRepository
+  val contentRepository: ContentRepository
 
   def currentContent(channelName: String) = Action.async {
     contentRepository.findCurrentContentByChannel(URLDecoder.decode(channelName, "UTF-8").toUpperCase).map {
