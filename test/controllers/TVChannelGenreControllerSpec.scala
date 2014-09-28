@@ -1,9 +1,8 @@
 package controllers
 
 import models.{ChannelGenreRepository, TVChannelGenre}
-import org.junit.runner.RunWith
-import org.specs2.mutable.Specification
-import org.specs2.runner.JUnitRunner
+import org.scalatest.MustMatchers
+import org.scalatestplus.play.PlaySpec
 import play.api.mvc.SimpleResult
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -11,16 +10,15 @@ import reactivemongo.bson.BSONObjectID
 
 import scala.concurrent.Future
 
-@RunWith(classOf[JUnitRunner])
-class TVChannelGenreControllerSpec extends Specification with TVChannelGenreSetUpTest {
+class TVChannelGenreControllerSpec extends PlaySpec with MustMatchers with TVChannelGenreSetUpTest {
 
 
   "TVChannelGenreController" should {
 
     "provide the all the list of genres availables for tv channels order alphabetically" in {
       val genresResult: Future[SimpleResult] = controller.genres().apply(FakeRequest())
-      status(genresResult) must equalTo(OK)
-      contentType(genresResult) must beSome.which(_ == "application/json")
+      status(genresResult) mustBe(OK)
+      contentType(genresResult) mustBe(Some("application/json"))
       val genresInResponse = contentAsJson(genresResult).as[Seq[TVChannelGenre]]
       genresInResponse mustEqual Seq(tvChannelGenre3, tvChannelGenre2, tvChannelGenre4, tvChannelGenre1)
 
@@ -30,8 +28,6 @@ class TVChannelGenreControllerSpec extends Specification with TVChannelGenreSetU
 
 
 trait TVChannelGenreSetUpTest {
-
-  self: Specification =>
 
   val tvChannelGenre1 = TVChannelGenre("SPORTS", Some(BSONObjectID.generate))
   val tvChannelGenre2 = TVChannelGenre("ENTERTAINMENT", Some(BSONObjectID.generate))

@@ -2,9 +2,8 @@ package controllers
 
 import models._
 import org.joda.time.{DateTime, DateTimeZone}
-import org.junit.runner._
-import org.specs2.mutable.Specification
-import org.specs2.runner._
+import org.scalatest.MustMatchers
+import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
 import play.api.mvc.SimpleResult
 import play.api.test.FakeRequest
@@ -14,8 +13,7 @@ import utils.DomainBuilder._
 
 import scala.concurrent.Future
 
-@RunWith(classOf[JUnitRunner])
-class TVContentControllerSpec extends Specification with TVContentSetUpTest {
+class TVContentControllerSpec extends PlaySpec with MustMatchers with TVContentSetUpTest {
 
 
   "TVContentController" should {
@@ -23,14 +21,14 @@ class TVContentControllerSpec extends Specification with TVContentSetUpTest {
     "return NOT_FOUND if there is no TV content for CHANNEL2 available today" in {
 
       val programsResult: Future[SimpleResult] = controller.allContent("CHANNEL2").apply(FakeRequest())
-      status(programsResult) must equalTo(NOT_FOUND)
+      status(programsResult) mustBe(NOT_FOUND)
     }
 
     "return all the TV content for a channel1 available today" in {
 
       val programResult: Future[SimpleResult] = controller.allContent("channel1").apply(FakeRequest())
-      status(programResult) must equalTo(OK)
-      contentType(programResult) must beSome.which(_ == "application/json")
+      status(programResult) mustBe(OK)
+      contentType(programResult) mustBe(Some("application/json"))
       val programInResponse = contentAsString(programResult)
       val tvprograms = Json.parse(programInResponse).as[Seq[TVProgramShort]]
       tvprograms must contain(TVShortWithTimeZone(tvProgram1))
@@ -44,8 +42,8 @@ class TVContentControllerSpec extends Specification with TVContentSetUpTest {
     "return all the TV content for a CHANNEL 3 available today" in {
 
       val programResult: Future[SimpleResult] = controller.allContent("CHANNEL+3").apply(FakeRequest())
-      status(programResult) must equalTo(OK)
-      contentType(programResult) must beSome.which(_ == "application/json")
+      status(programResult) mustBe(OK)
+      contentType(programResult) mustBe(Some("application/json"))
       val programInResponse = contentAsString(programResult)
       val tvprograms = Json.parse(programInResponse).as[Seq[TVProgramShort]]
       tvprograms must contain(TVShortWithTimeZone(tvProgram6))
@@ -55,8 +53,8 @@ class TVContentControllerSpec extends Specification with TVContentSetUpTest {
     "return all the TV content for a CHANNEL1 available today" in {
 
       val programResult: Future[SimpleResult] = controller.allContent("CHANNEL1").apply(FakeRequest())
-      status(programResult) must equalTo(OK)
-      contentType(programResult) must beSome.which(_ == "application/json")
+      status(programResult) mustBe(OK)
+      contentType(programResult) mustBe(Some("application/json"))
       val programInResponse = contentAsString(programResult)
       val tvprograms = Json.parse(programInResponse).as[Seq[TVProgramShort]]
       tvprograms must contain(TVShortWithTimeZone(tvProgram1))
@@ -69,24 +67,24 @@ class TVContentControllerSpec extends Specification with TVContentSetUpTest {
     "return NOT_FOUND if there is no TV content for CHANNEL2 available now" in {
 
       val programsResult: Future[SimpleResult] = controller.currentContent("CHANNEL2").apply(FakeRequest())
-      status(programsResult) must equalTo(NOT_FOUND)
+      status(programsResult) mustBe(NOT_FOUND)
     }
 
     "return the TV content for CHANNEL1 available now" in {
 
       val programsResult: Future[SimpleResult] = controller.currentContent("CHANNEL1").apply(FakeRequest())
-      status(programsResult) must equalTo(OK)
-      contentType(programsResult) must beSome.which(_ == "application/json")
+      status(programsResult) mustBe(OK)
+      contentType(programsResult) mustBe(Some("application/json"))
       val programInResponse = contentAsString(programsResult)
       val tvprogram = Json.parse(programInResponse).as[TVProgram]
-      tvprogram must be_==(TVProgramWithTimeZone(tvProgram3))
+      tvprogram mustBe(TVProgramWithTimeZone(tvProgram3))
     }
 
     "return the TV content for CHANNEL1 available from now until the end of the day" in {
 
       val programsResult: Future[SimpleResult] = controller.contentLeft("CHANNEL1").apply(FakeRequest())
-      status(programsResult) must equalTo(OK)
-      contentType(programsResult) must beSome.which(_ == "application/json")
+      status(programsResult) mustBe(OK)
+      contentType(programsResult) mustBe(Some("application/json"))
       val programInResponse = contentAsString(programsResult)
       val tvprograms = Json.parse(programInResponse).as[Seq[TVProgramShort]]
 
@@ -99,27 +97,27 @@ class TVContentControllerSpec extends Specification with TVContentSetUpTest {
     "return NOT_FOUND if there is no TV content for CHANNEL2 available from now until the end of the day" in {
 
       val programsResult: Future[SimpleResult] = controller.contentLeft("CHANNEL2").apply(FakeRequest())
-      status(programsResult) must equalTo(NOT_FOUND)
+      status(programsResult) mustBe(NOT_FOUND)
     }
 
     "return TV content details for a specific TV Content ID" in {
 
       val programResult: Future[SimpleResult] = controller.tvContentDetails(tvProgram1.id.get.stringify).apply(FakeRequest())
-      status(programResult) must equalTo(OK)
+      status(programResult) mustBe(OK)
       val programInResponse = contentAsString(programResult)
       val tvprogram = Json.parse(programInResponse).as[TVProgram]
-      tvprogram must be_==(TVProgramWithTimeZone(tvProgram1))
+      tvprogram mustBe(TVProgramWithTimeZone(tvProgram1))
     }
 
     "return NOT_FOUND if there is no TV content details for a specific TV Content ID" in {
 
       val programResult: Future[SimpleResult] = controller.tvContentDetails("noExistID").apply(FakeRequest())
-      status(programResult) must equalTo(NOT_FOUND)
+      status(programResult) mustBe(NOT_FOUND)
     }
 
     "return all the TV content available today by genre ENTERTAINMENT with upper case" in {
       val programsResult: Future[SimpleResult] = controller.contentByGenre("entertainment").apply(FakeRequest())
-      status(programsResult) must equalTo(OK)
+      status(programsResult) mustBe(OK)
       val programInResponse = contentAsString(programsResult)
       val tvprograms = Json.parse(programInResponse).as[Seq[TVProgramShort]]
       tvprograms mustEqual Seq(TVShortWithTimeZone(tvProgram1), TVShortWithTimeZone(tvProgram3))
@@ -128,7 +126,7 @@ class TVContentControllerSpec extends Specification with TVContentSetUpTest {
 
     "return all the TV content available today by genre sports with lower case" in {
       val programsResult: Future[SimpleResult] = controller.contentByGenre("sports").apply(FakeRequest())
-      status(programsResult) must equalTo(OK)
+      status(programsResult) mustBe(OK)
       val programInResponse = contentAsString(programsResult)
       val tvprograms = Json.parse(programInResponse).as[Seq[TVProgramShort]]
       tvprograms mustEqual Seq(TVShortWithTimeZone(tvProgram2), TVShortWithTimeZone(tvProgram4), TVShortWithTimeZone(tvProgram7), TVShortWithTimeZone(tvProgram8))
@@ -138,14 +136,14 @@ class TVContentControllerSpec extends Specification with TVContentSetUpTest {
     "return NOT_FOUND if there is no TV content for genre FILM available now" in {
 
       val programsResult: Future[SimpleResult] = controller.currentContentByGenre("FILM").apply(FakeRequest())
-      status(programsResult) must equalTo(NOT_FOUND)
+      status(programsResult) mustBe(NOT_FOUND)
     }
 
     "return the TV content for genre SPORTS available now" in {
 
       val programsResult: Future[SimpleResult] = controller.currentContentByGenre("SPORTS").apply(FakeRequest())
-      status(programsResult) must equalTo(OK)
-      contentType(programsResult) must beSome.which(_ == "application/json")
+      status(programsResult) mustBe(OK)
+      contentType(programsResult) mustBe(Some("application/json"))
       val programInResponse = contentAsString(programsResult)
       val tvprograms = Json.parse(programInResponse).as[Seq[TVProgramShort]]
       tvprograms mustEqual Seq(TVShortWithTimeZone(tvProgram7), TVShortWithTimeZone(tvProgram8))
@@ -154,14 +152,14 @@ class TVContentControllerSpec extends Specification with TVContentSetUpTest {
     "return NOT_FOUND if there is no TV content for genre FILM available from now until the end of the day" in {
 
       val programsResult: Future[SimpleResult] = controller.contentLeftByGenre("FILM").apply(FakeRequest())
-      status(programsResult) must equalTo(NOT_FOUND)
+      status(programsResult) mustBe(NOT_FOUND)
     }
 
     "return the TV content for genre HORROR available from now until the end of the day" in {
 
       val programsResult: Future[SimpleResult] = controller.contentLeftByGenre("HORROR").apply(FakeRequest())
-      status(programsResult) must equalTo(OK)
-      contentType(programsResult) must beSome.which(_ == "application/json")
+      status(programsResult) mustBe(OK)
+      contentType(programsResult) mustBe(Some("application/json"))
       val programInResponse = contentAsString(programsResult)
       val tvprograms = Json.parse(programInResponse).as[Seq[TVProgramShort]]
       tvprograms mustEqual Seq(TVShortWithTimeZone(tvProgram6), TVShortWithTimeZone(tvProgram5), TVShortWithTimeZone(tvProgram9))
@@ -172,8 +170,6 @@ class TVContentControllerSpec extends Specification with TVContentSetUpTest {
 }
 
 trait TVContentSetUpTest {
-
-  self: Specification =>
 
   val fakeNow = new DateTime(2014, 4, 4, 10, 0, 0, DateTimeZone.forID("UTC"))
 
