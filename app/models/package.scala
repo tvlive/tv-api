@@ -180,4 +180,23 @@ package object models {
       )
     }
   }
+
+  implicit object TVContentGenreBSONReader extends BSONDocumentReader[TVContentGenre] {
+    def read(doc: BSONDocument): TVContentGenre = {
+      TVContentGenre(
+        doc.getAs[BSONString]("genre").get.value,
+        doc.getAs[BSONObjectID]("_id")
+      )
+    }
+  }
+
+
+  implicit object TVContentGenreBSONWriter extends BSONDocumentWriter[TVContentGenre] {
+    override def write(t: TVContentGenre): BSONDocument = {
+      BSONDocument(
+        "_id" -> t.id.getOrElse(BSONObjectID.generate),
+        "genre" -> t.genre
+      )
+    }
+  }
 }

@@ -8,7 +8,7 @@ import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
 import reactivemongo.bson.BSONObjectID
 
-class MarshallingTVProgramShort extends PlaySpec with MustMatchers {
+class MarshallingTVProgramShortSpec extends PlaySpec with MustMatchers {
   val id = BSONObjectID.generate
   val idString = id.stringify
   val now = new DateTime(2014,10,10,10,0,0, DateTimeZone.forID("UTC"))

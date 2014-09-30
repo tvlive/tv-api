@@ -102,4 +102,5 @@ package object controllers {
 
 
   implicit val tvChannelGenreFmt = Json.format[TVChannelGenre]
+  implicit val tvContentGenreFmt = Json.format[TVContentGenre]
 }

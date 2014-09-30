@@ -6,7 +6,7 @@ import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
 import reactivemongo.bson.BSONObjectID
 
-class MarshallingTVChannel extends PlaySpec with MustMatchers {
+class MarshallingTVChannelSpec extends PlaySpec with MustMatchers {
   val id = BSONObjectID.generate
   val idString = id.stringify
 
