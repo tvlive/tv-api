@@ -7,7 +7,7 @@ import play.api.mvc.Action
 import scala.concurrent.ExecutionContext.Implicits.global
 
 object TVContentGenreController extends TVContentGenreController {
-  override val contentGenreReporitory: ContentGenreReporitory = new TVContentGenreRepository("tvChannelGenre")
+  override val contentGenreReporitory: ContentGenreReporitory = new TVContentGenreRepository("tvContentGenre")
 }
 
 trait TVContentGenreController extends BaseController {
