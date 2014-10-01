@@ -1,6 +1,5 @@
-package unit.configuration
+package configuration
 
-import configuration.Environment
 import org.scalatestplus.play.PlaySpec
 import play.api.test.{FakeApplication, WithApplication}
 

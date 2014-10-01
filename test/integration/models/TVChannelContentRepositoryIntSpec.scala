@@ -1,6 +1,5 @@
 package models
 
-import integration.MongoSugar
 import org.joda.time.{DateTime, DateTimeZone}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Millis, Seconds, Span}
@@ -11,7 +10,7 @@ import reactivemongo.bson.BSONObjectID
 import utils.DomainBuilder.TVShort
 import utils.TimeProvider
 
-class TVChannelContentRepositorySpec extends PlaySpec with MustMatchers with BeforeAndAfter with ScalaFutures with MongoSugar {
+class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with BeforeAndAfter with ScalaFutures with MongoSugar {
 
   implicit val defaultPatience =
     PatienceConfig(timeout = Span(1, Seconds), interval = Span(5, Millis))

@@ -1,13 +1,12 @@
 package models
 
-import integration.MongoSugar
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Millis, Seconds, Span}
 import org.scalatest.{BeforeAndAfter, MustMatchers}
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.iteratee.Enumerator
 
-class TVChannelRepositorySpec extends PlaySpec with MustMatchers with BeforeAndAfter with ScalaFutures with MongoSugar {
+class TVChannelRepositoryIntSpec extends PlaySpec with MustMatchers with BeforeAndAfter with ScalaFutures with MongoSugar {
 
   implicit val defaultPatience =
     PatienceConfig(timeout = Span(1, Seconds), interval = Span(5, Millis))

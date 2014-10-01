@@ -1,6 +1,5 @@
 package models
 
-import integration.MongoSugar
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Millis, Seconds, Span}
 import org.scalatest.{BeforeAndAfter, MustMatchers}
@@ -8,7 +7,7 @@ import org.scalatestplus.play.PlaySpec
 import play.api.libs.iteratee.Enumerator
 import reactivemongo.bson.BSONObjectID
 
-class TVChannelGenreRepositorySpec extends PlaySpec with MustMatchers with BeforeAndAfter with ScalaFutures with MongoSugar {
+class TVChannelGenreRepositoryIntSpec extends PlaySpec with MustMatchers with BeforeAndAfter with ScalaFutures with MongoSugar {
 
   val tvChannelGenre1 = TVChannelGenre("SPORTS", Some(BSONObjectID.generate))
   val tvChannelGenre2 = TVChannelGenre("ENTERTAINMENT", Some(BSONObjectID.generate))
