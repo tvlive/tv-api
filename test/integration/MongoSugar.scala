@@ -1,6 +1,6 @@
-package utils
+package integration
 
-import models.APIMongoConnection
+import _root_.models.APIMongoConnection
 
 trait MongoSugar {
 

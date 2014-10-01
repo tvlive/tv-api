@@ -1,5 +1,6 @@
 package models
 
+import integration.MongoSugar
 import org.joda.time.{DateTime, DateTimeZone}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Millis, Seconds, Span}
@@ -8,7 +9,7 @@ import org.scalatestplus.play.PlaySpec
 import play.api.libs.iteratee.Enumerator
 import reactivemongo.bson.BSONObjectID
 import utils.DomainBuilder.TVShort
-import utils.{MongoSugar, TimeProvider}
+import utils.TimeProvider
 
 class TVChannelContentRepositorySpec extends PlaySpec with MustMatchers with BeforeAndAfter with ScalaFutures with MongoSugar {
 
