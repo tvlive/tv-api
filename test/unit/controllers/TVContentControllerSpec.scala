@@ -174,23 +174,23 @@ trait TVContentSetUpTest {
   val fakeNow = new DateTime(2014, 4, 4, 10, 0, 0, DateTimeZone.forID("UTC"))
 
   val tvProgram1 = TVProgram("CHANNEL1", fakeNow.minusHours(3), fakeNow.minusHours(2), Some(List("program_type1", "ENTERTAINMENT")),
-    Some(Series("serie1", "ep1", None, None, None, None)), Some(Film("program1", None)), Some(BSONObjectID.generate))
+    Some(Series("serie1", "ep1", None, None, None, None, None)), Some(Film("program1", None, None, None)), Some(BSONObjectID.generate))
   val tvProgram2 = TVProgram("CHANNEL1", fakeNow.minusHours(2), fakeNow.minusHours(1), Some(List("program_type2", "SPORTS")),
-    Some(Series("serie1", "ep1", None, None, None, None)), Some(Film("program1", None)), Some(BSONObjectID.generate))
+    Some(Series("serie1", "ep1", None, None, None, None, None)), Some(Film("program1", None, None, None)), Some(BSONObjectID.generate))
   val tvProgram3 = TVProgram("CHANNEL1", fakeNow.minusHours(1), fakeNow.plusHours(1), Some(List("program_type3", "ENTERTAINMENT")),
-    Some(Series("serie1", "ep1", None, None, None, None)), Some(Film("program1", None)), Some(BSONObjectID.generate))
+    Some(Series("serie1", "ep1", None, None, None, None, None)), Some(Film("program1", None, None, None)), Some(BSONObjectID.generate))
   val tvProgram4 = TVProgram("CHANNEL1", fakeNow.plusHours(1), fakeNow.plusHours(3), Some(List("program_type4", "SPORTS")),
-    Some(Series("serie1", "ep1", None, None, None, None)), Some(Film("program1", None)), Some(BSONObjectID.generate))
+    Some(Series("serie1", "ep1", None, None, None, None, None)), Some(Film("program1", None, None, None)), Some(BSONObjectID.generate))
   val tvProgram5 = TVProgram("CHANNEL1", fakeNow.plusHours(3), fakeNow.plusHours(4), Some(List("HORROR", "program_type5")),
-    Some(Series("serie1", "ep1", None, None, None, None)), Some(Film("program1", None)), Some(BSONObjectID.generate))
+    Some(Series("serie1", "ep1", None, None, None, None, None)), Some(Film("program1", None, None, None)), Some(BSONObjectID.generate))
   val tvProgram6 = TVProgram("CHANNEL 3", fakeNow.plusHours(3), fakeNow.plusHours(5), Some(List("HORROR")),
-    Some(Series("serie1", "ep1", None, None, None, None)), Some(Film("program1", None)), Some(BSONObjectID.generate))
+    Some(Series("serie1", "ep1", None, None, None, None, None)), Some(Film("program1", None, None, None)), Some(BSONObjectID.generate))
   val tvProgram7 = TVProgram("CHANNEL4", fakeNow.minusHours(1), fakeNow.plusHours(2), Some(List("program_type3", "SPORTS")),
-    Some(Series("serie1", "ep1", None, None, None, None)), Some(Film("program1", None)), Some(BSONObjectID.generate))
+    Some(Series("serie1", "ep1", None, None, None, None, None)), Some(Film("program1", None, None, None)), Some(BSONObjectID.generate))
   val tvProgram8 = TVProgram("CHANNEL5", fakeNow.minusHours(1), fakeNow.plusHours(2), Some(List("program_type8", "SPORTS")),
-    Some(Series("serie1", "ep1", None, None, None, None)), Some(Film("program1", None)), Some(BSONObjectID.generate))
+    Some(Series("serie1", "ep1", None, None, None, None, None)), Some(Film("program1", None, None, None)), Some(BSONObjectID.generate))
   val tvProgram9 = TVProgram("CHANNEL5", fakeNow.minusHours(4), fakeNow.plusHours(5), Some(List("program_type8", "HORROR")),
-    Some(Series("serie1", "ep1", None, None, None, None)), Some(Film("program1", None)), Some(BSONObjectID.generate))
+    Some(Series("serie1", "ep1", None, None, None, None, None)), Some(Film("program1", None, None, None)), Some(BSONObjectID.generate))
 
   val tvContentRepository = new ContentRepository() {
     override def findLeftContentByChannel(channelName: String): Future[Seq[TVProgramShort]] = {

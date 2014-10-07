@@ -11,14 +11,15 @@ import scala.concurrent.Future
 case class TVProgram(channel: String, start: DateTime, end: DateTime, category: Option[List[String]],
                      series: Option[Series], film: Option[Film], id: Option[BSONObjectID] = Some(BSONObjectID.generate))
 
-case class TVProgramShort(channel: String, startTime: DateTime, endTime: DateTime, category: Option[List[String]], series: Option[SeriesShort], film: Option[FilmShort], id: Option[BSONObjectID] = Some(BSONObjectID.generate)) {
+case class TVProgramShort(channel: String, start: DateTime, end: DateTime, category: Option[List[String]], series: Option[SeriesShort], film: Option[FilmShort], id: Option[BSONObjectID] = Some(BSONObjectID.generate)) {
   val uriTVProgramDetails = controllers.routes.TVContentController.tvContentDetails(id.get.stringify).toString()
 }
 
 
-case class Series(serieTitle: String, episodeTitle: String, description: Option[String], seasonNumber: Option[String], episodeNumber: Option[String], totalNumber: Option[String])
+case class Series(serieTitle: String, episodeTitle: String, description: Option[String],
+                  seasonNumber: Option[String], episodeNumber: Option[String], totalNumber: Option[String], actors: Option[List[String]])
 
-case class Film(title: String, description: Option[String])
+case class Film(title: String, description: Option[String], actors: Option[List[String]], year: Option[String])
 
 case class SeriesShort(serieTitle: String)
 
@@ -58,7 +59,7 @@ class TVContentRepository(collectionName: String)(implicit val con: String => AP
   override def findDayContentByChannel(channelName: String): Future[Seq[TVProgramShort]] = {
 
     val query = BSONDocument(
-      "$orderby" -> BSONDocument("startTime" -> 1),
+      "$orderby" -> BSONDocument("start" -> 1),
       "$query" -> BSONDocument("channel" -> channelName)
     )
     val found = collection.find(query).cursor[TVProgramShort]
@@ -70,8 +71,8 @@ class TVContentRepository(collectionName: String)(implicit val con: String => AP
     val query = BSONDocument(
       "$query" -> BSONDocument(
         "channel" -> channelName,
-        "startTime" -> BSONDocument("$lte" -> BSONDateTime(now.getMillis)),
-        "endTime" -> BSONDocument("$gt" -> BSONDateTime(now.getMillis))))
+        "start" -> BSONDocument("$lte" -> BSONDateTime(now.getMillis)),
+        "end" -> BSONDocument("$gt" -> BSONDateTime(now.getMillis))))
 
     collection.find(query).one[TVProgram]
   }
@@ -80,10 +81,10 @@ class TVContentRepository(collectionName: String)(implicit val con: String => AP
 
     val now = currentDate()
     val query = BSONDocument(
-      "$orderby" -> BSONDocument("startTime" -> 1),
+      "$orderby" -> BSONDocument("start" -> 1),
       "$query" -> BSONDocument(
         "channel" -> channelName,
-        "endTime" -> BSONDocument("$gt" -> BSONDateTime(now.getMillis))))
+        "end" -> BSONDocument("$gt" -> BSONDateTime(now.getMillis))))
 
     val found = collection.find(query).cursor[TVProgramShort]
     found.collect[Seq]()
@@ -113,8 +114,8 @@ class TVContentRepository(collectionName: String)(implicit val con: String => AP
       "$orderby" -> BSONDocument("channel" -> 1),
       "$query" -> BSONDocument(
         "category" -> genre,
-        "startTime" -> BSONDocument("$lte" -> BSONDateTime(now.getMillis)),
-        "endTime" -> BSONDocument("$gt" -> BSONDateTime(now.getMillis))))
+        "start" -> BSONDocument("$lte" -> BSONDateTime(now.getMillis)),
+        "end" -> BSONDocument("$gt" -> BSONDateTime(now.getMillis))))
 
     val found = collection.find(query).cursor[TVProgramShort]
     found.collect[Seq]()
@@ -126,7 +127,7 @@ class TVContentRepository(collectionName: String)(implicit val con: String => AP
       "$orderby" -> BSONDocument("channel" -> 1),
       "$query" -> BSONDocument(
         "category" -> genre,
-        "endTime" -> BSONDocument("$gt" -> BSONDateTime(now.getMillis))))
+        "end" -> BSONDocument("$gt" -> BSONDateTime(now.getMillis))))
 
     val found = collection.find(query).cursor[TVProgramShort]
     found.collect[Seq]()

@@ -86,8 +86,8 @@ package object controllers {
   implicit val tvProgramShortWrites = new Writes[TVProgramShort] {
     override def writes(tvprogram: TVProgramShort): JsValue = Json.obj(
       "channel" -> tvprogram.channel,
-      "start" -> tvprogram.startTime.toDateTime(DateTimeZone.forID("Europe/London")),
-      "end" -> tvprogram.endTime.toDateTime(DateTimeZone.forID("Europe/London")),
+      "start" -> tvprogram.start.toDateTime(DateTimeZone.forID("Europe/London")),
+      "end" -> tvprogram.end.toDateTime(DateTimeZone.forID("Europe/London")),
       "category" -> tvprogram.category,
       "series" -> tvprogram.series,
       "film" -> tvprogram.film,

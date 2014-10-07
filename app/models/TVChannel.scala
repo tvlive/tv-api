@@ -44,7 +44,7 @@ class TVChannelRepository(collectionName: String)(implicit val con: String => AP
   override def listOfTVChannelsByGenre(genre: String): Future[Seq[TVChannel]] = {
     val query = BSONDocument(
       "$orderby" -> BSONDocument("name" -> 1),
-      "$query" -> BSONDocument("genre" -> genre)
+      "$query" -> BSONDocument("provider" -> genre)
     )
 
     val found = collection.find(query).cursor[TVChannel]

@@ -1,6 +1,8 @@
 import org.joda.time.{DateTime, DateTimeZone}
 import reactivemongo.bson._
 
+import scala.collection.immutable.::
+
 package object models {
 
   implicit object TVChannelBSONReader extends BSONDocumentReader[TVChannel] {
@@ -27,11 +29,11 @@ package object models {
     def read(doc: BSONDocument): TVProgram = {
       TVProgram(
         doc.getAs[BSONString]("channel").get.value,
-        new DateTime(doc.getAs[BSONDateTime]("startTime").get.value, DateTimeZone.forID("UTC")),
-        new DateTime(doc.getAs[BSONDateTime]("endTime").get.value, DateTimeZone.forID("UTC")),
+        new DateTime(doc.getAs[BSONDateTime]("start").get.value, DateTimeZone.forID("UTC")),
+        new DateTime(doc.getAs[BSONDateTime]("end").get.value, DateTimeZone.forID("UTC")),
         Option(doc.getAs[List[String]]("category").toList.flatten),
-        doc.getAs[BSONDocument]("serie").map(SerieBSONReader.read(_)),
-        doc.getAs[BSONDocument]("program").map(ProgramBSONReader.read(_)),
+        doc.getAs[BSONDocument]("series").map(SerieBSONReader.read(_)),
+        doc.getAs[BSONDocument]("film").map(ProgramBSONReader.read(_)),
         doc.getAs[BSONObjectID]("_id")
       )
     }
@@ -41,11 +43,11 @@ package object models {
     def read(doc: BSONDocument): TVProgramShort = {
       TVProgramShort(
         doc.getAs[BSONString]("channel").get.value,
-        new DateTime(doc.getAs[BSONDateTime]("startTime").get.value, DateTimeZone.forID("UTC")),
-        new DateTime(doc.getAs[BSONDateTime]("endTime").get.value, DateTimeZone.forID("UTC")),
+        new DateTime(doc.getAs[BSONDateTime]("start").get.value, DateTimeZone.forID("UTC")),
+        new DateTime(doc.getAs[BSONDateTime]("end").get.value, DateTimeZone.forID("UTC")),
         Option(doc.getAs[List[String]]("category").toList.flatten),
-        doc.getAs[BSONDocument]("serie").map(SerieShortBSONReader.read(_)),
-        doc.getAs[BSONDocument]("program").map(ProgramShortBSONReader.read(_)),
+        doc.getAs[BSONDocument]("series").map(SerieShortBSONReader.read(_)),
+        doc.getAs[BSONDocument]("film").map(ProgramShortBSONReader.read(_)),
         doc.getAs[BSONObjectID]("_id")
       )
     }
@@ -56,8 +58,8 @@ package object models {
       BSONDocument(
         "_id" -> t.id.getOrElse(BSONObjectID.generate),
         "channel" -> t.channel,
-        "startTime" -> new BSONDateTime(t.startTime.getMillis),
-        "endTime" -> new BSONDateTime(t.endTime.getMillis),
+        "start" -> new BSONDateTime(t.start.getMillis),
+        "end" -> new BSONDateTime(t.end.getMillis),
         "category" -> t.category
       )
     }
@@ -68,10 +70,10 @@ package object models {
       BSONDocument(
         "_id" -> t.id.getOrElse(BSONObjectID.generate),
         "channel" -> t.channel,
-        "startTime" -> new BSONDateTime(t.start.getMillis),
-        "endTime" -> new BSONDateTime(t.end.getMillis),
+        "start" -> new BSONDateTime(t.start.getMillis),
+        "end" -> new BSONDateTime(t.end.getMillis),
         "category" -> t.category,
-        "serie" -> t.series.map(SerieBSONWriter.write(_)),
+        "series" -> t.series.map(SerieBSONWriter.write(_)),
         "film" -> t.film.map(ProgramBSONWriter.write(_))
       )
     }
@@ -86,7 +88,8 @@ package object models {
         doc.getAs[BSONString]("description").map(_.value),
         doc.getAs[BSONString]("seasonNumber").map(_.value),
         doc.getAs[BSONString]("episodeNumber").map(_.value),
-        doc.getAs[BSONString]("totalNumber").map(_.value)
+        doc.getAs[BSONString]("totalNumber").map(_.value),
+        Option(doc.getAs[List[String]]("actors").toList.flatten)
       )
     }
   }
@@ -100,7 +103,8 @@ package object models {
         "description" -> t.description,
         "seasonNumber" -> t.seasonNumber,
         "episodeNumber" -> t.episodeNumber,
-        "totalNumber" -> t.totalNumber
+        "totalNumber" -> t.totalNumber,
+        "actors" -> t.actors
       )
     }
   }
@@ -126,7 +130,9 @@ package object models {
     def read(doc: BSONDocument): Film = {
       Film(
         doc.getAs[BSONString]("title").get.value,
-        doc.getAs[BSONString]("description").map(_.value)
+        doc.getAs[BSONString]("description").map(_.value),
+        Option(doc.getAs[List[String]]("actors").toList.flatten),
+        doc.getAs[BSONString]("year").map(_.value)
       )
     }
   }
@@ -136,7 +142,9 @@ package object models {
     override def write(t: Film): BSONDocument = {
       BSONDocument(
         "title" -> t.title,
-        "description" -> t.description
+        "description" -> t.description,
+        "actors" -> t.actors,
+        "year" -> t.year
       )
     }
   }
@@ -195,4 +203,5 @@ package object models {
       )
     }
   }
+
 }
