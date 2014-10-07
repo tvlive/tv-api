@@ -25,16 +25,14 @@ package object controllers {
 
   implicit val reviewReads: Reads[TVChannel] = (
     (__ \ "name").read[String] and
-      (__ \ "genre").read[String] and
-      (__ \ "language").read[String] and
+      (__ \ "provider").read[List[String]] and
       (__ \ "id").read[Option[BSONObjectID]]
     )(TVChannel.apply _)
 
   implicit val tvChannelWrites = new Writes[TVChannel] {
     override def writes(tvchannel: TVChannel): JsValue = Json.obj(
       "name" -> tvchannel.name,
-      "genre" -> tvchannel.genre,
-      "language" -> tvchannel.language,
+      "provider" -> tvchannel.provider,
       "id" -> tvchannel.id,
       "uriToday" -> tvchannel.uriToday,
       "uriCurrent" -> tvchannel.uriCurrent,

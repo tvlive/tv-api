@@ -7,8 +7,7 @@ package object models {
     def read(doc: BSONDocument): TVChannel = {
       TVChannel(
         doc.getAs[BSONString]("name").get.value,
-        doc.getAs[BSONString]("genre").get.value,
-        doc.getAs[BSONString]("language").get.value,
+        doc.getAs[List[String]]("provider").toList.flatten,
         doc.getAs[BSONObjectID]("_id"))
     }
   }
@@ -18,8 +17,7 @@ package object models {
       BSONDocument(
         "_id" -> t.id.getOrElse(BSONObjectID.generate),
         "name" -> t.name,
-        "genre" -> t.genre,
-        "language" -> t.language
+        "provider" -> t.provider
       )
     }
   }
