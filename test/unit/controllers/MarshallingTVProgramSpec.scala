@@ -16,9 +16,9 @@ class MarshallingTVProgramSpec extends PlaySpec with MustMatchers {
 
   "Write and reads" should {
     "transform TVProgram object to json" in {
-      Json.toJson(TVProgram("bbc1", now, now.plusHours(2), Some(List("documentary")), Some(List("flags1")),
+      Json.toJson(TVProgram("bbc1", now, now.plusHours(2), Some(List("documentary")),
         Some(Series("serie1", "ep1", None, None, None, None)), Some(Film("program1", None)), Some(id))).toString() mustBe
-        s"""{"channel":"bbc1","start":"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}","end":"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}","category":["documentary"],"accessibility":["flags1"],"series":{"serieTitle":"serie1","episodeTitle":"ep1"},"film":{"title":"program1"},"id":"$idString"}""".stripMargin
+        s"""{"channel":"bbc1","start":"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}","end":"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}","category":["documentary"],"series":{"serieTitle":"serie1","episodeTitle":"ep1"},"film":{"title":"program1"},"id":"$idString"}""".stripMargin
     }
     "transform json to TVProgram object" in {
       Json.parse(
@@ -26,12 +26,11 @@ class MarshallingTVProgramSpec extends PlaySpec with MustMatchers {
            |"start":"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}",
            |"end":"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}",
            |"category":["documentary"],
-           |"accessibility":["flags1"],
            |"series":{"serieTitle":"serie1","episodeTitle":"ep1"},
            |"film":{"title":"program1"},
            |"id":"$idString"}""".stripMargin)
         .as[TVProgram] mustBe TVProgram("bbc1", now.withZone(DateTimeZone.forID("Europe/London")), now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")),
-        Some(List("documentary")), Some(List("flags1")), Some(Series("serie1", "ep1", None, None, None, None)), Some(Film("program1", None)), Some(id))
+        Some(List("documentary")), Some(Series("serie1", "ep1", None, None, None, None)), Some(Film("program1", None)), Some(id))
     }
   }
 }

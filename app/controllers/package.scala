@@ -55,7 +55,6 @@ package object controllers {
       (__ \ "start").read[DateTime].map[DateTime]{ dt => dt.withZoneRetainFields(DateTimeZone.forID("Europe/London"))} and
       (__ \ "end").read[DateTime].map[DateTime](dt => dt.withZoneRetainFields(DateTimeZone.forID("Europe/London"))) and
       (__ \ "category").read[Option[List[String]]] and
-      (__ \ "accessibility").read[Option[List[String]]] and
       (__ \ "series").read[Option[Series]] and
       (__ \ "film").read[Option[Film]] and
       (__ \ "id").read[Option[BSONObjectID]]
@@ -67,7 +66,6 @@ package object controllers {
       "start" -> tvprogram.start.toDateTime(DateTimeZone.forID("Europe/London")),
       "end" -> tvprogram.end.toDateTime(DateTimeZone.forID("Europe/London")),
       "category" -> tvprogram.category,
-      "accessibility" -> tvprogram.accessibility,
       "series" -> tvprogram.series,
       "film" -> tvprogram.film,
       "id" -> tvprogram.id

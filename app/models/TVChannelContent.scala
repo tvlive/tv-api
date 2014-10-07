@@ -9,7 +9,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 case class TVProgram(channel: String, start: DateTime, end: DateTime, category: Option[List[String]],
-                     accessibility: Option[List[String]], series: Option[Series], film: Option[Film], id: Option[BSONObjectID] = Some(BSONObjectID.generate))
+                     series: Option[Series], film: Option[Film], id: Option[BSONObjectID] = Some(BSONObjectID.generate))
 
 case class TVProgramShort(channel: String, startTime: DateTime, endTime: DateTime, category: Option[List[String]], series: Option[SeriesShort], film: Option[FilmShort], id: Option[BSONObjectID] = Some(BSONObjectID.generate)) {
   val uriTVProgramDetails = controllers.routes.TVContentController.tvContentDetails(id.get.stringify).toString()
