@@ -9,20 +9,20 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 case class TVProgram(channel: String, start: DateTime, end: DateTime, category: Option[List[String]],
-                     accessibility: Option[List[String]], series: Option[Serie], program: Option[Program], id: Option[BSONObjectID] = Some(BSONObjectID.generate))
+                     accessibility: Option[List[String]], series: Option[Series], film: Option[Film], id: Option[BSONObjectID] = Some(BSONObjectID.generate))
 
-case class TVProgramShort(channel: String, startTime: DateTime, endTime: DateTime, category: Option[List[String]], series: Option[SerieShort], program: Option[ProgramShort], id: Option[BSONObjectID] = Some(BSONObjectID.generate)) {
+case class TVProgramShort(channel: String, startTime: DateTime, endTime: DateTime, category: Option[List[String]], series: Option[SeriesShort], film: Option[FilmShort], id: Option[BSONObjectID] = Some(BSONObjectID.generate)) {
   val uriTVProgramDetails = controllers.routes.TVContentController.tvContentDetails(id.get.stringify).toString()
 }
 
 
-case class Serie(serieTitle: String, episodeTitle: String, description: Option[String], seasonNumber: Option[String], episodeNumber: Option[String], totalNumber: Option[String])
+case class Series(serieTitle: String, episodeTitle: String, description: Option[String], seasonNumber: Option[String], episodeNumber: Option[String], totalNumber: Option[String])
 
-case class Program(title: String, description: Option[String])
+case class Film(title: String, description: Option[String])
 
-case class SerieShort(serieTitle: String)
+case class SeriesShort(serieTitle: String)
 
-case class ProgramShort(title: String)
+case class FilmShort(title: String)
 
 trait ContentRepository {
 

@@ -40,24 +40,24 @@ package object controllers {
     )
   }
 
-  implicit val programFmt = Json.format[Program]
-  implicit val serieFmt = Json.format[Serie]
+  implicit val programFmt = Json.format[Film]
+  implicit val serieFmt = Json.format[Series]
   val pattern = "yyyy-MM-dd'T'HH:mm:ss"
 
   implicit val dateFormat = Format[DateTime](
     Reads.jodaDateReads(pattern),
     Writes.jodaDateWrites(pattern))
 
-  implicit val programShortFmt = Json.format[ProgramShort]
-  implicit val serieShortFmt = Json.format[SerieShort]
+  implicit val programShortFmt = Json.format[FilmShort]
+  implicit val serieShortFmt = Json.format[SeriesShort]
 
   implicit val tvProgramReads: Reads[TVProgram] = ((__ \ "channel").read[String] and
       (__ \ "start").read[DateTime].map[DateTime]{ dt => dt.withZoneRetainFields(DateTimeZone.forID("Europe/London"))} and
       (__ \ "end").read[DateTime].map[DateTime](dt => dt.withZoneRetainFields(DateTimeZone.forID("Europe/London"))) and
       (__ \ "category").read[Option[List[String]]] and
       (__ \ "accessibility").read[Option[List[String]]] and
-      (__ \ "series").read[Option[Serie]] and
-      (__ \ "program").read[Option[Program]] and
+      (__ \ "series").read[Option[Series]] and
+      (__ \ "film").read[Option[Film]] and
       (__ \ "id").read[Option[BSONObjectID]]
       )(TVProgram.apply _)
 
@@ -69,7 +69,7 @@ package object controllers {
       "category" -> tvprogram.category,
       "accessibility" -> tvprogram.accessibility,
       "series" -> tvprogram.series,
-      "program" -> tvprogram.program,
+      "film" -> tvprogram.film,
       "id" -> tvprogram.id
     )
   }
@@ -79,8 +79,8 @@ package object controllers {
       (__ \ "start").read[DateTime].map[DateTime](dt => dt.withZoneRetainFields(DateTimeZone.forID("Europe/London"))) and
       (__ \ "end").read[DateTime].map[DateTime](dt => dt.withZoneRetainFields(DateTimeZone.forID("Europe/London"))) and
       (__ \ "category").read[Option[List[String]]] and
-      (__ \ "series").read[Option[SerieShort]] and
-      (__ \ "program").read[Option[ProgramShort]] and
+      (__ \ "series").read[Option[SeriesShort]] and
+      (__ \ "film").read[Option[FilmShort]] and
       (__ \ "id").read[Option[BSONObjectID]]
     )(TVProgramShort.apply _)
 
@@ -92,7 +92,7 @@ package object controllers {
       "end" -> tvprogram.endTime.toDateTime(DateTimeZone.forID("Europe/London")),
       "category" -> tvprogram.category,
       "series" -> tvprogram.series,
-      "program" -> tvprogram.program,
+      "film" -> tvprogram.film,
       "uriTVProgramDetails" -> tvprogram.uriTVProgramDetails,
       "id" -> tvprogram.id
     )
