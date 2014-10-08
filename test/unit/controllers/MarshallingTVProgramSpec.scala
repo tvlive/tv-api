@@ -1,6 +1,6 @@
 package controllers
 
-import models.{Film, Series, TVProgram}
+import models.{Film, Series, TVContent}
 import org.joda.time.{DateTimeZone, DateTime}
 import org.joda.time.format.DateTimeFormat
 import org.scalatest.MustMatchers
@@ -16,7 +16,7 @@ class MarshallingTVProgramSpec extends PlaySpec with MustMatchers {
 
   "Write and reads" should {
     "transform TVProgram object to json" in {
-      Json.toJson(TVProgram("bbc1", now, now.plusHours(2), Some(List("documentary")),
+      Json.toJson(TVContent("bbc1", now, now.plusHours(2), Some(List("documentary")),
         Some(Series("serie1", "ep1", None, None, None, None, Some(List("actor1")))), Some(Film("program1", None, Some(List()), Some("2014"))), Some(id))).toString() mustBe
         s"""{"channel":"bbc1","start":"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}","end":"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}","category":["documentary"],"series":{"serieTitle":"serie1","episodeTitle":"ep1","actors":["actor1"]},"film":{"title":"program1","actors":[],"year":"2014"},"id":"$idString"}""".stripMargin
     }
@@ -29,7 +29,7 @@ class MarshallingTVProgramSpec extends PlaySpec with MustMatchers {
            |"series":{"serieTitle":"serie1","episodeTitle":"ep1","actors":["actor1"]},
            |"film":{"title":"program1","actors":[],"year":"2014"},
            |"id":"$idString"}""".stripMargin)
-        .as[TVProgram] mustBe TVProgram("bbc1", now.withZone(DateTimeZone.forID("Europe/London")), now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")),
+        .as[TVContent] mustBe TVContent("bbc1", now.withZone(DateTimeZone.forID("Europe/London")), now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")),
         Some(List("documentary")), Some(Series("serie1", "ep1", None, None, None, None, Some(List("actor1")))), Some(Film("program1", None, Some(List()), Some("2014"))), Some(id))
     }
   }

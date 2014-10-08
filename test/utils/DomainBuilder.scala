@@ -1,12 +1,12 @@
 package utils
 
-import models.{FilmShort, SeriesShort, TVProgramShort, TVProgram}
+import models.{FilmShort, SeriesShort, TVContentShort, TVContent}
 import org.joda.time.DateTimeZone
 
 object DomainBuilder {
 
   object TVShort {
-    def apply(tvProgram: TVProgram): TVProgramShort = TVProgramShort(tvProgram.channel,
+    def apply(tvProgram: TVContent): TVContentShort = TVContentShort(tvProgram.channel,
       tvProgram.start,
       tvProgram.end,
       tvProgram.category, tvProgram.series.map(s => SeriesShort(s.serieTitle)),
@@ -14,7 +14,7 @@ object DomainBuilder {
   }
 
   object TVShortWithTimeZone {
-    def apply(tvProgram: TVProgram): TVProgramShort = TVProgramShort(tvProgram.channel,
+    def apply(tvProgram: TVContent): TVContentShort = TVContentShort(tvProgram.channel,
       tvProgram.start.withZone(DateTimeZone.forID("Europe/London")),
       tvProgram.end.withZone(DateTimeZone.forID("Europe/London")),
       tvProgram.category, tvProgram.series.map(s => SeriesShort(s.serieTitle)),
@@ -23,7 +23,7 @@ object DomainBuilder {
 
 
   object TVProgramWithTimeZone {
-    def apply(tvProgram: TVProgram): TVProgram = tvProgram.copy(
+    def apply(tvProgram: TVContent): TVContent = tvProgram.copy(
       start = tvProgram.start.withZone(DateTimeZone.forID("Europe/London")),
       end = tvProgram.end.withZone(DateTimeZone.forID("Europe/London")))
   }

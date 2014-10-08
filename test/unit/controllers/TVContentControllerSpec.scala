@@ -30,7 +30,7 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers with TVContentS
       status(programResult) mustBe(OK)
       contentType(programResult) mustBe(Some("application/json"))
       val programInResponse = contentAsString(programResult)
-      val tvprograms = Json.parse(programInResponse).as[Seq[TVProgramShort]]
+      val tvprograms = Json.parse(programInResponse).as[Seq[TVContentShort]]
       tvprograms must contain(TVShortWithTimeZone(tvProgram1))
       tvprograms must contain(TVShortWithTimeZone(tvProgram2))
       tvprograms must contain(TVShortWithTimeZone(tvProgram3))
@@ -45,7 +45,7 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers with TVContentS
       status(programResult) mustBe(OK)
       contentType(programResult) mustBe(Some("application/json"))
       val programInResponse = contentAsString(programResult)
-      val tvprograms = Json.parse(programInResponse).as[Seq[TVProgramShort]]
+      val tvprograms = Json.parse(programInResponse).as[Seq[TVContentShort]]
       tvprograms must contain(TVShortWithTimeZone(tvProgram6))
     }
 
@@ -56,7 +56,7 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers with TVContentS
       status(programResult) mustBe(OK)
       contentType(programResult) mustBe(Some("application/json"))
       val programInResponse = contentAsString(programResult)
-      val tvprograms = Json.parse(programInResponse).as[Seq[TVProgramShort]]
+      val tvprograms = Json.parse(programInResponse).as[Seq[TVContentShort]]
       tvprograms must contain(TVShortWithTimeZone(tvProgram1))
       tvprograms must contain(TVShortWithTimeZone(tvProgram2))
       tvprograms must contain(TVShortWithTimeZone(tvProgram3))
@@ -76,7 +76,7 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers with TVContentS
       status(programsResult) mustBe(OK)
       contentType(programsResult) mustBe(Some("application/json"))
       val programInResponse = contentAsString(programsResult)
-      val tvprogram = Json.parse(programInResponse).as[TVProgram]
+      val tvprogram = Json.parse(programInResponse).as[TVContent]
       tvprogram mustBe(TVProgramWithTimeZone(tvProgram3))
     }
 
@@ -86,7 +86,7 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers with TVContentS
       status(programsResult) mustBe(OK)
       contentType(programsResult) mustBe(Some("application/json"))
       val programInResponse = contentAsString(programsResult)
-      val tvprograms = Json.parse(programInResponse).as[Seq[TVProgramShort]]
+      val tvprograms = Json.parse(programInResponse).as[Seq[TVContentShort]]
 
       tvprograms must contain(TVShortWithTimeZone(tvProgram3))
       tvprograms must contain(TVShortWithTimeZone(tvProgram4))
@@ -105,7 +105,7 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers with TVContentS
       val programResult: Future[SimpleResult] = controller.tvContentDetails(tvProgram1.id.get.stringify).apply(FakeRequest())
       status(programResult) mustBe(OK)
       val programInResponse = contentAsString(programResult)
-      val tvprogram = Json.parse(programInResponse).as[TVProgram]
+      val tvprogram = Json.parse(programInResponse).as[TVContent]
       tvprogram mustBe(TVProgramWithTimeZone(tvProgram1))
     }
 
@@ -119,7 +119,7 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers with TVContentS
       val programsResult: Future[SimpleResult] = controller.contentByGenre("entertainment").apply(FakeRequest())
       status(programsResult) mustBe(OK)
       val programInResponse = contentAsString(programsResult)
-      val tvprograms = Json.parse(programInResponse).as[Seq[TVProgramShort]]
+      val tvprograms = Json.parse(programInResponse).as[Seq[TVContentShort]]
       tvprograms mustEqual Seq(TVShortWithTimeZone(tvProgram1), TVShortWithTimeZone(tvProgram3))
 
     }
@@ -128,7 +128,7 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers with TVContentS
       val programsResult: Future[SimpleResult] = controller.contentByGenre("sports").apply(FakeRequest())
       status(programsResult) mustBe(OK)
       val programInResponse = contentAsString(programsResult)
-      val tvprograms = Json.parse(programInResponse).as[Seq[TVProgramShort]]
+      val tvprograms = Json.parse(programInResponse).as[Seq[TVContentShort]]
       tvprograms mustEqual Seq(TVShortWithTimeZone(tvProgram2), TVShortWithTimeZone(tvProgram4), TVShortWithTimeZone(tvProgram7), TVShortWithTimeZone(tvProgram8))
 
     }
@@ -145,7 +145,7 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers with TVContentS
       status(programsResult) mustBe(OK)
       contentType(programsResult) mustBe(Some("application/json"))
       val programInResponse = contentAsString(programsResult)
-      val tvprograms = Json.parse(programInResponse).as[Seq[TVProgramShort]]
+      val tvprograms = Json.parse(programInResponse).as[Seq[TVContentShort]]
       tvprograms mustEqual Seq(TVShortWithTimeZone(tvProgram7), TVShortWithTimeZone(tvProgram8))
     }
 
@@ -161,7 +161,7 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers with TVContentS
       status(programsResult) mustBe(OK)
       contentType(programsResult) mustBe(Some("application/json"))
       val programInResponse = contentAsString(programsResult)
-      val tvprograms = Json.parse(programInResponse).as[Seq[TVProgramShort]]
+      val tvprograms = Json.parse(programInResponse).as[Seq[TVContentShort]]
       tvprograms mustEqual Seq(TVShortWithTimeZone(tvProgram6), TVShortWithTimeZone(tvProgram5), TVShortWithTimeZone(tvProgram9))
     }
 
@@ -173,27 +173,27 @@ trait TVContentSetUpTest {
 
   val fakeNow = new DateTime(2014, 4, 4, 10, 0, 0, DateTimeZone.forID("UTC"))
 
-  val tvProgram1 = TVProgram("CHANNEL1", fakeNow.minusHours(3), fakeNow.minusHours(2), Some(List("program_type1", "ENTERTAINMENT")),
+  val tvProgram1 = TVContent("CHANNEL1", fakeNow.minusHours(3), fakeNow.minusHours(2), Some(List("program_type1", "ENTERTAINMENT")),
     Some(Series("serie1", "ep1", None, None, None, None, None)), Some(Film("program1", None, None, None)), Some(BSONObjectID.generate))
-  val tvProgram2 = TVProgram("CHANNEL1", fakeNow.minusHours(2), fakeNow.minusHours(1), Some(List("program_type2", "SPORTS")),
+  val tvProgram2 = TVContent("CHANNEL1", fakeNow.minusHours(2), fakeNow.minusHours(1), Some(List("program_type2", "SPORTS")),
     Some(Series("serie1", "ep1", None, None, None, None, None)), Some(Film("program1", None, None, None)), Some(BSONObjectID.generate))
-  val tvProgram3 = TVProgram("CHANNEL1", fakeNow.minusHours(1), fakeNow.plusHours(1), Some(List("program_type3", "ENTERTAINMENT")),
+  val tvProgram3 = TVContent("CHANNEL1", fakeNow.minusHours(1), fakeNow.plusHours(1), Some(List("program_type3", "ENTERTAINMENT")),
     Some(Series("serie1", "ep1", None, None, None, None, None)), Some(Film("program1", None, None, None)), Some(BSONObjectID.generate))
-  val tvProgram4 = TVProgram("CHANNEL1", fakeNow.plusHours(1), fakeNow.plusHours(3), Some(List("program_type4", "SPORTS")),
+  val tvProgram4 = TVContent("CHANNEL1", fakeNow.plusHours(1), fakeNow.plusHours(3), Some(List("program_type4", "SPORTS")),
     Some(Series("serie1", "ep1", None, None, None, None, None)), Some(Film("program1", None, None, None)), Some(BSONObjectID.generate))
-  val tvProgram5 = TVProgram("CHANNEL1", fakeNow.plusHours(3), fakeNow.plusHours(4), Some(List("HORROR", "program_type5")),
+  val tvProgram5 = TVContent("CHANNEL1", fakeNow.plusHours(3), fakeNow.plusHours(4), Some(List("HORROR", "program_type5")),
     Some(Series("serie1", "ep1", None, None, None, None, None)), Some(Film("program1", None, None, None)), Some(BSONObjectID.generate))
-  val tvProgram6 = TVProgram("CHANNEL 3", fakeNow.plusHours(3), fakeNow.plusHours(5), Some(List("HORROR")),
+  val tvProgram6 = TVContent("CHANNEL 3", fakeNow.plusHours(3), fakeNow.plusHours(5), Some(List("HORROR")),
     Some(Series("serie1", "ep1", None, None, None, None, None)), Some(Film("program1", None, None, None)), Some(BSONObjectID.generate))
-  val tvProgram7 = TVProgram("CHANNEL4", fakeNow.minusHours(1), fakeNow.plusHours(2), Some(List("program_type3", "SPORTS")),
+  val tvProgram7 = TVContent("CHANNEL4", fakeNow.minusHours(1), fakeNow.plusHours(2), Some(List("program_type3", "SPORTS")),
     Some(Series("serie1", "ep1", None, None, None, None, None)), Some(Film("program1", None, None, None)), Some(BSONObjectID.generate))
-  val tvProgram8 = TVProgram("CHANNEL5", fakeNow.minusHours(1), fakeNow.plusHours(2), Some(List("program_type8", "SPORTS")),
+  val tvProgram8 = TVContent("CHANNEL5", fakeNow.minusHours(1), fakeNow.plusHours(2), Some(List("program_type8", "SPORTS")),
     Some(Series("serie1", "ep1", None, None, None, None, None)), Some(Film("program1", None, None, None)), Some(BSONObjectID.generate))
-  val tvProgram9 = TVProgram("CHANNEL5", fakeNow.minusHours(4), fakeNow.plusHours(5), Some(List("program_type8", "HORROR")),
+  val tvProgram9 = TVContent("CHANNEL5", fakeNow.minusHours(4), fakeNow.plusHours(5), Some(List("program_type8", "HORROR")),
     Some(Series("serie1", "ep1", None, None, None, None, None)), Some(Film("program1", None, None, None)), Some(BSONObjectID.generate))
 
   val tvContentRepository = new ContentRepository() {
-    override def findLeftContentByChannel(channelName: String): Future[Seq[TVProgramShort]] = {
+    override def findLeftContentByChannel(channelName: String): Future[Seq[TVContentShort]] = {
       channelName match {
         case "CHANNEL1" => Future.successful(Seq(TVShortWithTimeZone(tvProgram3),
           TVShortWithTimeZone(tvProgram4),
@@ -206,7 +206,7 @@ trait TVContentSetUpTest {
       }
     }
 
-    override def findDayContentByChannel(channelName: String): Future[Seq[TVProgramShort]] = {
+    override def findDayContentByChannel(channelName: String): Future[Seq[TVContentShort]] = {
       channelName match {
         case "CHANNEL1" => Future.successful(Seq(TVShortWithTimeZone(tvProgram1),
           TVShortWithTimeZone(tvProgram2),
@@ -221,7 +221,7 @@ trait TVContentSetUpTest {
       }
     }
 
-    override def findCurrentContentByChannel(channelName: String): Future[Option[TVProgram]] = {
+    override def findCurrentContentByChannel(channelName: String): Future[Option[TVContent]] = {
       channelName match {
         case "CHANNEL1" => Future.successful(Some(tvProgram3))
         case "CHANNEL3" => Future.successful(Some(tvProgram6))
@@ -231,13 +231,13 @@ trait TVContentSetUpTest {
       }
     }
 
-    override def findContentByID(contentID: String): Future[Option[TVProgram]] = {
+    override def findContentByID(contentID: String): Future[Option[TVContent]] = {
       if (contentID == tvProgram1.id.get.stringify)
         Future.successful(Some(tvProgram1))
       else Future.successful(None)
     }
 
-    override def findDayContentByGenre(genre: String): Future[Seq[TVProgramShort]] = {
+    override def findDayContentByGenre(genre: String): Future[Seq[TVContentShort]] = {
       genre match {
         case "ENTERTAINMENT" => Future.successful(Seq(TVShortWithTimeZone(tvProgram1),
           TVShortWithTimeZone(tvProgram3)))
@@ -249,7 +249,7 @@ trait TVContentSetUpTest {
       }
     }
 
-    override def findCurrentContentByGenre(genre: String): Future[Seq[TVProgramShort]] = {
+    override def findCurrentContentByGenre(genre: String): Future[Seq[TVContentShort]] = {
       genre match {
         case "SPORTS" => Future.successful(Seq(TVShortWithTimeZone(tvProgram7),
           TVShortWithTimeZone(tvProgram8)))
@@ -257,7 +257,7 @@ trait TVContentSetUpTest {
       }
     }
 
-    override def findLeftContentByGenre(genre: String): Future[Seq[TVProgramShort]] = {
+    override def findLeftContentByGenre(genre: String): Future[Seq[TVContentShort]] = {
       genre match {
         case "HORROR" => Future.successful(Seq(TVShortWithTimeZone(tvProgram6),
           TVShortWithTimeZone(tvProgram5),

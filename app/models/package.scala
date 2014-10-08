@@ -25,9 +25,9 @@ package object models {
   }
 
 
-  implicit object TVProgramContentBSONReader extends BSONDocumentReader[TVProgram] {
-    def read(doc: BSONDocument): TVProgram = {
-      TVProgram(
+  implicit object TVProgramContentBSONReader extends BSONDocumentReader[TVContent] {
+    def read(doc: BSONDocument): TVContent = {
+      TVContent(
         doc.getAs[BSONString]("channel").get.value,
         new DateTime(doc.getAs[BSONDateTime]("start").get.value, DateTimeZone.forID("UTC")),
         new DateTime(doc.getAs[BSONDateTime]("end").get.value, DateTimeZone.forID("UTC")),
@@ -39,9 +39,9 @@ package object models {
     }
   }
 
-  implicit object TVProgramShortContentBSONReader extends BSONDocumentReader[TVProgramShort] {
-    def read(doc: BSONDocument): TVProgramShort = {
-      TVProgramShort(
+  implicit object TVProgramShortContentBSONReader extends BSONDocumentReader[TVContentShort] {
+    def read(doc: BSONDocument): TVContentShort = {
+      TVContentShort(
         doc.getAs[BSONString]("channel").get.value,
         new DateTime(doc.getAs[BSONDateTime]("start").get.value, DateTimeZone.forID("UTC")),
         new DateTime(doc.getAs[BSONDateTime]("end").get.value, DateTimeZone.forID("UTC")),
@@ -53,8 +53,8 @@ package object models {
     }
   }
 
-  implicit object TVProgramShortContentBSONWriter extends BSONDocumentWriter[TVProgramShort] {
-    override def write(t: TVProgramShort): BSONDocument = {
+  implicit object TVProgramShortContentBSONWriter extends BSONDocumentWriter[TVContentShort] {
+    override def write(t: TVContentShort): BSONDocument = {
       BSONDocument(
         "_id" -> t.id.getOrElse(BSONObjectID.generate),
         "channel" -> t.channel,
@@ -65,8 +65,8 @@ package object models {
     }
   }
 
-  implicit object TVProgramContentBSONWriter extends BSONDocumentWriter[TVProgram] {
-    override def write(t: TVProgram): BSONDocument = {
+  implicit object TVProgramContentBSONWriter extends BSONDocumentWriter[TVContent] {
+    override def write(t: TVContent): BSONDocument = {
       BSONDocument(
         "_id" -> t.id.getOrElse(BSONObjectID.generate),
         "channel" -> t.channel,
