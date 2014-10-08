@@ -14,6 +14,7 @@ case class TVContent(channel: String,
                      category: Option[List[String]],
                      series: Option[Series],
                      film: Option[Film],
+                     program: Option[Program],
                      id: Option[BSONObjectID] = Some(BSONObjectID.generate))
 
 case class TVContentShort(channel: String,
@@ -22,20 +23,33 @@ case class TVContentShort(channel: String,
                           category: Option[List[String]],
                           series: Option[SeriesShort],
                           film: Option[FilmShort],
+                          program: Option[ProgramShort],
                           id: Option[BSONObjectID] = Some(BSONObjectID.generate)) {
 
   val uriTVProgramDetails = controllers.routes.TVContentController.tvContentDetails(id.get.stringify).toString()
 }
 
 
-case class Series(serieTitle: String, episodeTitle: String, description: Option[String],
-                  seasonNumber: Option[String], episodeNumber: Option[String], totalNumber: Option[String], actors: Option[List[String]])
+case class Series(serieTitle: String,
+                  episodeTitle: String,
+                  description: Option[String],
+                  seasonNumber: Option[String],
+                  episodeNumber: Option[String],
+                  totalNumber: Option[String],
+                  actors: Option[List[String]])
 
-case class Film(title: String, description: Option[String], actors: Option[List[String]], year: Option[String])
+case class Film(title: String,
+                description: Option[String],
+                actors: Option[List[String]],
+                year: Option[String])
+
+case class Program(title: String, description: Option[String])
 
 case class SeriesShort(serieTitle: String)
 
 case class FilmShort(title: String)
+
+case class ProgramShort(title: String)
 
 trait ContentRepository {
 
@@ -56,7 +70,6 @@ trait ContentRepository {
   def drop(): Future[Boolean] = ???
 
   def insertBulk(enumerator: Enumerator[TVContent]): Future[Int] = ???
-
 
 }
 

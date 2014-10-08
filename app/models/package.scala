@@ -33,7 +33,8 @@ package object models {
         new DateTime(doc.getAs[BSONDateTime]("end").get.value, DateTimeZone.forID("UTC")),
         Option(doc.getAs[List[String]]("category").toList.flatten),
         doc.getAs[BSONDocument]("series").map(SerieBSONReader.read(_)),
-        doc.getAs[BSONDocument]("film").map(ProgramBSONReader.read(_)),
+        doc.getAs[BSONDocument]("film").map(FilmBSONReader.read(_)),
+        doc.getAs[BSONDocument]("program").map(ProgramBSONReader.read(_)),
         doc.getAs[BSONObjectID]("_id")
       )
     }
@@ -47,13 +48,14 @@ package object models {
         new DateTime(doc.getAs[BSONDateTime]("end").get.value, DateTimeZone.forID("UTC")),
         Option(doc.getAs[List[String]]("category").toList.flatten),
         doc.getAs[BSONDocument]("series").map(SerieShortBSONReader.read(_)),
-        doc.getAs[BSONDocument]("film").map(ProgramShortBSONReader.read(_)),
+        doc.getAs[BSONDocument]("film").map(FilmShortBSONReader.read(_)),
+        doc.getAs[BSONDocument]("program").map(ProgramShortBSONReader.read(_)),
         doc.getAs[BSONObjectID]("_id")
       )
     }
   }
 
-  implicit object TVProgramShortContentBSONWriter extends BSONDocumentWriter[TVContentShort] {
+  implicit object TVContentShortContentBSONWriter extends BSONDocumentWriter[TVContentShort] {
     override def write(t: TVContentShort): BSONDocument = {
       BSONDocument(
         "_id" -> t.id.getOrElse(BSONObjectID.generate),
@@ -65,7 +67,7 @@ package object models {
     }
   }
 
-  implicit object TVProgramContentBSONWriter extends BSONDocumentWriter[TVContent] {
+  implicit object TVContentContentBSONWriter extends BSONDocumentWriter[TVContent] {
     override def write(t: TVContent): BSONDocument = {
       BSONDocument(
         "_id" -> t.id.getOrElse(BSONObjectID.generate),
@@ -74,7 +76,8 @@ package object models {
         "end" -> new BSONDateTime(t.end.getMillis),
         "category" -> t.category,
         "series" -> t.series.map(SerieBSONWriter.write(_)),
-        "film" -> t.film.map(ProgramBSONWriter.write(_))
+        "film" -> t.film.map(FilmBSONWriter.write(_)),
+        "program" -> t.program.map(ProgramBSONWriter.write(_))
       )
     }
   }
@@ -126,7 +129,7 @@ package object models {
     }
   }
 
-  implicit object ProgramBSONReader extends BSONDocumentReader[Film] {
+  implicit object FilmBSONReader extends BSONDocumentReader[Film] {
     def read(doc: BSONDocument): Film = {
       Film(
         doc.getAs[BSONString]("title").get.value,
@@ -138,7 +141,7 @@ package object models {
   }
 
 
-  implicit object ProgramBSONWriter extends BSONDocumentWriter[Film] {
+  implicit object FilmBSONWriter extends BSONDocumentWriter[Film] {
     override def write(t: Film): BSONDocument = {
       BSONDocument(
         "title" -> t.title,
@@ -149,7 +152,26 @@ package object models {
     }
   }
 
-  implicit object ProgramShortBSONReader extends BSONDocumentReader[FilmShort] {
+  implicit object ProgramBSONReader extends BSONDocumentReader[Program] {
+    def read(doc: BSONDocument): Program = {
+      Program(
+        doc.getAs[BSONString]("title").get.value,
+        doc.getAs[BSONString]("description").map(_.value)
+      )
+    }
+  }
+
+
+  implicit object ProgramBSONWriter extends BSONDocumentWriter[Program] {
+    override def write(t: Program): BSONDocument = {
+      BSONDocument(
+        "title" -> t.title,
+        "description" -> t.description
+      )
+    }
+  }
+
+  implicit object FilmShortBSONReader extends BSONDocumentReader[FilmShort] {
     def read(doc: BSONDocument): FilmShort = {
       FilmShort(
         doc.getAs[BSONString]("title").get.value
@@ -158,8 +180,25 @@ package object models {
   }
 
 
-  implicit object ProgramShortBSONWriter extends BSONDocumentWriter[FilmShort] {
+  implicit object FilmShortBSONWriter extends BSONDocumentWriter[FilmShort] {
     override def write(t: FilmShort): BSONDocument = {
+      BSONDocument(
+        "title" -> t.title
+      )
+    }
+  }
+
+  implicit object ProgramShortBSONReader extends BSONDocumentReader[ProgramShort] {
+    def read(doc: BSONDocument): ProgramShort = {
+      ProgramShort(
+        doc.getAs[BSONString]("title").get.value
+      )
+    }
+  }
+
+
+  implicit object ProgramShortBSONWriter extends BSONDocumentWriter[ProgramShort] {
+    override def write(t: ProgramShort): BSONDocument = {
       BSONDocument(
         "title" -> t.title
       )

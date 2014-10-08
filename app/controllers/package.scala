@@ -40,16 +40,20 @@ package object controllers {
     )
   }
 
-  implicit val programFmt = Json.format[Film]
+  implicit val filmFmt = Json.format[Film]
   implicit val serieFmt = Json.format[Series]
+  implicit val programFmt = Json.format[Program]
+
   val pattern = "yyyy-MM-dd'T'HH:mm:ss"
 
   implicit val dateFormat = Format[DateTime](
     Reads.jodaDateReads(pattern),
     Writes.jodaDateWrites(pattern))
 
-  implicit val programShortFmt = Json.format[FilmShort]
+  implicit val filmShortFmt = Json.format[FilmShort]
   implicit val serieShortFmt = Json.format[SeriesShort]
+  implicit val programShortFmt = Json.format[ProgramShort]
+
 
   implicit val tvProgramReads: Reads[TVContent] = ((__ \ "channel").read[String] and
       (__ \ "start").read[DateTime].map[DateTime]{ dt => dt.withZoneRetainFields(DateTimeZone.forID("Europe/London"))} and
@@ -57,18 +61,20 @@ package object controllers {
       (__ \ "category").read[Option[List[String]]] and
       (__ \ "series").read[Option[Series]] and
       (__ \ "film").read[Option[Film]] and
+      (__ \ "program").read[Option[Program]] and
       (__ \ "id").read[Option[BSONObjectID]]
       )(TVContent.apply _)
 
   implicit val tvProgramWrites = new Writes[TVContent] {
-    override def writes(tvprogram: TVContent): JsValue = Json.obj(
-      "channel" -> tvprogram.channel,
-      "start" -> tvprogram.start.toDateTime(DateTimeZone.forID("Europe/London")),
-      "end" -> tvprogram.end.toDateTime(DateTimeZone.forID("Europe/London")),
-      "category" -> tvprogram.category,
-      "series" -> tvprogram.series,
-      "film" -> tvprogram.film,
-      "id" -> tvprogram.id
+    override def writes(tvContent: TVContent): JsValue = Json.obj(
+      "channel" -> tvContent.channel,
+      "start" -> tvContent.start.toDateTime(DateTimeZone.forID("Europe/London")),
+      "end" -> tvContent.end.toDateTime(DateTimeZone.forID("Europe/London")),
+      "category" -> tvContent.category,
+      "series" -> tvContent.series,
+      "film" -> tvContent.film,
+      "program" -> tvContent.program,
+      "id" -> tvContent.id
     )
   }
 
@@ -79,20 +85,22 @@ package object controllers {
       (__ \ "category").read[Option[List[String]]] and
       (__ \ "series").read[Option[SeriesShort]] and
       (__ \ "film").read[Option[FilmShort]] and
+      (__ \ "program").read[Option[ProgramShort]] and
       (__ \ "id").read[Option[BSONObjectID]]
     )(TVContentShort.apply _)
 
 
   implicit val tvProgramShortWrites = new Writes[TVContentShort] {
-    override def writes(tvprogram: TVContentShort): JsValue = Json.obj(
-      "channel" -> tvprogram.channel,
-      "start" -> tvprogram.start.toDateTime(DateTimeZone.forID("Europe/London")),
-      "end" -> tvprogram.end.toDateTime(DateTimeZone.forID("Europe/London")),
-      "category" -> tvprogram.category,
-      "series" -> tvprogram.series,
-      "film" -> tvprogram.film,
-      "uriTVProgramDetails" -> tvprogram.uriTVProgramDetails,
-      "id" -> tvprogram.id
+    override def writes(tvContent: TVContentShort): JsValue = Json.obj(
+      "channel" -> tvContent.channel,
+      "start" -> tvContent.start.toDateTime(DateTimeZone.forID("Europe/London")),
+      "end" -> tvContent.end.toDateTime(DateTimeZone.forID("Europe/London")),
+      "category" -> tvContent.category,
+      "series" -> tvContent.series,
+      "film" -> tvContent.film,
+      "program" -> tvContent.program,
+      "uriTVProgramDetails" -> tvContent.uriTVProgramDetails,
+      "id" -> tvContent.id
     )
   }
 
