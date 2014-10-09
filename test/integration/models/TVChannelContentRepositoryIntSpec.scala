@@ -26,32 +26,32 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
   Thread.sleep(5000)
 
   val p1 = TVContent("channel1", current.minusHours(4), current.minusHours(2), Some(List("documentary", "ENTERTAINMENT")),
-    Some(Series("serie1", "ep1", None, None, None, None, Some(List("actor1")))),
+    Some(Series("serie1", Some("ep1"), None, None, None, None, Some(List("actor1")))),
     Some(Film("program1", None, Some(List("actor2")), Some("2011"))),
     Some(Program("p1", Some("d1"))))
 
   val p2 = TVContent("channel1", current.minusHours(2), current, Some(List("documentary")),
-    Some(Series("serie2", "ep1", None, None, None, None, Some(List("actor1")))),
+    Some(Series("serie2", Some("ep1"), None, None, None, None, Some(List("actor1")))),
     Some(Film("program1", None, Some(List("actor2")), Some("2013"))),
     Some(Program("p2", Some("d2"))))
 
   val p3 = TVContent("channel1", current, current.plusHours(1), Some(List("FILM", "ENTERTAINMENT")),
-    Some(Series("serie3", "ep1", None, None, None, None, Some(List("actor3")))),
+    Some(Series("serie3", Some("ep1"), None, None, None, None, Some(List("actor3")))),
     Some(Film("program1", None, Some(List("actor5")), Some("1999"))),
     Some(Program("p3", Some("d3"))))
 
   val p4 = TVContent("channel1", current.plusHours(1), current.plusHours(3), Some(List("documentary")),
-    Some(Series("serie4", "ep1", None, None, None, None, Some(List("actor1")))),
+    Some(Series("serie4", Some("ep1"), None, None, None, None, Some(List("actor1")))),
     Some(Film("program1", None, Some(List("actor1")), None)),
     Some(Program("p4", Some("d4"))))
 
   val p5 = TVContent("channel1", current.plusHours(3), current.plusHours(5), Some(List("documentary")),
-    Some(Series("serie5", "ep1", None, None, None, None, Some(List("actor1")))),
+    Some(Series("serie5", Some("ep1"), None, None, None, None, Some(List("actor1")))),
     Some(Film("program1", None, Some(List("actor5")), Some("2011"))),
     Some(Program("p5", Some("d5"))))
 
   val p6 = TVContent("channel1", current.plusHours(5), current.plusHours(7), Some(List("documentary")),
-    Some(Series("serie6", "ep1", None, None, None, None, Some(List("actor6")))),
+    Some(Series("serie6", Some("ep1"), None, None, None, None, Some(List("actor6")))),
     Some(Film("program1", None, Some(List("actor1")), None)),
     Some(Program("p6", Some("d6"))))
 

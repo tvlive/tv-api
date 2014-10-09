@@ -31,7 +31,7 @@ case class TVContentShort(channel: String,
 
 
 case class Series(serieTitle: String,
-                  episodeTitle: String,
+                  episodeTitle: Option[String],
                   description: Option[String],
                   seasonNumber: Option[String],
                   episodeNumber: Option[String],

@@ -1,8 +1,6 @@
 import org.joda.time.{DateTime, DateTimeZone}
 import reactivemongo.bson._
 
-import scala.collection.immutable.::
-
 package object models {
 
   implicit object TVChannelBSONReader extends BSONDocumentReader[TVChannel] {
@@ -87,7 +85,7 @@ package object models {
     def read(doc: BSONDocument): Series = {
       Series(
         doc.getAs[BSONString]("serieTitle").get.value,
-        doc.getAs[BSONString]("episodeTitle").get.value,
+        doc.getAs[BSONString]("episodeTitle").map(_.value),
         doc.getAs[BSONString]("description").map(_.value),
         doc.getAs[BSONString]("seasonNumber").map(_.value),
         doc.getAs[BSONString]("episodeNumber").map(_.value),
