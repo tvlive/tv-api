@@ -46,10 +46,10 @@ class TVChannelControllerSpec extends PlaySpec with MustMatchers with TVChannelS
 
 trait TVChannelSetUpTest {
 
-  val tvChannel1 = TVChannel("testTvChannel1", List("DOCUMENTARY"), Some(BSONObjectID.generate))
-  val tvChannel2 = TVChannel("testTvChannel2", List("ENTERTAINMENT"), Some(BSONObjectID.generate))
-  val tvChannel3 = TVChannel("testTvChannel3", List("DOCUMENTARY"), Some(BSONObjectID.generate))
-  val tvChannel4 = TVChannel("testTvChannel4", List("ENTERTAINMENT"), Some(BSONObjectID.generate))
+  val tvChannel1 = TVChannel("testTvChannel1", List("DOCUMENTARY"), List("cat1"), Some(BSONObjectID.generate))
+  val tvChannel2 = TVChannel("testTvChannel2", List("ENTERTAINMENT"), List("cat2"), Some(BSONObjectID.generate))
+  val tvChannel3 = TVChannel("testTvChannel3", List("DOCUMENTARY"), List("cat3"), Some(BSONObjectID.generate))
+  val tvChannel4 = TVChannel("testTvChannel4", List("ENTERTAINMENT"), List("cat4"), Some(BSONObjectID.generate))
 
   val tvChannelRepository = new ChannelRepository {
     override def listOfTVChannels(): Future[Seq[TVChannel]] = {

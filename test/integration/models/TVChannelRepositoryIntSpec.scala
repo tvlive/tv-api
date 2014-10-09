@@ -15,10 +15,10 @@ class TVChannelRepositoryIntSpec extends PlaySpec with MustMatchers with BeforeA
   tvChannelRepository.drop()
   Thread.sleep(5000)
 
-  val tvChannel1 = TVChannel("testTvChannel1", List("genre1"))
-  val tvChannel2 = TVChannel("testTvChannel2", List("ENTERTAINMENT"))
-  val tvChannel3 = TVChannel("testTvChannel3", List("genre1"))
-  val tvChannel4 = TVChannel("testTvChannel4", List("ENTERTAINMENT"))
+  val tvChannel1 = TVChannel("testTvChannel1", List("genre1"), List("cat1"))
+  val tvChannel2 = TVChannel("testTvChannel2", List("ENTERTAINMENT"), List("cat2"))
+  val tvChannel3 = TVChannel("testTvChannel3", List("genre1"), List("cat3"))
+  val tvChannel4 = TVChannel("testTvChannel4", List("ENTERTAINMENT"), List("cat4"))
 
   before {
     whenReady(tvChannelRepository.insertBulk(Enumerator(tvChannel1, tvChannel2, tvChannel3, tvChannel4))) {

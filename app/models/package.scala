@@ -8,6 +8,7 @@ package object models {
       TVChannel(
         doc.getAs[BSONString]("name").get.value,
         doc.getAs[List[String]]("provider").toList.flatten,
+        doc.getAs[List[String]]("category").toList.flatten,
         doc.getAs[BSONObjectID]("_id"))
     }
   }
@@ -17,7 +18,8 @@ package object models {
       BSONDocument(
         "_id" -> t.id.getOrElse(BSONObjectID.generate),
         "name" -> t.name,
-        "provider" -> t.provider
+        "provider" -> t.provider,
+        "category" -> t.category
       )
     }
   }
