@@ -26,7 +26,7 @@ class TVChannelControllerSpec extends PlaySpec with MustMatchers with TVChannelS
 
     "provide the list of channels for that contains genre ENTERTAINMENT in upper case" in {
 
-      val channelResult: Future[SimpleResult] = controller.channelsByGenre("ENTERTAINMENT").apply(FakeRequest())
+      val channelResult: Future[SimpleResult] = controller.channelsByCategory("ENTERTAINMENT").apply(FakeRequest())
       status(channelResult) mustBe(OK)
       contentType(channelResult) mustBe(Some("application/json"))
       val channelsInResponse = contentAsJson(channelResult).as[Seq[TVChannel]]
@@ -35,7 +35,7 @@ class TVChannelControllerSpec extends PlaySpec with MustMatchers with TVChannelS
 
     "provide the list of channels for that contains genre documentary in lower case" in {
 
-      val channelResult: Future[SimpleResult] = controller.channelsByGenre("documentary").apply(FakeRequest())
+      val channelResult: Future[SimpleResult] = controller.channelsByCategory("documentary").apply(FakeRequest())
       status(channelResult) mustBe(OK)
       contentType(channelResult) mustBe(Some("application/json"))
       val channelsInResponse = contentAsJson(channelResult).as[Seq[TVChannel]]
@@ -56,7 +56,7 @@ trait TVChannelSetUpTest {
       Future.successful(Seq(tvChannel1, tvChannel2, tvChannel3, tvChannel4))
     }
 
-    override def listOfTVChannelsByGenre(genre: String): Future[Seq[TVChannel]] = {
+    override def listOfTVChannelsByCategory(genre: String): Future[Seq[TVChannel]] = {
       genre match {
         case "ENTERTAINMENT" => Future.successful(Seq(tvChannel2, tvChannel4))
         case "DOCUMENTARY" => Future.successful(Seq(tvChannel1, tvChannel3))

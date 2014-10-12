@@ -205,21 +205,21 @@ package object models {
     }
   }
 
-  implicit object TVChannelGenreBSONReader extends BSONDocumentReader[TVChannelGenre] {
-    def read(doc: BSONDocument): TVChannelGenre = {
-      TVChannelGenre(
-        doc.getAs[BSONString]("genre").get.value,
+  implicit object TVChannelCategoryBSONReader extends BSONDocumentReader[TVChannelCategory] {
+    def read(doc: BSONDocument): TVChannelCategory = {
+      TVChannelCategory(
+        doc.getAs[BSONString]("category").get.value,
         doc.getAs[BSONObjectID]("_id")
       )
     }
   }
 
 
-  implicit object TVChannelGenreBSONWriter extends BSONDocumentWriter[TVChannelGenre] {
-    override def write(t: TVChannelGenre): BSONDocument = {
+  implicit object TVChannelCategoryBSONWriter extends BSONDocumentWriter[TVChannelCategory] {
+    override def write(t: TVChannelCategory): BSONDocument = {
       BSONDocument(
         "_id" -> t.id.getOrElse(BSONObjectID.generate),
-        "genre" -> t.genre
+        "category" -> t.category
       )
     }
   }

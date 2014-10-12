@@ -23,8 +23,8 @@ trait TVChannelController extends BaseController {
     }
   }
 
-  def channelsByGenre(genre: String) = Action.async {
-    channelRepository.listOfTVChannelsByGenre(genre.toUpperCase).map {
+  def channelsByCategory(category: String) = Action.async {
+    channelRepository.listOfTVChannelsByCategory(category.toUpperCase).map {
       case head :: tail => {
         Ok(Json.toJson(head :: tail))
       }

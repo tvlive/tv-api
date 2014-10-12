@@ -7,7 +7,7 @@ GET     /                                               controllers.Application.
 
 GET     /channels                           			controllers.TVChannelController.channels
 
-GET     /channels/:genre                    			controllers.TVChannelController.channelsByGenre(genre)
+GET     /channels/:category                    			controllers.TVChannelController.channelsByCategory(category)
 
 GET     /tvcontent/channel/:channelName/current       	controllers.TVContentController.currentContent(channelName)
 
@@ -23,7 +23,7 @@ GET     /tvcontent/genre/:genre/current     			controllers.TVContentController.c
 
 GET     /tvcontent/genre/:genre/left        			controllers.TVContentController.contentLeftByGenre(genre)
 
-GET     /genres/channels                    			controllers.TVChannelGenreController.genres
+GET     /categories/channels                    		controllers.TVChannelCategoryController.genres
 
 GET     /genres/tvcontent                               controllers.TVContentGenreController.genres
 

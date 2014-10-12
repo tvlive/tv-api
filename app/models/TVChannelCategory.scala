@@ -6,15 +6,15 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.concurrent.Future
 
-case class TVChannelGenre(genre: String, id: Option[BSONObjectID] = Some(BSONObjectID.generate))
+case class TVChannelCategory(category: String, id: Option[BSONObjectID] = Some(BSONObjectID.generate))
 
 trait ChannelGenreRepository {
 
-  def findAll(): Future[Seq[TVChannelGenre]] = ???
+  def findAll(): Future[Seq[TVChannelCategory]] = ???
 
   def drop(): Future[Boolean] = ???
 
-  def insertBulk(enumerator: Enumerator[TVChannelGenre]): Future[Int] = ???
+  def insertBulk(enumerator: Enumerator[TVChannelCategory]): Future[Int] = ???
 
 }
 
@@ -22,18 +22,18 @@ trait ChannelGenreRepository {
 class TVChannelGenreRepository(collectionName: String)(implicit val con: String => APIMongoConnection) extends ChannelGenreRepository {
   private val collection = con(collectionName).collection
 
-  override def findAll(): Future[Seq[TVChannelGenre]] = {
+  override def findAll(): Future[Seq[TVChannelCategory]] = {
     val query = BSONDocument(
-      "$orderby" -> BSONDocument("genre" -> 1),
+      "$orderby" -> BSONDocument("category" -> 1),
       "$query" -> BSONDocument()
     )
 
-    val found = collection.find(query).cursor[TVChannelGenre]
+    val found = collection.find(query).cursor[TVChannelCategory]
     found.collect[Seq]()
   }
 
   override def drop(): Future[Boolean] = collection.drop()
 
-  override def insertBulk(enumerator: Enumerator[TVChannelGenre]): Future[Int] =
+  override def insertBulk(enumerator: Enumerator[TVChannelCategory]): Future[Int] =
     collection.bulkInsert(enumerator)
 }

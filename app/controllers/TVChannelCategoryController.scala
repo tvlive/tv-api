@@ -5,11 +5,11 @@ import play.api.libs.json.Json
 import play.api.mvc.Action
 import scala.concurrent.ExecutionContext.Implicits.global
 
-object TVChannelGenreController extends TVChannelGenreController {
+object TVChannelCategoryController extends TVChannelCategoryController {
   override val channelGenreReporitory = new TVChannelGenreRepository("tvChannelGenre")
 }
 
-trait TVChannelGenreController extends BaseController {
+trait TVChannelCategoryController extends BaseController {
   val channelGenreReporitory: ChannelGenreRepository
 
   def genres() = Action.async {

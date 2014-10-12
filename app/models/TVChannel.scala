@@ -18,7 +18,7 @@ case class TVChannel(name: String, provider: List[String], category: List[String
 trait ChannelRepository {
 
   def listOfTVChannels(): Future[Seq[TVChannel]] = ???
-  def listOfTVChannelsByGenre(genre: String): Future[Seq[TVChannel]] = ???
+  def listOfTVChannelsByCategory(category: String): Future[Seq[TVChannel]] = ???
   def drop(): Future[Boolean] = ???
   def insertBulk(enumerator: Enumerator[TVChannel]): Future[Int] = ???
 }
@@ -41,10 +41,10 @@ class TVChannelRepository(collectionName: String)(implicit val con: String => AP
     found.collect[Seq]()
   }
 
-  override def listOfTVChannelsByGenre(genre: String): Future[Seq[TVChannel]] = {
+  override def listOfTVChannelsByCategory(category: String): Future[Seq[TVChannel]] = {
     val query = BSONDocument(
       "$orderby" -> BSONDocument("name" -> 1),
-      "$query" -> BSONDocument("provider" -> genre)
+      "$query" -> BSONDocument("category" -> category)
     )
 
     val found = collection.find(query).cursor[TVChannel]

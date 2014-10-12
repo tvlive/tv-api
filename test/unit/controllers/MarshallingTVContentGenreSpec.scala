@@ -1,6 +1,6 @@
 package controllers
 
-import models.{TVContentGenre, TVChannelGenre}
+import models.TVContentGenre
 import org.scalatest.MustMatchers
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
