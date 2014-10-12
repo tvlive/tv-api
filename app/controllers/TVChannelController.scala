@@ -31,4 +31,13 @@ trait TVChannelController extends BaseController {
       case Nil => NotFound
     }
   }
+
+  def channelsByProvider(provider: String) = Action.async {
+    channelRepository.listOfTVChannelsByProvider(provider.toUpperCase).map {
+      case head :: tail => {
+        Ok(Json.toJson(head :: tail))
+      }
+      case Nil => NotFound
+    }
+  }
 }

@@ -15,10 +15,10 @@ class TVChannelRepositoryIntSpec extends PlaySpec with MustMatchers with BeforeA
   tvChannelRepository.drop()
   Thread.sleep(5000)
 
-  val tvChannel1 = TVChannel("testTvChannel1", List("provider1"), List("category1"))
-  val tvChannel2 = TVChannel("testTvChannel2", List("provider2"), List("ENTERTAINMENT"))
-  val tvChannel3 = TVChannel("testTvChannel3", List("provider3"), List("category1"))
-  val tvChannel4 = TVChannel("testTvChannel4", List("provider4"), List("ENTERTAINMENT"))
+  val tvChannel1 = TVChannel("testTvChannel1", List("PROVIDER1"), List("category1"))
+  val tvChannel2 = TVChannel("testTvChannel2", List("PROVIDER2"), List("ENTERTAINMENT"))
+  val tvChannel3 = TVChannel("testTvChannel3", List("PROVIDER3"), List("category1"))
+  val tvChannel4 = TVChannel("testTvChannel4", List("PROVIDER3"), List("ENTERTAINMENT"))
 
   before {
     whenReady(tvChannelRepository.insertBulk(Enumerator(tvChannel1, tvChannel2, tvChannel3, tvChannel4))) {
@@ -42,6 +42,24 @@ class TVChannelRepositoryIntSpec extends PlaySpec with MustMatchers with BeforeA
     "return the list of TV Channels by category ENTERTAINMENT" in {
       whenReady(tvChannelRepository.listOfTVChannelsByCategory("ENTERTAINMENT")) {
         _ mustBe Seq(tvChannel2, tvChannel4)
+      }
+    }
+
+    "return empty list of TV Channels by category NONEXIST" in {
+      whenReady(tvChannelRepository.listOfTVChannelsByCategory("NONEXIST")) {
+        _ mustBe Seq()
+      }
+    }
+
+    "return the list of TV Channels by provider PROVIDER3" in {
+      whenReady(tvChannelRepository.listOfTVChannelsByProvider("PROVIDER3")) {
+        _ mustBe Seq(tvChannel3, tvChannel4)
+      }
+    }
+
+    "return empty list of TV Channels by provider NONEXIST" in {
+      whenReady(tvChannelRepository.listOfTVChannelsByProvider("NONEXIST")) {
+        _ mustBe Seq()
       }
     }
   }

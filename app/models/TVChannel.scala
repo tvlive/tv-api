@@ -19,6 +19,7 @@ trait ChannelRepository {
 
   def listOfTVChannels(): Future[Seq[TVChannel]] = ???
   def listOfTVChannelsByCategory(category: String): Future[Seq[TVChannel]] = ???
+  def listOfTVChannelsByProvider(provider: String): Future[Seq[TVChannel]] = ???
   def drop(): Future[Boolean] = ???
   def insertBulk(enumerator: Enumerator[TVChannel]): Future[Int] = ???
 }
@@ -45,6 +46,16 @@ class TVChannelRepository(collectionName: String)(implicit val con: String => AP
     val query = BSONDocument(
       "$orderby" -> BSONDocument("name" -> 1),
       "$query" -> BSONDocument("category" -> category)
+    )
+
+    val found = collection.find(query).cursor[TVChannel]
+    found.collect[Seq]()
+  }
+
+ override def listOfTVChannelsByProvider(provider: String): Future[Seq[TVChannel]] = {
+    val query = BSONDocument(
+      "$orderby" -> BSONDocument("name" -> 1),
+      "$query" -> BSONDocument("provider" -> provider)
     )
 
     val found = collection.find(query).cursor[TVChannel]

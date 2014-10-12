@@ -7,7 +7,9 @@ GET     /                                               controllers.Application.
 
 GET     /channels                           			controllers.TVChannelController.channels
 
-GET     /channels/:category                    			controllers.TVChannelController.channelsByCategory(category)
+GET     /channels/category/:category                    controllers.TVChannelController.channelsByCategory(category)
+
+GET     /channels/provider/:provider                    controllers.TVChannelController.channelsByProvider(provider)
 
 GET     /tvcontent/channel/:channelName/current       	controllers.TVContentController.currentContent(channelName)
 
