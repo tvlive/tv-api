@@ -8,7 +8,7 @@ import scala.concurrent.Future
 
 case class TVChannelCategory(category: String, id: Option[BSONObjectID] = Some(BSONObjectID.generate))
 
-trait ChannelGenreRepository {
+trait ChannelCategoryRepository {
 
   def findAll(): Future[Seq[TVChannelCategory]] = ???
 
@@ -19,7 +19,7 @@ trait ChannelGenreRepository {
 }
 
 
-class TVChannelGenreRepository(collectionName: String)(implicit val con: String => APIMongoConnection) extends ChannelGenreRepository {
+class TVChannelCategoryRepository(collectionName: String)(implicit val con: String => APIMongoConnection) extends ChannelCategoryRepository {
   private val collection = con(collectionName).collection
 
   override def findAll(): Future[Seq[TVChannelCategory]] = {

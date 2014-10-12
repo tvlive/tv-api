@@ -1,6 +1,6 @@
 package controllers
 
-import models.{ChannelGenreRepository, TVChannelCategory}
+import models.{ChannelCategoryRepository, TVChannelCategory}
 import org.scalatest.MustMatchers
 import org.scalatestplus.play.PlaySpec
 import play.api.mvc.SimpleResult
@@ -10,13 +10,13 @@ import reactivemongo.bson.BSONObjectID
 
 import scala.concurrent.Future
 
-class TVChannelGenreControllerSpec extends PlaySpec with MustMatchers with TVChannelGenreSetUpTest {
+class TVChannelGenreControllerSpec extends PlaySpec with MustMatchers with TVChannelCategprySetUpTest {
 
 
   "TVChannelGenreController" should {
 
-    "provide the all the list of genres availables for tv channels order alphabetically" in {
-      val genresResult: Future[SimpleResult] = controller.genres().apply(FakeRequest())
+    "provide the all the list of cateogry availables for tv channels order alphabetically" in {
+      val genresResult: Future[SimpleResult] = controller.categories().apply(FakeRequest())
       status(genresResult) mustBe(OK)
       contentType(genresResult) mustBe(Some("application/json"))
       val genresInResponse = contentAsJson(genresResult).as[Seq[TVChannelCategory]]
@@ -27,21 +27,21 @@ class TVChannelGenreControllerSpec extends PlaySpec with MustMatchers with TVCha
 }
 
 
-trait TVChannelGenreSetUpTest {
+trait TVChannelCategprySetUpTest {
 
   val tvChannelGenre1 = TVChannelCategory("SPORTS", Some(BSONObjectID.generate))
   val tvChannelGenre2 = TVChannelCategory("ENTERTAINMENT", Some(BSONObjectID.generate))
   val tvChannelGenre3 = TVChannelCategory("DOCUMENTARY", Some(BSONObjectID.generate))
   val tvChannelGenre4 = TVChannelCategory("NEWS", Some(BSONObjectID.generate))
 
-  val tvChannelGenreRepository = new ChannelGenreRepository() {
+  val tvChannelGenreRepository = new ChannelCategoryRepository() {
     override def findAll(): Future[Seq[TVChannelCategory]] = {
       Future.successful(Seq(tvChannelGenre3, tvChannelGenre2, tvChannelGenre4, tvChannelGenre1))
     }
   }
 
   class App extends controllers.TVChannelCategoryController {
-    override val channelGenreReporitory = tvChannelGenreRepository
+    override val channelCategoryReporitory = tvChannelGenreRepository
   }
 
   val controller = new App

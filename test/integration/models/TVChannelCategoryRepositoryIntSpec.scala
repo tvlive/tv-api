@@ -18,7 +18,7 @@ class TVChannelCategoryRepositoryIntSpec extends PlaySpec with MustMatchers with
   implicit val defaultPatience =
     PatienceConfig(timeout = Span(1, Seconds), interval = Span(5, Millis))
 
-  val tvChannelCategoryRepository: TVChannelGenreRepository = new TVChannelGenreRepository(this.getClass.getCanonicalName)
+  val tvChannelCategoryRepository: TVChannelCategoryRepository = new TVChannelCategoryRepository(this.getClass.getCanonicalName)
   tvChannelCategoryRepository.drop()
   Thread.sleep(5000)
 

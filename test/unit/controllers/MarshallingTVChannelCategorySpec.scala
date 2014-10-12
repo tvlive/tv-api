@@ -11,11 +11,11 @@ class MarshallingTVChannelCategorySpec extends PlaySpec with MustMatchers {
   val idString = id.stringify
 
   "Write and reads" should {
-    "transform TVChannelGenre object to json" in {
+    "transform TVChannelCategory object to json" in {
       Json.toJson(TVChannelCategory("ENTERTAINMENT", Some(id))).toString() mustBe s"""{"category":"ENTERTAINMENT","id":\"$idString\"}"""
     }
 
-    "transform json to TVChannelGenre object" in {
+    "transform json to TVChannelCategory object" in {
       Json.parse(s"""{"category":"ENTERTAINMENT","id":\"$idString\"}""").as[TVChannelCategory] mustBe TVChannelCategory("ENTERTAINMENT", Some(id))
     }
   }

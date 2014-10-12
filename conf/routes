@@ -25,7 +25,9 @@ GET     /tvcontent/genre/:genre/current     			controllers.TVContentController.c
 
 GET     /tvcontent/genre/:genre/left        			controllers.TVContentController.contentLeftByGenre(genre)
 
-GET     /categories/channels                    		controllers.TVChannelCategoryController.genres
+GET     /categories/channels                    		controllers.TVChannelCategoryController.categories
+
+GET     /providers/channels                    		    controllers.TVChannelProviderController.providers
 
 GET     /genres/tvcontent                               controllers.TVContentGenreController.genres
 
