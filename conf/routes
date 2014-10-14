@@ -3,7 +3,7 @@
 # ~~~~
 
 # Home page
-GET     /                                               controllers.Application.index
+GET     /                                               controllers.TVRootController.roots
 
 GET     /channels                           			controllers.TVChannelController.channels
 
