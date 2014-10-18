@@ -1,34 +1,35 @@
 package controllers
 
-import models.{TVChannelCategory, ChannelCategoryRepository, TVChannelProvider, ChannelProviderRepository}
+import models.{ChannelCategoryRepository, ChannelProviderRepository, TVChannelCategory, TVChannelProvider}
 import org.scalatest.MustMatchers
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
 import play.api.mvc.SimpleResult
-import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import play.api.test.{FakeRequest, WithApplication}
 
 import scala.concurrent.Future
 
-class TVRootControllerSpec extends PlaySpec with MustMatchers with RootSetup {
+class TVRootControllerSpec extends PlaySpec with MustMatchers with RootSetup  {
 
 
   "root" should {
-    "return the list of tv links that help to start the navigation across the API" in {
+    "return the list of tv links that help to start the navigation across the API" in  new WithApplication() {
       val rootsResponse: Future[SimpleResult] = rootController.roots.apply(FakeRequest())
       status(rootsResponse) mustBe (OK)
       contentType(rootsResponse) mustBe (Some("application/json"))
       val linksInResponse = contentAsString(rootsResponse)
-      val links = Json.parse(linksInResponse).as[Seq[String]]
+      val links = Json.parse(linksInResponse).as[Seq[Link]]
       links mustEqual Seq(
-        "/channels",
-        "/channels/provider/CABLE",
-        "/channels/provider/FREEVIEW",
-        "/channels/provider/TERRESTRIAL",
-        "/channels/category/FILMS",
-        "/channels/category/KID",
-        "/channels/category/NEWS"
-      )
+        Link("/channels", "List of all the channels"),
+        Link("/providers/channels", "List of all the channel TV providers"),
+        Link("/categories/channels", "List of all the channel TV categories"),
+        Link("/channels/provider/CABLE", "List of channels by provider: CABLE"),
+        Link("/channels/provider/FREEVIEW", "List of channels by provider: FREEVIEW"),
+        Link("/channels/provider/TERRESTRIAL", "List of channels by provider: TERRESTRIAL"),
+        Link("/channels/category/FILMS", "List of channels by category: FILMS"),
+        Link("/channels/category/KID", "List of channels by category: KID"),
+        Link("/channels/category/NEWS", "List of channels by category: NEWS"))
     }
   }
 }
