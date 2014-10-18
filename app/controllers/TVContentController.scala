@@ -20,14 +20,14 @@ trait TVContentController extends BaseController {
   def currentContent(channelName: String) = Action.async {
     contentRepository.findCurrentContentByChannel(URLDecoder.decode(channelName, "UTF-8").toUpperCase).map {
       case Some(tvProgram) => Ok(Json.toJson(tvProgram))
-      case None => NotFound
+      case None => NotFound(Json.toJson(NotFoundResponse(s"No TV content at this moment for the channel: $channelName")))
     }
   }
 
   def contentLeft(channelName: String) = Action.async {
     contentRepository.findLeftContentByChannel(URLDecoder.decode(channelName, "UTF-8").toUpperCase).map {
       case head :: tail => Ok(Json.toJson(head :: tail))
-      case Nil => NotFound
+      case Nil => NotFound(Json.toJson(NotFoundResponse(s"No TV content left for the channel: $channelName")))
     }
   }
 
@@ -37,14 +37,14 @@ trait TVContentController extends BaseController {
       case head :: tail => {
         Ok(Json.toJson(head :: tail))
       }
-      case Nil => NotFound
+      case Nil => NotFound(Json.toJson(NotFoundResponse(s"No TV content for the channel: $channelName")))
     }
   }
 
   def tvContentDetails(tvContentID: String) = Action.async {
     contentRepository.findContentByID(tvContentID).map {
       case Some(tvProgram) => Ok(Json.toJson(tvProgram))
-      case None => NotFound
+      case None => NotFound(Json.toJson(NotFoundResponse(s"No TV content details with id: $tvContentID")))
     }
   }
 
@@ -53,7 +53,7 @@ trait TVContentController extends BaseController {
       case head :: tail => {
         Ok(Json.toJson(head :: tail))
       }
-      case Nil => NotFound
+      case Nil => NotFound(Json.toJson(NotFoundResponse(s"No TV content for the genre: $genre")))
     }
   }
 
@@ -62,7 +62,7 @@ trait TVContentController extends BaseController {
       case head :: tail => {
         Ok(Json.toJson(head :: tail))
       }
-      case Nil => NotFound
+      case Nil => NotFound(Json.toJson(NotFoundResponse(s"No TV content at this moment for the genre: $genre")))
     }
   }
 
@@ -71,7 +71,7 @@ trait TVContentController extends BaseController {
       case head :: tail => {
         Ok(Json.toJson(head :: tail))
       }
-      case Nil => NotFound
+      case Nil => NotFound(Json.toJson(NotFoundResponse(s"No TV content left for the genre: $genre")))
     }
   }
 }

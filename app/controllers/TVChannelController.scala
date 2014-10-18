@@ -19,7 +19,7 @@ trait TVChannelController extends BaseController {
       case head :: tail => {
         Ok(Json.toJson(head :: tail))
       }
-      case Nil => NotFound
+      case Nil => NotFound(Json.toJson(NotFoundResponse("No channels found")))
     }
   }
 
@@ -28,7 +28,7 @@ trait TVChannelController extends BaseController {
       case head :: tail => {
         Ok(Json.toJson(head :: tail))
       }
-      case Nil => NotFound
+      case Nil => NotFound(Json.toJson(NotFoundResponse(s"No channels found for the category: $category")))
     }
   }
 
@@ -37,7 +37,7 @@ trait TVChannelController extends BaseController {
       case head :: tail => {
         Ok(Json.toJson(head :: tail))
       }
-      case Nil => NotFound
+      case Nil => NotFound(Json.toJson(NotFoundResponse(s"No channels found for the provider: $provider")))
     }
   }
 }

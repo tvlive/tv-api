@@ -110,4 +110,9 @@ package object controllers {
   implicit val tvChannelCategoryFmt = Json.format[TVChannelCategory]
   implicit val tvChannelProviderFmt = Json.format[TVChannelProvider]
   implicit val tvContentGenreFmt = Json.format[TVContentGenre]
+  implicit val linkFmt = Json.format[Link]
+  implicit val notFoundResponseFmt = Json.format[NotFoundResponse]
+  implicit val internalServerErrorResponseFmt = Json.format[InternalErrorServerResponse]
+  implicit val BadRequestResponseFmt = Json.format[BadRequestResponse]
+
 }

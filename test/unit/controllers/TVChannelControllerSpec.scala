@@ -46,6 +46,8 @@ class TVChannelControllerSpec extends PlaySpec with MustMatchers with TVChannelS
 
       val channelResult: Future[SimpleResult] = controller.channelsByCategory("NOEXIST").apply(FakeRequest())
       status(channelResult) mustBe(NOT_FOUND)
+      val channelsInResponse = contentAsJson(channelResult).as[NotFoundResponse]
+      channelsInResponse mustEqual(NotFoundResponse(s"No channels found for the category: NOEXIST"))
     }
 
     "provide the list of channels for that contains provider PROVIDER2 in upper case" in {
@@ -70,6 +72,8 @@ class TVChannelControllerSpec extends PlaySpec with MustMatchers with TVChannelS
 
       val channelResult: Future[SimpleResult] = controller.channelsByProvider("NOEXIST").apply(FakeRequest())
       status(channelResult) mustBe(NOT_FOUND)
+      val channelsInResponse = contentAsJson(channelResult).as[NotFoundResponse]
+      channelsInResponse mustEqual(NotFoundResponse(s"No channels found for the provider: NOEXIST"))
     }
   }
 }

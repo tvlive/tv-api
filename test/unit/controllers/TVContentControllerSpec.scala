@@ -20,8 +20,10 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers with TVContentS
 
     "return NOT_FOUND if there is no TV content for CHANNEL2 available today" in {
 
-      val programsResult: Future[SimpleResult] = controller.allContent("CHANNEL2").apply(FakeRequest())
-      status(programsResult) mustBe(NOT_FOUND)
+      val contentsResult: Future[SimpleResult] = controller.allContent("CHANNEL2").apply(FakeRequest())
+      status(contentsResult) mustBe(NOT_FOUND)
+      val contentsInResponse = contentAsJson(contentsResult).as[NotFoundResponse]
+      contentsInResponse mustEqual(NotFoundResponse(s"No TV content for the channel: CHANNEL2"))
     }
 
     "return all the TV content for a channel1 available today" in {
@@ -66,8 +68,10 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers with TVContentS
     //
     "return NOT_FOUND if there is no TV content for CHANNEL2 available now" in {
 
-      val programsResult: Future[SimpleResult] = controller.currentContent("CHANNEL2").apply(FakeRequest())
-      status(programsResult) mustBe(NOT_FOUND)
+      val contentsResult: Future[SimpleResult] = controller.currentContent("CHANNEL2").apply(FakeRequest())
+      status(contentsResult) mustBe(NOT_FOUND)
+      val contentsInResponse = contentAsJson(contentsResult).as[NotFoundResponse]
+      contentsInResponse mustEqual(NotFoundResponse(s"No TV content at this moment for the channel: CHANNEL2"))
     }
 
     "return the TV content for CHANNEL1 available now" in {
@@ -96,8 +100,10 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers with TVContentS
 
     "return NOT_FOUND if there is no TV content for CHANNEL2 available from now until the end of the day" in {
 
-      val programsResult: Future[SimpleResult] = controller.contentLeft("CHANNEL2").apply(FakeRequest())
-      status(programsResult) mustBe(NOT_FOUND)
+      val contentsResult: Future[SimpleResult] = controller.contentLeft("CHANNEL2").apply(FakeRequest())
+      status(contentsResult) mustBe(NOT_FOUND)
+      val contentsInResponse = contentAsJson(contentsResult).as[NotFoundResponse]
+      contentsInResponse mustEqual(NotFoundResponse(s"No TV content left for the channel: CHANNEL2"))
     }
 
     "return TV content details for a specific TV Content ID" in {
@@ -111,8 +117,10 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers with TVContentS
 
     "return NOT_FOUND if there is no TV content details for a specific TV Content ID" in {
 
-      val programResult: Future[SimpleResult] = controller.tvContentDetails("noExistID").apply(FakeRequest())
-      status(programResult) mustBe(NOT_FOUND)
+      val contentsResult: Future[SimpleResult] = controller.tvContentDetails("noExistID").apply(FakeRequest())
+      status(contentsResult) mustBe(NOT_FOUND)
+      val contentsInResponse = contentAsJson(contentsResult).as[NotFoundResponse]
+      contentsInResponse mustEqual(NotFoundResponse(s"No TV content details with id: noExistID"))
     }
 
     "return all the TV content available today by genre ENTERTAINMENT with upper case" in {
@@ -135,8 +143,10 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers with TVContentS
 
     "return NOT_FOUND if there is no TV content for genre FILM available now" in {
 
-      val programsResult: Future[SimpleResult] = controller.currentContentByGenre("FILM").apply(FakeRequest())
-      status(programsResult) mustBe(NOT_FOUND)
+      val contentsResult: Future[SimpleResult] = controller.currentContentByGenre("FILM").apply(FakeRequest())
+      status(contentsResult) mustBe(NOT_FOUND)
+      val contentsInResponse = contentAsJson(contentsResult).as[NotFoundResponse]
+      contentsInResponse mustEqual(NotFoundResponse(s"No TV content at this moment for the genre: FILM"))
     }
 
     "return the TV content for genre SPORTS available now" in {
@@ -151,8 +161,10 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers with TVContentS
 
     "return NOT_FOUND if there is no TV content for genre FILM available from now until the end of the day" in {
 
-      val programsResult: Future[SimpleResult] = controller.contentLeftByGenre("FILM").apply(FakeRequest())
-      status(programsResult) mustBe(NOT_FOUND)
+      val contentsResult: Future[SimpleResult] = controller.contentLeftByGenre("FILM").apply(FakeRequest())
+      status(contentsResult) mustBe(NOT_FOUND)
+      val contentsInResponse = contentAsJson(contentsResult).as[NotFoundResponse]
+      contentsInResponse mustEqual(NotFoundResponse(s"No TV content left for the genre: FILM"))
     }
 
     "return the TV content for genre HORROR available from now until the end of the day" in {
