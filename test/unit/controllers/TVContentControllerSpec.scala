@@ -122,62 +122,60 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers with TVContentS
       val contentsInResponse = contentAsJson(contentsResult).as[NotFoundResponse]
       contentsInResponse mustEqual(NotFoundResponse(s"No TV content details with id: noExistID"))
     }
-
-    "return all the TV content available today by genre ENTERTAINMENT with upper case" in {
-      val programsResult: Future[SimpleResult] = controller.contentByGenre("entertainment").apply(FakeRequest())
-      status(programsResult) mustBe(OK)
-      val programInResponse = contentAsString(programsResult)
-      val tvprograms = Json.parse(programInResponse).as[Seq[TVContentShort]]
-      tvprograms mustEqual Seq(TVShortWithTimeZone(tvProgram1), TVShortWithTimeZone(tvProgram3))
-
-    }
-
-    "return all the TV content available today by genre sports with lower case" in {
-      val programsResult: Future[SimpleResult] = controller.contentByGenre("sports").apply(FakeRequest())
-      status(programsResult) mustBe(OK)
-      val programInResponse = contentAsString(programsResult)
-      val tvprograms = Json.parse(programInResponse).as[Seq[TVContentShort]]
-      tvprograms mustEqual Seq(TVShortWithTimeZone(tvProgram2), TVShortWithTimeZone(tvProgram4), TVShortWithTimeZone(tvProgram7), TVShortWithTimeZone(tvProgram8))
-
-    }
-
-    "return NOT_FOUND if there is no TV content for genre FILM available now" in {
-
-      val contentsResult: Future[SimpleResult] = controller.currentContentByGenre("FILM").apply(FakeRequest())
-      status(contentsResult) mustBe(NOT_FOUND)
-      val contentsInResponse = contentAsJson(contentsResult).as[NotFoundResponse]
-      contentsInResponse mustEqual(NotFoundResponse(s"No TV content at this moment for the genre: FILM"))
-    }
-
-    "return the TV content for genre SPORTS available now" in {
-
-      val programsResult: Future[SimpleResult] = controller.currentContentByGenre("SPORTS").apply(FakeRequest())
-      status(programsResult) mustBe(OK)
-      contentType(programsResult) mustBe(Some("application/json"))
-      val programInResponse = contentAsString(programsResult)
-      val tvprograms = Json.parse(programInResponse).as[Seq[TVContentShort]]
-      tvprograms mustEqual Seq(TVShortWithTimeZone(tvProgram7), TVShortWithTimeZone(tvProgram8))
-    }
-
-    "return NOT_FOUND if there is no TV content for genre FILM available from now until the end of the day" in {
-
-      val contentsResult: Future[SimpleResult] = controller.contentLeftByGenre("FILM").apply(FakeRequest())
-      status(contentsResult) mustBe(NOT_FOUND)
-      val contentsInResponse = contentAsJson(contentsResult).as[NotFoundResponse]
-      contentsInResponse mustEqual(NotFoundResponse(s"No TV content left for the genre: FILM"))
-    }
-
-    "return the TV content for genre HORROR available from now until the end of the day" in {
-
-      val programsResult: Future[SimpleResult] = controller.contentLeftByGenre("HORROR").apply(FakeRequest())
-      status(programsResult) mustBe(OK)
-      contentType(programsResult) mustBe(Some("application/json"))
-      val programInResponse = contentAsString(programsResult)
-      val tvprograms = Json.parse(programInResponse).as[Seq[TVContentShort]]
-      tvprograms mustEqual Seq(TVShortWithTimeZone(tvProgram6), TVShortWithTimeZone(tvProgram5), TVShortWithTimeZone(tvProgram9))
-    }
-
-
+//
+//    "return all the TV content available today by genre ENTERTAINMENT with upper case" in {
+//      val programsResult: Future[SimpleResult] = controller.contentByGenre("entertainment").apply(FakeRequest())
+//      status(programsResult) mustBe(OK)
+//      val programInResponse = contentAsString(programsResult)
+//      val tvprograms = Json.parse(programInResponse).as[Seq[TVContentShort]]
+//      tvprograms mustEqual Seq(TVShortWithTimeZone(tvProgram1), TVShortWithTimeZone(tvProgram3))
+//
+//    }
+//
+//    "return all the TV content available today by genre sports with lower case" in {
+//      val programsResult: Future[SimpleResult] = controller.contentByGenre("sports").apply(FakeRequest())
+//      status(programsResult) mustBe(OK)
+//      val programInResponse = contentAsString(programsResult)
+//      val tvprograms = Json.parse(programInResponse).as[Seq[TVContentShort]]
+//      tvprograms mustEqual Seq(TVShortWithTimeZone(tvProgram2), TVShortWithTimeZone(tvProgram4), TVShortWithTimeZone(tvProgram7), TVShortWithTimeZone(tvProgram8))
+//
+//    }
+//
+//    "return NOT_FOUND if there is no TV content for genre FILM available now" in {
+//
+//      val contentsResult: Future[SimpleResult] = controller.currentContentByGenre("FILM").apply(FakeRequest())
+//      status(contentsResult) mustBe(NOT_FOUND)
+//      val contentsInResponse = contentAsJson(contentsResult).as[NotFoundResponse]
+//      contentsInResponse mustEqual(NotFoundResponse(s"No TV content at this moment for the genre: FILM"))
+//    }
+//
+//    "return the TV content for genre SPORTS available now" in {
+//
+//      val programsResult: Future[SimpleResult] = controller.currentContentByGenre("SPORTS").apply(FakeRequest())
+//      status(programsResult) mustBe(OK)
+//      contentType(programsResult) mustBe(Some("application/json"))
+//      val programInResponse = contentAsString(programsResult)
+//      val tvprograms = Json.parse(programInResponse).as[Seq[TVContentShort]]
+//      tvprograms mustEqual Seq(TVShortWithTimeZone(tvProgram7), TVShortWithTimeZone(tvProgram8))
+//    }
+//
+//    "return NOT_FOUND if there is no TV content for genre FILM available from now until the end of the day" in {
+//
+//      val contentsResult: Future[SimpleResult] = controller.contentLeftByGenre("FILM").apply(FakeRequest())
+//      status(contentsResult) mustBe(NOT_FOUND)
+//      val contentsInResponse = contentAsJson(contentsResult).as[NotFoundResponse]
+//      contentsInResponse mustEqual(NotFoundResponse(s"No TV content left for the genre: FILM"))
+//    }
+//
+//    "return the TV content for genre HORROR available from now until the end of the day" in {
+//
+//      val programsResult: Future[SimpleResult] = controller.contentLeftByGenre("HORROR").apply(FakeRequest())
+//      status(programsResult) mustBe(OK)
+//      contentType(programsResult) mustBe(Some("application/json"))
+//      val programInResponse = contentAsString(programsResult)
+//      val tvprograms = Json.parse(programInResponse).as[Seq[TVContentShort]]
+//      tvprograms mustEqual Seq(TVShortWithTimeZone(tvProgram6), TVShortWithTimeZone(tvProgram5), TVShortWithTimeZone(tvProgram9))
+//    }
   }
 }
 
@@ -284,34 +282,34 @@ trait TVContentSetUpTest {
       else Future.successful(None)
     }
 
-    override def findDayContentByGenre(genre: String): Future[Seq[TVContentShort]] = {
-      genre match {
-        case "ENTERTAINMENT" => Future.successful(Seq(TVShortWithTimeZone(tvProgram1),
-          TVShortWithTimeZone(tvProgram3)))
-        case "SPORTS" => Future.successful(Seq(TVShortWithTimeZone(tvProgram2),
-          TVShortWithTimeZone(tvProgram4),
-          TVShortWithTimeZone(tvProgram7),
-          TVShortWithTimeZone(tvProgram8)))
-        case _ => Future.successful(Seq())
-      }
-    }
-
-    override def findCurrentContentByGenre(genre: String): Future[Seq[TVContentShort]] = {
-      genre match {
-        case "SPORTS" => Future.successful(Seq(TVShortWithTimeZone(tvProgram7),
-          TVShortWithTimeZone(tvProgram8)))
-        case _ => Future.successful(Seq())
-      }
-    }
-
-    override def findLeftContentByGenre(genre: String): Future[Seq[TVContentShort]] = {
-      genre match {
-        case "HORROR" => Future.successful(Seq(TVShortWithTimeZone(tvProgram6),
-          TVShortWithTimeZone(tvProgram5),
-          TVShortWithTimeZone(tvProgram9)))
-        case _ => Future.successful(Seq())
-      }
-    }
+//    override def findDayContentByGenre(genre: String): Future[Seq[TVContentShort]] = {
+//      genre match {
+//        case "ENTERTAINMENT" => Future.successful(Seq(TVShortWithTimeZone(tvProgram1),
+//          TVShortWithTimeZone(tvProgram3)))
+//        case "SPORTS" => Future.successful(Seq(TVShortWithTimeZone(tvProgram2),
+//          TVShortWithTimeZone(tvProgram4),
+//          TVShortWithTimeZone(tvProgram7),
+//          TVShortWithTimeZone(tvProgram8)))
+//        case _ => Future.successful(Seq())
+//      }
+//    }
+//
+//    override def findCurrentContentByGenre(genre: String): Future[Seq[TVContentShort]] = {
+//      genre match {
+//        case "SPORTS" => Future.successful(Seq(TVShortWithTimeZone(tvProgram7),
+//          TVShortWithTimeZone(tvProgram8)))
+//        case _ => Future.successful(Seq())
+//      }
+//    }
+//
+//    override def findLeftContentByGenre(genre: String): Future[Seq[TVContentShort]] = {
+//      genre match {
+//        case "HORROR" => Future.successful(Seq(TVShortWithTimeZone(tvProgram6),
+//          TVShortWithTimeZone(tvProgram5),
+//          TVShortWithTimeZone(tvProgram9)))
+//        case _ => Future.successful(Seq())
+//      }
+//    }
   }
 
   class App extends TVContentController {

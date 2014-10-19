@@ -48,30 +48,30 @@ trait TVContentController extends BaseController {
     }
   }
 
-  def contentByGenre(genre: String) = Action.async {
-    contentRepository.findDayContentByGenre(genre.toUpperCase()).map {
-      case head :: tail => {
-        Ok(Json.toJson(head :: tail))
-      }
-      case Nil => NotFound(Json.toJson(NotFoundResponse(s"No TV content for the genre: $genre")))
-    }
-  }
-
-  def currentContentByGenre(genre: String) = Action.async {
-    contentRepository.findCurrentContentByGenre(genre.toUpperCase()).map {
-      case head :: tail => {
-        Ok(Json.toJson(head :: tail))
-      }
-      case Nil => NotFound(Json.toJson(NotFoundResponse(s"No TV content at this moment for the genre: $genre")))
-    }
-  }
-
-  def contentLeftByGenre(genre: String) = Action.async {
-    contentRepository.findLeftContentByGenre(genre.toUpperCase()).map {
-      case head :: tail => {
-        Ok(Json.toJson(head :: tail))
-      }
-      case Nil => NotFound(Json.toJson(NotFoundResponse(s"No TV content left for the genre: $genre")))
-    }
-  }
+//  def contentByGenre(genre: String) = Action.async {
+//    contentRepository.findDayContentByGenre(genre.toUpperCase()).map {
+//      case head :: tail => {
+//        Ok(Json.toJson(head :: tail))
+//      }
+//      case Nil => NotFound(Json.toJson(NotFoundResponse(s"No TV content for the genre: $genre")))
+//    }
+//  }
+//
+//  def currentContentByGenre(genre: String) = Action.async {
+//    contentRepository.findCurrentContentByGenre(genre.toUpperCase()).map {
+//      case head :: tail => {
+//        Ok(Json.toJson(head :: tail))
+//      }
+//      case Nil => NotFound(Json.toJson(NotFoundResponse(s"No TV content at this moment for the genre: $genre")))
+//    }
+//  }
+//
+//  def contentLeftByGenre(genre: String) = Action.async {
+//    contentRepository.findLeftContentByGenre(genre.toUpperCase()).map {
+//      case head :: tail => {
+//        Ok(Json.toJson(head :: tail))
+//      }
+//      case Nil => NotFound(Json.toJson(NotFoundResponse(s"No TV content left for the genre: $genre")))
+//    }
+//  }
 }

@@ -61,11 +61,11 @@ trait ContentRepository {
 
   def findContentByID(contentID: String): Future[Option[TVContent]] = ???
 
-  def findDayContentByGenre(genre: String): Future[Seq[TVContentShort]] = ???
-
-  def findCurrentContentByGenre(genre: String): Future[Seq[TVContentShort]] = ???
-
-  def findLeftContentByGenre(genre: String): Future[Seq[TVContentShort]] = ???
+//  def findDayContentByGenre(genre: String): Future[Seq[TVContentShort]] = ???
+//
+//  def findCurrentContentByGenre(genre: String): Future[Seq[TVContentShort]] = ???
+//
+//  def findLeftContentByGenre(genre: String): Future[Seq[TVContentShort]] = ???
 
   def drop(): Future[Boolean] = ???
 
@@ -123,40 +123,40 @@ class TVContentRepository(collectionName: String)(implicit val con: String => AP
     collection.find(query).one[TVContent]
   }
 
-  override def findDayContentByGenre(genre: String): Future[Seq[TVContentShort]] = {
-    val query = BSONDocument(
-      "$orderby" -> BSONDocument("channel" -> 1),
-      "$query" -> BSONDocument("category" -> genre)
-    )
-
-    val found = collection.find(query).cursor[TVContentShort]
-    found.collect[Seq]()
-  }
-
-  override def findCurrentContentByGenre(genre: String): Future[Seq[TVContentShort]] = {
-    val now = currentDate()
-    val query = BSONDocument(
-      "$orderby" -> BSONDocument("channel" -> 1),
-      "$query" -> BSONDocument(
-        "category" -> genre,
-        "start" -> BSONDocument("$lte" -> BSONDateTime(now.getMillis)),
-        "end" -> BSONDocument("$gt" -> BSONDateTime(now.getMillis))))
-
-    val found = collection.find(query).cursor[TVContentShort]
-    found.collect[Seq]()
-  }
-
-  override def findLeftContentByGenre(genre: String): Future[Seq[TVContentShort]] = {
-    val now = currentDate()
-    val query = BSONDocument(
-      "$orderby" -> BSONDocument("channel" -> 1),
-      "$query" -> BSONDocument(
-        "category" -> genre,
-        "end" -> BSONDocument("$gt" -> BSONDateTime(now.getMillis))))
-
-    val found = collection.find(query).cursor[TVContentShort]
-    found.collect[Seq]()
-  }
+//  override def findDayContentByGenre(genre: String): Future[Seq[TVContentShort]] = {
+//    val query = BSONDocument(
+//      "$orderby" -> BSONDocument("channel" -> 1),
+//      "$query" -> BSONDocument("category" -> genre)
+//    )
+//
+//    val found = collection.find(query).cursor[TVContentShort]
+//    found.collect[Seq]()
+//  }
+//
+//  override def findCurrentContentByGenre(genre: String): Future[Seq[TVContentShort]] = {
+//    val now = currentDate()
+//    val query = BSONDocument(
+//      "$orderby" -> BSONDocument("channel" -> 1),
+//      "$query" -> BSONDocument(
+//        "category" -> genre,
+//        "start" -> BSONDocument("$lte" -> BSONDateTime(now.getMillis)),
+//        "end" -> BSONDocument("$gt" -> BSONDateTime(now.getMillis))))
+//
+//    val found = collection.find(query).cursor[TVContentShort]
+//    found.collect[Seq]()
+//  }
+//
+//  override def findLeftContentByGenre(genre: String): Future[Seq[TVContentShort]] = {
+//    val now = currentDate()
+//    val query = BSONDocument(
+//      "$orderby" -> BSONDocument("channel" -> 1),
+//      "$query" -> BSONDocument(
+//        "category" -> genre,
+//        "end" -> BSONDocument("$gt" -> BSONDateTime(now.getMillis))))
+//
+//    val found = collection.find(query).cursor[TVContentShort]
+//    found.collect[Seq]()
+//  }
 }
 
 

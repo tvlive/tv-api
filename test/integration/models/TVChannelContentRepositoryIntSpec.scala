@@ -108,47 +108,47 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
     }
   }
 
-  "findDayContentByGenre" should {
-    "return all the TV content for a genre ENTERTAINMENT" in {
-      whenReady(tvContentRepository.findDayContentByGenre("ENTERTAINMENT")) {
-        _ mustBe Seq(TVShort(p1), TVShort(p3))
-      }
-    }
-
-    "return none TV Content for a genre FOOTBALL" in {
-      whenReady(tvContentRepository.findDayContentByGenre("FOOTBALL")) {
-        _ mustBe List()
-      }
-    }
-  }
-
-  "findCurrentContentByGenre" should {
-    "return the TV content for a genre FILM available now" in {
-
-      whenReady(tvContentRepository.findCurrentContentByGenre("FILM")) {
-        _ mustBe Seq(TVShort(p3))
-      }
-    }
-
-    "return none TV Content for a genre NEWS" in {
-      whenReady(tvContentRepository.findCurrentContentByGenre("NEWS")) {
-        _ mustBe List()
-      }
-    }
-  }
-
-  "findLeftContentByGenre" should {
-    "return the TV content for a genre documentary available  from now until the end of the day" in {
-
-      whenReady(tvContentRepository.findLeftContentByGenre("documentary")) {
-        _ mustBe Seq(TVShort(p4), TVShort(p5), TVShort(p6))
-      }
-    }
-
-    "return none TV Content for a genre NEWS from now until the end of the day" in {
-      whenReady(tvContentRepository.findLeftContentByGenre("NEWS")) {
-        _ mustBe List()
-      }
-    }
-  }
+//  "findDayContentByGenre" should {
+//    "return all the TV content for a genre ENTERTAINMENT" in {
+//      whenReady(tvContentRepository.findDayContentByGenre("ENTERTAINMENT")) {
+//        _ mustBe Seq(TVShort(p1), TVShort(p3))
+//      }
+//    }
+//
+//    "return none TV Content for a genre FOOTBALL" in {
+//      whenReady(tvContentRepository.findDayContentByGenre("FOOTBALL")) {
+//        _ mustBe List()
+//      }
+//    }
+//  }
+//
+//  "findCurrentContentByGenre" should {
+//    "return the TV content for a genre FILM available now" in {
+//
+//      whenReady(tvContentRepository.findCurrentContentByGenre("FILM")) {
+//        _ mustBe Seq(TVShort(p3))
+//      }
+//    }
+//
+//    "return none TV Content for a genre NEWS" in {
+//      whenReady(tvContentRepository.findCurrentContentByGenre("NEWS")) {
+//        _ mustBe List()
+//      }
+//    }
+//  }
+//
+//  "findLeftContentByGenre" should {
+//    "return the TV content for a genre documentary available  from now until the end of the day" in {
+//
+//      whenReady(tvContentRepository.findLeftContentByGenre("documentary")) {
+//        _ mustBe Seq(TVShort(p4), TVShort(p5), TVShort(p6))
+//      }
+//    }
+//
+//    "return none TV Content for a genre NEWS from now until the end of the day" in {
+//      whenReady(tvContentRepository.findLeftContentByGenre("NEWS")) {
+//        _ mustBe List()
+//      }
+//    }
+//  }
 }
