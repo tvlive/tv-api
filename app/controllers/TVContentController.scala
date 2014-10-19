@@ -48,30 +48,31 @@ trait TVContentController extends BaseController {
     }
   }
 
-//  def contentByGenre(genre: String) = Action.async {
-//    contentRepository.findDayContentByGenre(genre.toUpperCase()).map {
-//      case head :: tail => {
-//        Ok(Json.toJson(head :: tail))
-//      }
-//      case Nil => NotFound(Json.toJson(NotFoundResponse(s"No TV content for the genre: $genre")))
-//    }
-//  }
-//
-//  def currentContentByGenre(genre: String) = Action.async {
-//    contentRepository.findCurrentContentByGenre(genre.toUpperCase()).map {
-//      case head :: tail => {
-//        Ok(Json.toJson(head :: tail))
-//      }
-//      case Nil => NotFound(Json.toJson(NotFoundResponse(s"No TV content at this moment for the genre: $genre")))
-//    }
-//  }
-//
-//  def contentLeftByGenre(genre: String) = Action.async {
-//    contentRepository.findLeftContentByGenre(genre.toUpperCase()).map {
-//      case head :: tail => {
-//        Ok(Json.toJson(head :: tail))
-//      }
-//      case Nil => NotFound(Json.toJson(NotFoundResponse(s"No TV content left for the genre: $genre")))
-//    }
-//  }
+  def contentByType(contentType: String) = Action.async {
+    contentRepository.findDayContentByType(contentType.toLowerCase).map {
+      case head :: tail => {
+        Ok(Json.toJson(head :: tail))
+      }
+      case Nil => NotFound(Json.toJson(NotFoundResponse(s"No TV content for the type: $contentType")))
+    }
+  }
+
+  //
+  def currentContentByType(contentType: String) = Action.async {
+    contentRepository.findCurrentContentByType(contentType.toLowerCase()).map {
+      case head :: tail => {
+        Ok(Json.toJson(head :: tail))
+      }
+      case Nil => NotFound(Json.toJson(NotFoundResponse(s"No TV content at this moment for the type: $contentType")))
+    }
+  }
+
+  def contentLeftByType(contentType: String) = Action.async {
+    contentRepository.findLeftContentByType(contentType.toLowerCase()).map {
+      case head :: tail => {
+        Ok(Json.toJson(head :: tail))
+      }
+      case Nil => NotFound(Json.toJson(NotFoundResponse(s"No TV content left for the type: $contentType")))
+    }
+  }
 }

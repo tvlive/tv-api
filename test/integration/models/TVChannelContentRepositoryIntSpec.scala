@@ -27,32 +27,32 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
 
   val p1 = TVContent("channel1", current.minusHours(4), current.minusHours(2), Some(List("documentary", "ENTERTAINMENT")),
     Some(Series("serie1", Some("ep1"), None, None, None, None, Some(List("actor1")))),
-    Some(Film("program1", None, Some(List("actor2")), Some("2011"))),
-    Some(Program("p1", Some("d1"))))
+    None,
+    None)
 
   val p2 = TVContent("channel1", current.minusHours(2), current, Some(List("documentary")),
     Some(Series("serie2", Some("ep1"), None, None, None, None, Some(List("actor1")))),
-    Some(Film("program1", None, Some(List("actor2")), Some("2013"))),
-    Some(Program("p2", Some("d2"))))
+    None,
+    None)
 
   val p3 = TVContent("channel1", current, current.plusHours(1), Some(List("FILM", "ENTERTAINMENT")),
-    Some(Series("serie3", Some("ep1"), None, None, None, None, Some(List("actor3")))),
+    None,
     Some(Film("program1", None, Some(List("actor5")), Some("1999"))),
-    Some(Program("p3", Some("d3"))))
+    None)
 
   val p4 = TVContent("channel1", current.plusHours(1), current.plusHours(3), Some(List("documentary")),
-    Some(Series("serie4", Some("ep1"), None, None, None, None, Some(List("actor1")))),
+    None,
     Some(Film("program1", None, Some(List("actor1")), None)),
-    Some(Program("p4", Some("d4"))))
+    None)
 
   val p5 = TVContent("channel1", current.plusHours(3), current.plusHours(5), Some(List("documentary")),
-    Some(Series("serie5", Some("ep1"), None, None, None, None, Some(List("actor1")))),
-    Some(Film("program1", None, Some(List("actor5")), Some("2011"))),
+    None,
+    None,
     Some(Program("p5", Some("d5"))))
 
   val p6 = TVContent("channel1", current.plusHours(5), current.plusHours(7), Some(List("documentary")),
-    Some(Series("serie6", Some("ep1"), None, None, None, None, Some(List("actor6")))),
-    Some(Film("program1", None, Some(List("actor1")), None)),
+    None,
+    None,
     Some(Program("p6", Some("d6"))))
 
 
@@ -108,47 +108,82 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
     }
   }
 
-//  "findDayContentByGenre" should {
-//    "return all the TV content for a genre ENTERTAINMENT" in {
-//      whenReady(tvContentRepository.findDayContentByGenre("ENTERTAINMENT")) {
-//        _ mustBe Seq(TVShort(p1), TVShort(p3))
-//      }
-//    }
-//
-//    "return none TV Content for a genre FOOTBALL" in {
-//      whenReady(tvContentRepository.findDayContentByGenre("FOOTBALL")) {
-//        _ mustBe List()
-//      }
-//    }
-//  }
-//
-//  "findCurrentContentByGenre" should {
-//    "return the TV content for a genre FILM available now" in {
-//
-//      whenReady(tvContentRepository.findCurrentContentByGenre("FILM")) {
-//        _ mustBe Seq(TVShort(p3))
-//      }
-//    }
-//
-//    "return none TV Content for a genre NEWS" in {
-//      whenReady(tvContentRepository.findCurrentContentByGenre("NEWS")) {
-//        _ mustBe List()
-//      }
-//    }
-//  }
-//
-//  "findLeftContentByGenre" should {
-//    "return the TV content for a genre documentary available  from now until the end of the day" in {
-//
-//      whenReady(tvContentRepository.findLeftContentByGenre("documentary")) {
-//        _ mustBe Seq(TVShort(p4), TVShort(p5), TVShort(p6))
-//      }
-//    }
-//
-//    "return none TV Content for a genre NEWS from now until the end of the day" in {
-//      whenReady(tvContentRepository.findLeftContentByGenre("NEWS")) {
-//        _ mustBe List()
-//      }
-//    }
-//  }
+  "findDayContentByType" should {
+    "return all the TV content for a type series" in {
+      whenReady(tvContentRepository.findDayContentByType("series")) {
+        _ mustBe Seq(TVShort(p1), TVShort(p2))
+      }
+    }
+
+    "return all the TV content for a type film" in {
+      whenReady(tvContentRepository.findDayContentByType("film")) {
+        _ mustBe Seq(TVShort(p3), TVShort(p4))
+      }
+    }
+
+    "return all the TV content for a type program" in {
+      whenReady(tvContentRepository.findDayContentByType("program")) {
+        _ mustBe Seq(TVShort(p5), TVShort(p6))
+      }
+    }
+
+    "return empty list of TV content for a type nonExist" in {
+      whenReady(tvContentRepository.findDayContentByType("nonExist")) {
+        _ mustBe Seq()
+      }
+    }
+  }
+
+
+  "findCurrentContentByType" should {
+    "return all the TV content for a type series available now" in {
+      whenReady(tvContentRepository.findCurrentContentByType("series")) {
+        _ mustBe Seq()
+      }
+    }
+
+    "return all the TV content for a type film available now" in {
+      whenReady(tvContentRepository.findCurrentContentByType("film")) {
+        _ mustBe Seq(TVShort(p3))
+      }
+    }
+
+    "return all the TV content for a type program  available now" in {
+      whenReady(tvContentRepository.findCurrentContentByType("program")) {
+        _ mustBe Seq()
+      }
+    }
+
+    "return empty list of TV content for a type nonExist available now" in {
+      whenReady(tvContentRepository.findCurrentContentByType("nonExist")) {
+        _ mustBe Seq()
+      }
+    }
+  }
+
+  "findLeftContentByType" should {
+    "return all the TV content left for a type series" in {
+      whenReady(tvContentRepository.findLeftContentByType("series")) {
+        _ mustBe Seq()
+      }
+    }
+
+    "return all the TV content left for a type film" in {
+      whenReady(tvContentRepository.findLeftContentByType("film")) {
+        _ mustBe Seq(TVShort(p3), TVShort(p4))
+      }
+    }
+
+    "return all the TV content left for a type program " in {
+      whenReady(tvContentRepository.findLeftContentByType("program")) {
+        _ mustBe Seq(TVShort(p5), TVShort(p6))
+      }
+    }
+
+    "return empty list of TV content left for a type nonExist" in {
+      whenReady(tvContentRepository.findLeftContentByType("nonExist")) {
+        _ mustBe Seq()
+      }
+    }
+  }
 }
