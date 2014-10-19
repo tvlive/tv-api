@@ -44,17 +44,27 @@
 <h3>Current version</h3>
 
 <pre>
+  <code>tv-api version 1.0.4  - Deployed 19 October 2014
+    Issue 40 - Create endpoints for searching based on type of content: Series, Program, Film
+    Issue 39 - Remove endpoints related with search based on genre and list of genres
+    Issue 18 - Managing exceptions and error responses in json
+    Issue 37 - Add Rest roots to API
+    Issue 35 - Rewrite the model
+    
+  tv-crawler version 1.0.0 - Deployed 29 Septemer 2014
+      Issue 13 - Rewrite the new crawler
+</code></pre>
+
+<h3>Previous versions</h3>
+
+<pre>
   <code>tv-api version 0.16.0  - Deployed 30 Septemer 2014
     Issue 27 - List of genres per tvcontent
     Issue 33 - Change the url  resource 'genre for channels'
     
   tv-crawler version 0.3.0 - Deployed 29 Septemer 2014
       Issue 11 - Collection for genre for tvcontent
-</code></pre>
-
-<h3>Previous versions</h3>
-
-<pre>
+</code>
   <code>tv-api version 0.15.0  - Deployed 24 Septemer 2014
     Issue 26 - List of genres for channels
     Issue 24 - Remove configuration hardcoded
@@ -81,50 +91,57 @@
 <h3>
 <a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Let's test it</h3>
 
+<pre>List of roots (resources/endpoints to start navigating through the content ): 
+
+<code>$curl http://beta.tvlive.io</code></pre>
+
 <pre>List of TV channels: 
 
 <code>$curl http://beta.tvlive.io/channels</code></pre>
 
-<pre>List of TV channels by genre: 
+<pre>List of TV channels with category 'kids': 
 
-<code>$curl http://beta.tvlive.io/channels/kids</code></pre>
+<code>$curl http://beta.tvlive.io/channels/category/kids</code></pre>
 
-<pre>TV content today in BBC 1 London: 
+<pre>List of TV channels with TV provider 'freeview': 
 
-<code>$curl http://beta.tvlive.io/tvcontent/channel/BBC+1+LONDON/today</code></pre>
+<code>$curl http://beta.tvlive.io/channels/provider/freeview</code></pre>
 
-<pre>TV content left today in BBC 1 London: 
+<pre>List of all the channel TV providers:
 
-<code>$curl http://beta.tvlive.io/tvcontent/channel/BBC+1+LONDON/left</code></pre>
+<code>$curl http://beta.tvlive.io/providers/channels</code></pre>
 
-<pre>What's on in BBC 1 London: 
+<pre>List of all the channel TV categories:
 
-<code>$curl http://beta.tvlive.io/tvcontent/channel/BBC+1+LONDON/current></code></pre>
+<code>$curl http://beta.tvlive.io/categories/channels</code></pre>
 
-<pre>Western TV content today: 
+<pre>TV content today in BBC One London: 
 
-<code>curl http://beta.tvlive.io/tvcontent/genre/western/today</code></pre>
+<code>$curl http://beta.tvlive.io/tvcontent/channel/BBC+ONE+LONDON/today</code></pre>
 
-<pre>Horror TV content left today: 
+<pre>TV content left today in BBC One London: 
 
-<code>curl http://beta.tvlive.io/tvcontent/genre/horror/left</code></pre>
+<code>$curl http://beta.tvlive.io/tvcontent/channel/BBC+ONE+LONDON/left</code></pre>
 
-<pre>What documentaries are on TV now: 
+<pre>What's on in BBC One London: 
 
-<code>curl http://beta.tvlive.io/tvcontent/genre/documentary/current</code></pre>
+<code>$curl http://beta.tvlive.io/tvcontent/channel/BBC+ONE+LONDON/current</code></pre>
+
+<pre>TV series today: 
+
+<code>curl http://beta.tvlive.io/tvcontent/type/series/today</code></pre>
+
+<pre>TV programs left today: 
+
+<code>curl http://beta.tvlive.io/tvcontent/type/program/left</code></pre>
+
+<pre>What films are on TV now: 
+
+<code>curl http://beta.tvlive.io/tvcontent/type/film/current</code></pre>
 
 <pre>TV program details: 
 
 <code>curl http://beta.tvlive.io/tvcontent/540c028aa3d9bd4ae35dbfbe</code></pre>
-
-<pre>List of genres for tv channels: 
-
-<code>$curl http://beta.tvlive.io/genres/channels</code></pre>
-
-<pre>List of genres for tv content: 
-
-<code>$curl http://beta.tvlive.io/genres/tvcontent</code></pre>
-
 
 
 <h3>
