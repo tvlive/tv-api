@@ -8,7 +8,7 @@ import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
 import reactivemongo.bson.BSONObjectID
 
-class MarshallingTVProgramShortSpec extends PlaySpec with MustMatchers {
+class MarshallingTVContentShortSpec extends PlaySpec with MustMatchers {
   val id = BSONObjectID.generate
   val idString = id.stringify
   val now = new DateTime(2014,10,10,10,0,0, DateTimeZone.forID("UTC"))
@@ -16,12 +16,17 @@ class MarshallingTVProgramShortSpec extends PlaySpec with MustMatchers {
 
   "Write and reads" should {
     "transform TVProgram object to json" in {
+      print(Json.toJson(TVContentShort("bbc1", now, now.plusHours(2), Some(List("documentary")),
+        Some(SeriesShort("titleSerie")),
+        Some(FilmShort("titleFilm")),
+        Some(ProgramShort("titleProgram")),
+        Some(id))))
       Json.toJson(TVContentShort("bbc1", now, now.plusHours(2), Some(List("documentary")),
         Some(SeriesShort("titleSerie")),
         Some(FilmShort("titleFilm")),
         Some(ProgramShort("titleProgram")),
         Some(id))).toString() mustBe
-        s"""{"channel":"bbc1","start":"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}","end":"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}","category":["documentary"],"series":{"serieTitle":"titleSerie"},"film":{"title":"titleFilm"},"program":{"title":"titleProgram"},"uriTVProgramDetails":"/tvcontent/$idString","id":"$idString"}"""
+        s"""{"channel":"bbc1","start":"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}","end":"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}","category":["documentary"],"series":{"serieTitle":"titleSerie"},"film":{"title":"titleFilm"},"program":{"title":"titleProgram"},"uriTVContentDetails":"/tvcontent/$idString","id":"$idString"}"""
     }
     "transform json to TVProgram object" in {
       Json.parse(
@@ -32,7 +37,7 @@ class MarshallingTVProgramShortSpec extends PlaySpec with MustMatchers {
            |"series":{"serieTitle":"titleSerie"},
            |"film":{"title":"titleFilm"},
            |"program":{"title":"titleProgram"},
-           |"uriTVProgramDetails":"/tvcontent  /$idString","id":"$idString"}""".stripMargin)
+           |"uriTVContentDetails":"/tvcontent/$idString","id":"$idString"}""".stripMargin)
         .as[TVContentShort] mustBe
         TVContentShort("bbc1",
           now.withZone(DateTimeZone.forID("Europe/London")),

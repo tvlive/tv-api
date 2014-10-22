@@ -101,7 +101,7 @@ package object controllers {
       "series" -> tvContent.series,
       "film" -> tvContent.film,
       "program" -> tvContent.program,
-      "uriTVProgramDetails" -> tvContent.uriTVProgramDetails,
+      "uriTVContentDetails" -> tvContent.uriTVContentDetails,
       "id" -> tvContent.id
     )
   }

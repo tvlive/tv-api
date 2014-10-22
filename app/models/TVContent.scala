@@ -26,7 +26,7 @@ case class TVContentShort(channel: String,
                           program: Option[ProgramShort],
                           id: Option[BSONObjectID] = Some(BSONObjectID.generate)) {
 
-  val uriTVProgramDetails = controllers.routes.TVContentController.tvContentDetails(id.get.stringify).toString()
+  val uriTVContentDetails = controllers.routes.TVContentController.tvContentDetails(id.get.stringify).toString()
 }
 
 
