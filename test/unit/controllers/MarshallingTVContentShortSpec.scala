@@ -16,11 +16,6 @@ class MarshallingTVContentShortSpec extends PlaySpec with MustMatchers {
 
   "Write and reads" should {
     "transform TVProgram object to json" in {
-      print(Json.toJson(TVContentShort("bbc1", now, now.plusHours(2), Some(List("documentary")),
-        Some(SeriesShort("titleSerie")),
-        Some(FilmShort("titleFilm")),
-        Some(ProgramShort("titleProgram")),
-        Some(id))))
       Json.toJson(TVContentShort("bbc1", now, now.plusHours(2), Some(List("documentary")),
         Some(SeriesShort("titleSerie")),
         Some(FilmShort("titleFilm")),
