@@ -124,60 +124,54 @@ class TVContentRepository(collectionName: String)(implicit val con: String => AP
   }
 
   override def findDayContentByType(contentType: String): Future[Seq[TVContentShort]] = {
-    def find(contentType: String) = {
-      val query = BSONDocument(
-        "$orderby" -> BSONDocument("channel" -> 1),
-        "$query" -> BSONDocument(contentType -> BSONDocument("$exists" -> true))
-      )
-
-      val found = collection.find(query).cursor[TVContentShort]
-      found.collect[Seq]()
-    }
-
-    contentType match {
-      case ct if (ct == "program" || ct == "series" || ct == "film") => find(ct)
-      case _ => Future.successful(Seq())
+    findContentByType(contentType) {
+      ct =>
+        val query = BSONDocument(
+          "$orderby" -> BSONDocument("channel" -> 1),
+          "$query" -> BSONDocument(ct -> BSONDocument("$exists" -> true))
+        )
+        val found = collection.find(query).cursor[TVContentShort]
+        found.collect[Seq]()
     }
   }
 
 
   override def findCurrentContentByType(contentType: String): Future[Seq[TVContentShort]] = {
 
-    def find(contentType: String) = {
-      val now = currentDate()
+    findContentByType(contentType) {
+      ct =>
+        val now = currentDate()
+        val query = BSONDocument(
+          "$orderby" -> BSONDocument("channel" -> 1),
+          "$query" -> BSONDocument(
+            "start" -> BSONDocument("$lte" -> BSONDateTime(now.getMillis)),
+            "end" -> BSONDocument("$gt" -> BSONDateTime(now.getMillis)),
+            ct -> BSONDocument("$exists" -> true)))
 
-      val query = BSONDocument(
-        "$orderby" -> BSONDocument("channel" -> 1),
-        "$query" -> BSONDocument(
-          "start" -> BSONDocument("$lte" -> BSONDateTime(now.getMillis)),
-          "end" -> BSONDocument("$gt" -> BSONDateTime(now.getMillis)),
-          contentType -> BSONDocument("$exists" -> true)))
-
-      val found = collection.find(query).cursor[TVContentShort]
-      found.collect[Seq]()
-    }
-
-    contentType match {
-      case ct if (ct == "program" || ct == "series" || ct == "film") => find(ct)
-      case _ => Future.successful(Seq())
+        val found = collection.find(query).cursor[TVContentShort]
+        found.collect[Seq]()
     }
   }
 
   override def findLeftContentByType(contentType: String): Future[Seq[TVContentShort]] = {
 
-    def find(contentType: String) = {
-      val now = currentDate()
-      val query = BSONDocument(
-        "$orderby" -> BSONDocument("channel" -> 1),
-        "$query" -> BSONDocument(
-          contentType -> BSONDocument("$exists" -> true),
-          "end" -> BSONDocument("$gt" -> BSONDateTime(now.getMillis))))
+    findContentByType(contentType) {
+      ct =>
+        val now = currentDate()
+        val query = BSONDocument(
+          "$orderby" -> BSONDocument("channel" -> 1),
+          "$query" -> BSONDocument(
+            ct -> BSONDocument("$exists" -> true),
+            "end" -> BSONDocument("$gt" -> BSONDateTime(now.getMillis))))
 
-      val found = collection.find(query).cursor[TVContentShort]
-      found.collect[Seq]()
+        val found = collection.find(query).cursor[TVContentShort]
+        found.collect[Seq]()
     }
+  }
+
+  private def findContentByType(contentType: String)(f: String => Future[Seq[TVContentShort]]) = {
     contentType match {
-      case ct if (ct == "program" || ct == "series" || ct == "film") => find(ct)
+      case ct if (ct == "program" || ct == "series" || ct == "film") => f(ct)
       case _ => Future.successful(Seq())
     }
   }
