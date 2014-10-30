@@ -7,7 +7,6 @@ import org.scalatest.{BeforeAndAfter, MustMatchers}
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.iteratee.Enumerator
 import reactivemongo.bson.BSONObjectID
-import utils.DomainBuilder.TVShort
 import utils.TimeProvider
 
 class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with BeforeAndAfter with ScalaFutures with MongoSugar {
@@ -71,8 +70,7 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
   "findDayContentByChannel" should {
     "return all the TV content for a particular channel available today" in {
       whenReady(tvContentRepository.findDayContentByChannel("channel1")) {
-        _ mustBe Seq(TVShort(p1), TVShort(p2), TVShort(p3), TVShort(p4),
-          TVShort(p5), TVShort(p6))
+        _ mustBe Seq(p1, p2, p3, p4, p5, p6)
       }
     }
   }
@@ -89,7 +87,7 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
   "findLeftContentByChannel" should {
     "return the TV content for a particular channel available from now until the end of the day" in {
       whenReady(tvContentRepository.findLeftContentByChannel("channel1")) {
-        _ mustBe Seq(TVShort(p3), TVShort(p4), TVShort(p5), TVShort(p6))
+        _ mustBe Seq(p3, p4, p5, p6)
       }
     }
   }
@@ -111,19 +109,19 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
   "findDayContentByType" should {
     "return all the TV content for a type series" in {
       whenReady(tvContentRepository.findDayContentByType("series")) {
-        _ mustBe Seq(TVShort(p1), TVShort(p2))
+        _ mustBe Seq(p1, p2)
       }
     }
 
     "return all the TV content for a type film" in {
       whenReady(tvContentRepository.findDayContentByType("film")) {
-        _ mustBe Seq(TVShort(p3), TVShort(p4))
+        _ mustBe Seq(p3, p4)
       }
     }
 
     "return all the TV content for a type program" in {
       whenReady(tvContentRepository.findDayContentByType("program")) {
-        _ mustBe Seq(TVShort(p5), TVShort(p6))
+        _ mustBe Seq(p5, p6)
       }
     }
 
@@ -144,7 +142,7 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
 
     "return all the TV content for a type film available now" in {
       whenReady(tvContentRepository.findCurrentContentByType("film")) {
-        _ mustBe Seq(TVShort(p3))
+        _ mustBe Seq(p3)
       }
     }
 
@@ -170,13 +168,13 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
 
     "return all the TV content left for a type film" in {
       whenReady(tvContentRepository.findLeftContentByType("film")) {
-        _ mustBe Seq(TVShort(p3), TVShort(p4))
+        _ mustBe Seq(p3, p4)
       }
     }
 
     "return all the TV content left for a type program " in {
       whenReady(tvContentRepository.findLeftContentByType("program")) {
-        _ mustBe Seq(TVShort(p5), TVShort(p6))
+        _ mustBe Seq(p5, p6)
       }
     }
 

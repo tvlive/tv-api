@@ -1,6 +1,5 @@
 package controllers
 
-import models.{ProgramShort, FilmShort, SeriesShort, TVContentShort}
 import org.joda.time.{DateTimeZone, DateTime}
 import org.joda.time.format.DateTimeFormat
 import org.scalatest.MustMatchers

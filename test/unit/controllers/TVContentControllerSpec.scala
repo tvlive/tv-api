@@ -262,30 +262,22 @@ trait TVContentSetUpTest {
     Some(BSONObjectID.generate))
 
   val tvContentRepository = new ContentRepository() {
-    override def findLeftContentByChannel(channelName: String): Future[Seq[TVContentShort]] = {
+    override def findLeftContentByChannel(channelName: String): Future[Seq[TVContent]] = {
       channelName match {
-        case "CHANNEL1" => Future.successful(Seq(TVShortWithTimeZone(tvProgram3),
-          TVShortWithTimeZone(tvProgram4),
-          TVShortWithTimeZone(tvProgram5)))
-        case "CHANNEL3" => Future.successful(Seq(TVShortWithTimeZone(tvProgram6)))
-        case "CHANNEL4" => Future.successful(Seq(TVShortWithTimeZone(tvProgram7),
-          TVShortWithTimeZone(tvProgram8)))
-        case "CHANNEL5" => Future.successful(Seq(TVShortWithTimeZone(tvProgram9)))
+        case "CHANNEL1" => Future.successful(Seq(tvProgram3, tvProgram4, tvProgram5))
+        case "CHANNEL3" => Future.successful(Seq(tvProgram6))
+        case "CHANNEL4" => Future.successful(Seq(tvProgram7, tvProgram8))
+        case "CHANNEL5" => Future.successful(Seq(tvProgram9))
         case _ => Future.successful(Seq())
       }
     }
 
-    override def findDayContentByChannel(channelName: String): Future[Seq[TVContentShort]] = {
+    override def findDayContentByChannel(channelName: String): Future[Seq[TVContent]] = {
       channelName match {
-        case "CHANNEL1" => Future.successful(Seq(TVShortWithTimeZone(tvProgram1),
-          TVShortWithTimeZone(tvProgram2),
-          TVShortWithTimeZone(tvProgram3),
-          TVShortWithTimeZone(tvProgram4),
-          TVShortWithTimeZone(tvProgram5)))
-        case "CHANNEL 3" => Future.successful(Seq(TVShortWithTimeZone(tvProgram6)))
-        case "CHANNEL4" => Future.successful(Seq(TVShortWithTimeZone(tvProgram7),
-          TVShortWithTimeZone(tvProgram8)))
-        case "CHANNEL5" => Future.successful(Seq(TVShortWithTimeZone(tvProgram9)))
+        case "CHANNEL1" => Future.successful(Seq(tvProgram1, tvProgram2, tvProgram3, tvProgram4, tvProgram5))
+        case "CHANNEL 3" => Future.successful(Seq(tvProgram6))
+        case "CHANNEL4" => Future.successful(Seq(tvProgram7, tvProgram8))
+        case "CHANNEL5" => Future.successful(Seq(tvProgram9))
         case _ => Future.successful(Seq())
       }
     }
@@ -306,36 +298,30 @@ trait TVContentSetUpTest {
       else Future.successful(None)
     }
 
-    override def findDayContentByType(contentType: String): Future[Seq[TVContentShort]] = {
+    override def findDayContentByType(contentType: String): Future[Seq[TVContent]] = {
       contentType match {
         case "program" => Future.successful(
-          Seq(TVShortWithTimeZone(tvProgram5), TVShortWithTimeZone(tvProgram6), TVShortWithTimeZone(tvProgram9)))
+          Seq(tvProgram5, tvProgram6, tvProgram9))
 
-        case "series" => Future.successful(
-          Seq(TVShortWithTimeZone(tvProgram1), TVShortWithTimeZone(tvProgram2), TVShortWithTimeZone(tvProgram7)))
+        case "series" => Future.successful(Seq(tvProgram1, tvProgram2, tvProgram7))
 
-        case "film" => Future.successful(
-          Seq(TVShortWithTimeZone(tvProgram3), TVShortWithTimeZone(tvProgram4), TVShortWithTimeZone(tvProgram8)))
+        case "film" => Future.successful(Seq(tvProgram3, tvProgram4, tvProgram8))
 
         case _ => Future.successful(Seq())
       }
     }
 
-    //
-    override def findCurrentContentByType(contentType: String): Future[Seq[TVContentShort]] = {
+    override def findCurrentContentByType(contentType: String): Future[Seq[TVContent]] = {
       contentType match {
-        case "film" => Future.successful(Seq(TVShortWithTimeZone(tvProgram8)))
-        case "series" => Future.successful(Seq(TVShortWithTimeZone(tvProgram7)))
+        case "film" => Future.successful(Seq(tvProgram8))
+        case "series" => Future.successful(Seq(tvProgram7))
         case _ => Future.successful(Seq())
       }
     }
 
-    override def findLeftContentByType(contentType: String): Future[Seq[TVContentShort]] = {
+    override def findLeftContentByType(contentType: String): Future[Seq[TVContent]] = {
       contentType match {
-        case "program" => Future.successful(
-          Seq(TVShortWithTimeZone(tvProgram5),
-            TVShortWithTimeZone(tvProgram6),
-            TVShortWithTimeZone(tvProgram9)))
+        case "program" => Future.successful(Seq(tvProgram5, tvProgram6, tvProgram9))
         case _ => Future.successful(Seq())
       }
     }

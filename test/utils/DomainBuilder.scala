@@ -1,19 +1,10 @@
 package utils
 
+import controllers.{ProgramShort, SeriesShort, FilmShort, TVContentShort}
 import models._
 import org.joda.time.DateTimeZone
 
 object DomainBuilder {
-
-  object TVShort {
-    def apply(tvProgram: TVContent): TVContentShort = TVContentShort(tvProgram.channel,
-      tvProgram.start,
-      tvProgram.end,
-      tvProgram.category, tvProgram.series.map(s => SeriesShort(s.serieTitle)),
-      tvProgram.film.map(f => FilmShort(f.title)),
-      tvProgram.program.map(p => ProgramShort(p.title)),
-      tvProgram.id)
-  }
 
   object TVShortWithTimeZone {
     def apply(tvProgram: TVContent): TVContentShort = TVContentShort(tvProgram.channel,
