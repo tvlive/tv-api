@@ -14,12 +14,8 @@ trait TVChannelProviderController extends BaseController {
 
   def providers() = Action.async {
     channelProviderReporitory.findAll().map{
-      case head :: tail => {
-        Ok(Json.toJson(head :: tail))
-      }
-      case Nil => {
-        NotFound
-      }
+      case l if l.size > 0 => Ok(Json.toJson(l))
+      case _ => NotFound
     }
   }
 }
