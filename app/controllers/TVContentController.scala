@@ -31,39 +31,37 @@ trait TVContentController extends BaseController {
 
   def contentLeft(channelName: String) = Action.async {
     contentRepository.findLeftContentByChannel(URLDecoder.decode(channelName, "UTF-8").toUpperCase).map {
-      ltv =>
-        buildResponseSeq(ltv.map(TVShort(_)), s"No TV content left for the channel: $channelName")
+      ltv => buildResponseSeq(toTVShorts(ltv), s"No TV content left for the channel: $channelName")
     }
   }
 
   def allContent(channelName: String) = Action.async {
 
     contentRepository.findDayContentByChannel(URLDecoder.decode(channelName, "UTF-8").toUpperCase).map {
-      ltv =>
-        buildResponseSeq(ltv.map(TVShort(_)), s"No TV content for the channel: $channelName")
+      ltv => buildResponseSeq(toTVShorts(ltv), s"No TV content for the channel: $channelName")
     }
   }
 
   def contentByType(contentType: String) = Action.async {
     contentRepository.findDayContentByType(contentType.toLowerCase).map {
-      ltv =>
-        buildResponseSeq(ltv.map(TVShort(_)), s"No TV content for the type: $contentType")
+      ltv => buildResponseSeq(toTVShorts(ltv), s"No TV content for the type: $contentType")
     }
   }
 
   def currentContentByType(contentType: String) = Action.async {
     contentRepository.findCurrentContentByType(contentType.toLowerCase()).map {
-      ltv =>
-        buildResponseSeq(ltv.map(TVShort(_)), s"No TV content at this moment for the type: $contentType")
+      ltv => buildResponseSeq(toTVShorts(ltv), s"No TV content at this moment for the type: $contentType")
     }
   }
 
   def contentLeftByType(contentType: String) = Action.async {
     contentRepository.findLeftContentByType(contentType.toLowerCase()).map {
-      ltv =>
-        buildResponseSeq(ltv.map(TVShort(_)), s"No TV content left for the type: $contentType")
+      ltv => buildResponseSeq(toTVShorts(ltv), s"No TV content left for the type: $contentType")
     }
   }
+
+  private def toTVShorts(content: Seq[TVContent]): Seq[TVContentShort] = content.map(TVShort(_))
+
 }
 
 
