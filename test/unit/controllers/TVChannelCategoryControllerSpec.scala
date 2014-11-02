@@ -10,7 +10,7 @@ import reactivemongo.bson.BSONObjectID
 
 import scala.concurrent.Future
 
-class TVChannelGenreControllerSpec extends PlaySpec with MustMatchers with TVChannelCategprySetUpTest {
+class TVChannelCategoryControllerSpec extends PlaySpec with MustMatchers with TVChannelCategorySetUpTest {
 
 
   "TVChannelGenreController" should {
@@ -21,13 +21,12 @@ class TVChannelGenreControllerSpec extends PlaySpec with MustMatchers with TVCha
       contentType(genresResult) mustBe(Some("application/json"))
       val genresInResponse = contentAsJson(genresResult).as[Seq[TVChannelCategory]]
       genresInResponse mustEqual Seq(tvChannelGenre3, tvChannelGenre2, tvChannelGenre4, tvChannelGenre1)
-
     }
   }
 }
 
 
-trait TVChannelCategprySetUpTest {
+trait TVChannelCategorySetUpTest {
 
   val tvChannelGenre1 = TVChannelCategory("SPORTS", Some(BSONObjectID.generate))
   val tvChannelGenre2 = TVChannelCategory("ENTERTAINMENT", Some(BSONObjectID.generate))
