@@ -28,7 +28,3 @@ GET     /tvcontent/type/:type/left        			    controllers.TVContentController
 GET     /categories/channels                    		controllers.TVChannelCategoryController.categories
 
 GET     /providers/channels                    		    controllers.TVChannelProviderController.providers
-
-
-# Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
