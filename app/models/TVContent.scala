@@ -9,6 +9,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 case class TVContent(channel: String,
+                     provider: List[String],
                      start: DateTime,
                      end: DateTime,
                      category: Option[List[String]],

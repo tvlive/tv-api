@@ -29,6 +29,7 @@ package object models {
     def read(doc: BSONDocument): TVContent = {
       TVContent(
         doc.getAs[BSONString]("channel").get.value,
+        doc.getAs[List[String]]("provider").toList.flatten,
         new DateTime(doc.getAs[BSONDateTime]("start").get.value, DateTimeZone.forID("UTC")),
         new DateTime(doc.getAs[BSONDateTime]("end").get.value, DateTimeZone.forID("UTC")),
         Option(doc.getAs[List[String]]("category").toList.flatten),
@@ -45,6 +46,7 @@ package object models {
       BSONDocument(
         "_id" -> t.id.getOrElse(BSONObjectID.generate),
         "channel" -> t.channel,
+        "provider" -> t.provider,
         "start" -> new BSONDateTime(t.start.getMillis),
         "end" -> new BSONDateTime(t.end.getMillis),
         "category" -> t.category,

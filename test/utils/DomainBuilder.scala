@@ -7,13 +7,15 @@ import org.joda.time.DateTimeZone
 object DomainBuilder {
 
   object TVShortWithTimeZone {
-    def apply(tvProgram: TVContent): TVContentShort = TVContentShort(tvProgram.channel,
-      tvProgram.start.withZone(DateTimeZone.forID("Europe/London")),
-      tvProgram.end.withZone(DateTimeZone.forID("Europe/London")),
-      tvProgram.category, tvProgram.series.map(s => SeriesShort(s.serieTitle)),
-      tvProgram.film.map(p => FilmShort(p.title)),
-      tvProgram.program.map(p => ProgramShort(p.title)),
-      tvProgram.id)
+    def apply(tvContent: TVContent): TVContentShort = TVContentShort(
+      tvContent.channel,
+      tvContent.provider,
+      tvContent.start.withZone(DateTimeZone.forID("Europe/London")),
+      tvContent.end.withZone(DateTimeZone.forID("Europe/London")),
+      tvContent.category, tvContent.series.map(s => SeriesShort(s.serieTitle)),
+      tvContent.film.map(p => FilmShort(p.title)),
+      tvContent.program.map(p => ProgramShort(p.title)),
+      tvContent.id)
   }
 
 

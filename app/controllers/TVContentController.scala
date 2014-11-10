@@ -66,6 +66,7 @@ trait TVContentController extends BaseController {
 
 
 case class TVContentShort(channel: String,
+                          provider: List[String],
                           start: DateTime,
                           end: DateTime,
                           category: Option[List[String]],
@@ -84,11 +85,13 @@ case class FilmShort(title: String)
 case class ProgramShort(title: String)
 
 object TVShort {
-  def apply(tvProgram: TVContent): TVContentShort = TVContentShort(tvProgram.channel,
-    tvProgram.start,
-    tvProgram.end,
-    tvProgram.category, tvProgram.series.map(s => SeriesShort(s.serieTitle)),
-    tvProgram.film.map(f => FilmShort(f.title)),
-    tvProgram.program.map(p => ProgramShort(p.title)),
-    tvProgram.id)
+  def apply(tvContent: TVContent): TVContentShort = TVContentShort(
+    tvContent.channel,
+    tvContent.provider,
+    tvContent.start,
+    tvContent.end,
+    tvContent.category, tvContent.series.map(s => SeriesShort(s.serieTitle)),
+    tvContent.film.map(f => FilmShort(f.title)),
+    tvContent.program.map(p => ProgramShort(p.title)),
+    tvContent.id)
 }

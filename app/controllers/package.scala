@@ -57,7 +57,9 @@ package object controllers {
   implicit val programShortFmt = Json.format[ProgramShort]
 
 
-  implicit val tvProgramReads: Reads[TVContent] = ((__ \ "channel").read[String] and
+  implicit val tvProgramReads: Reads[TVContent] = (
+      (__ \ "channel").read[String] and
+      (__ \ "provider").read[List[String]] and
       (__ \ "start").read[DateTime].map[DateTime]{ dt => dt.withZoneRetainFields(DateTimeZone.forID("Europe/London"))} and
       (__ \ "end").read[DateTime].map[DateTime](dt => dt.withZoneRetainFields(DateTimeZone.forID("Europe/London"))) and
       (__ \ "category").read[Option[List[String]]] and
@@ -70,6 +72,7 @@ package object controllers {
   implicit val tvProgramWrites = new Writes[TVContent] {
     override def writes(tvContent: TVContent): JsValue = Json.obj(
       "channel" -> tvContent.channel,
+      "provider" -> tvContent.provider,
       "start" -> tvContent.start.toDateTime(DateTimeZone.forID("Europe/London")),
       "end" -> tvContent.end.toDateTime(DateTimeZone.forID("Europe/London")),
       "category" -> tvContent.category,
@@ -82,6 +85,7 @@ package object controllers {
 
   implicit val tvProgramShortReads: Reads[TVContentShort] = (
     (__ \ "channel").read[String] and
+    (__ \ "provider").read[List[String]] and
       (__ \ "start").read[DateTime].map[DateTime](dt => dt.withZoneRetainFields(DateTimeZone.forID("Europe/London"))) and
       (__ \ "end").read[DateTime].map[DateTime](dt => dt.withZoneRetainFields(DateTimeZone.forID("Europe/London"))) and
       (__ \ "category").read[Option[List[String]]] and
@@ -95,6 +99,7 @@ package object controllers {
   implicit val tvProgramShortWrites = new Writes[TVContentShort] {
     override def writes(tvContent: TVContentShort): JsValue = Json.obj(
       "channel" -> tvContent.channel,
+      "provider" -> tvContent.provider,
       "start" -> tvContent.start.toDateTime(DateTimeZone.forID("Europe/London")),
       "end" -> tvContent.end.toDateTime(DateTimeZone.forID("Europe/London")),
       "category" -> tvContent.category,

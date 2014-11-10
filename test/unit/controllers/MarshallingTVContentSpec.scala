@@ -15,17 +15,18 @@ class MarshallingTVContentSpec extends PlaySpec with MustMatchers {
   val fmt = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
 
   "Write and reads" should {
-    "transform TVProgram object to json" in {
-      Json.toJson(TVContent("bbc1", now, now.plusHours(2), Some(List("documentary")),
+    "transform TVContent object to json" in {
+      Json.toJson(TVContent("bbc1", List("FREEVIEW", "SKY"), now, now.plusHours(2), Some(List("documentary")),
         Some(Series("serie1", Some("ep1"), None, None, None, None, Some(List("actor1")))),
         Some(Film("program1", None, Some(List()), Some("2014"))),
         Some(Program("program1", Some("d1"))),
         Some(id))).toString() mustBe
-        s"""{"channel":"bbc1","start":"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}","end":"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}","category":["documentary"],"series":{"serieTitle":"serie1","episodeTitle":"ep1","actors":["actor1"]},"film":{"title":"program1","actors":[],"year":"2014"},"program":{"title":"program1","description":"d1"},"id":"$idString"}""".stripMargin
+        s"""{"channel":"bbc1","provider":["FREEVIEW","SKY"],"start":"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}","end":"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}","category":["documentary"],"series":{"serieTitle":"serie1","episodeTitle":"ep1","actors":["actor1"]},"film":{"title":"program1","actors":[],"year":"2014"},"program":{"title":"program1","description":"d1"},"id":"$idString"}""".stripMargin
     }
-    "transform json to TVProgram object" in {
+    "transform json to TVContent object" in {
       Json.parse(
         s"""{"channel":"bbc1",
+           |"provider":["FREEVIEW","SKY"],
            |"start":"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}",
            |"end":"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}",
            |"category":["documentary"],
@@ -34,6 +35,7 @@ class MarshallingTVContentSpec extends PlaySpec with MustMatchers {
            |"program":{"title":"program1","description":"d1"},
            |"id":"$idString"}""".stripMargin)
         .as[TVContent] mustBe TVContent("bbc1",
+        List("FREEVIEW", "SKY"),
         now.withZone(DateTimeZone.forID("Europe/London")),
         now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")),
         Some(List("documentary")),
