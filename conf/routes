@@ -25,6 +25,6 @@ GET     /tvcontent/:type/:provider/current     			controllers.TVContentControlle
 
 GET     /tvcontent/:type/:provider/left        			controllers.TVContentController.contentLeftByTypeAndProvider(type, provider)
 
-GET     /categories/channels                    		controllers.TVChannelCategoryController.categories
+GET     /categories                                     controllers.TVChannelCategoryController.categories
 
-GET     /providers/channels                    		    controllers.TVChannelProviderController.providers
+GET     /providers                                      controllers.TVChannelProviderController.providers

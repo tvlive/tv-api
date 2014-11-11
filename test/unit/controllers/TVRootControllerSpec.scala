@@ -22,8 +22,8 @@ class TVRootControllerSpec extends PlaySpec with MustMatchers with RootSetup  {
       val links = Json.parse(linksInResponse).as[Seq[Link]]
       links mustEqual Seq(
         Link("/channels", "List of all the channels"),
-        Link("/providers/channels", "List of all the channel TV providers"),
-        Link("/categories/channels", "List of all the channel TV categories"),
+        Link("/providers", "List of all the channel TV providers"),
+        Link("/categories", "List of all the channel TV categories"),
         Link("/channels/provider/CABLE", "List of channels by provider: CABLE"),
         Link("/channels/provider/FREEVIEW", "List of channels by provider: FREEVIEW"),
         Link("/channels/provider/TERRESTRIAL", "List of channels by provider: TERRESTRIAL"),
