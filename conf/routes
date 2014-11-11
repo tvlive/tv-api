@@ -19,11 +19,11 @@ GET     /tvcontent/channel/:channelName/left          	controllers.TVContentCont
 
 GET     /tvcontent/:id                      			controllers.TVContentController.tvContentDetails(id)
 
-GET     /tvcontent/type/:type/today             		controllers.TVContentController.contentByType(type)
+GET     /tvcontent/:type/:provider/today             	controllers.TVContentController.allContentByTypeAndProvider(type, provider)
 
-GET     /tvcontent/type/:type/current     			    controllers.TVContentController.currentContentByType(type)
+GET     /tvcontent/:type/:provider/current     			controllers.TVContentController.currentContentByTypeAndProvider(type, provider)
 
-GET     /tvcontent/type/:type/left        			    controllers.TVContentController.contentLeftByType(type)
+GET     /tvcontent/:type/:provider/left        			controllers.TVContentController.contentLeftByTypeAndProvider(type, provider)
 
 GET     /categories/channels                    		controllers.TVChannelCategoryController.categories
 

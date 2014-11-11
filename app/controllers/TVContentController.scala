@@ -42,21 +42,21 @@ trait TVContentController extends BaseController {
     }
   }
 
-  def contentByType(contentType: String) = Action.async {
-    contentRepository.findDayContentByType(contentType.toLowerCase).map {
-      ltv => buildResponseSeq(toTVShorts(ltv), s"No TV content for the type: $contentType")
+  def allContentByTypeAndProvider(contentType: String, provider: String) = Action.async {
+    contentRepository.findDayContentByTypeAndProvider(contentType.toLowerCase, provider.toUpperCase).map {
+      ltv => buildResponseSeq(toTVShorts(ltv), s"No TV content for type: $contentType and provider: $provider")
     }
   }
 
-  def currentContentByType(contentType: String) = Action.async {
-    contentRepository.findCurrentContentByType(contentType.toLowerCase()).map {
-      ltv => buildResponseSeq(toTVShorts(ltv), s"No TV content at this moment for the type: $contentType")
+  def currentContentByTypeAndProvider(contentType: String, provider: String) = Action.async {
+    contentRepository.findCurrentContentByTypeAndProvider(contentType.toLowerCase, provider.toUpperCase).map {
+      ltv => buildResponseSeq(toTVShorts(ltv), s"No TV content at this moment for the type: $contentType and provider: $provider")
     }
   }
 
-  def contentLeftByType(contentType: String) = Action.async {
-    contentRepository.findLeftContentByType(contentType.toLowerCase()).map {
-      ltv => buildResponseSeq(toTVShorts(ltv), s"No TV content left for the type: $contentType")
+  def contentLeftByTypeAndProvider(contentType: String, provider: String) = Action.async {
+    contentRepository.findLeftContentByTypeAndProvider(contentType.toLowerCase(), provider.toUpperCase()).map {
+      ltv => buildResponseSeq(toTVShorts(ltv), s"No TV content left for the type: $contentType and provider: $provider")
     }
   }
 

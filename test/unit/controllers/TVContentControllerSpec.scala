@@ -123,17 +123,17 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers with TVContentS
       contentsInResponse mustEqual (NotFoundResponse(s"No TV content details with id: noExistID"))
     }
 
-    "return all the TV content available today by type SERIES with upper case" in {
-      val programsResult: Future[SimpleResult] = controller.contentByType("SERIES").apply(FakeRequest())
+    "return all the TV content available today by type SERIES and provider FREEVIEW with upper case" in {
+      val programsResult: Future[SimpleResult] = controller.allContentByTypeAndProvider("SERIES", "FREEVIEW").apply(FakeRequest())
       status(programsResult) mustBe (OK)
       val programInResponse = contentAsString(programsResult)
       val tvprograms = Json.parse(programInResponse).as[Seq[TVContentShort]]
       tvprograms mustEqual Seq(
-        TVShortWithTimeZone(tvProgram1), TVShortWithTimeZone(tvProgram2), TVShortWithTimeZone(tvProgram7))
+        TVShortWithTimeZone(tvProgram1), TVShortWithTimeZone(tvProgram7))
     }
 
-    "return all the TV content available today by type film" in {
-      val programsResult: Future[SimpleResult] = controller.contentByType("film").apply(FakeRequest())
+    "return all the TV content available today by type film and provider freeview" in {
+      val programsResult: Future[SimpleResult] = controller.allContentByTypeAndProvider("film", "freeview").apply(FakeRequest())
       status(programsResult) mustBe (OK)
       val programInResponse = contentAsString(programsResult)
       val tvprograms = Json.parse(programInResponse).as[Seq[TVContentShort]]
@@ -141,25 +141,32 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers with TVContentS
         TVShortWithTimeZone(tvProgram3), TVShortWithTimeZone(tvProgram4), TVShortWithTimeZone(tvProgram8))
     }
 
-    "return all the TV content available today by type program" in {
-      val programsResult: Future[SimpleResult] = controller.contentByType("program").apply(FakeRequest())
+    "return all the TV content available today by type program and provider FREEVIEW" in {
+      val programsResult: Future[SimpleResult] = controller.allContentByTypeAndProvider("program", "FREEVIEW").apply(FakeRequest())
       status(programsResult) mustBe (OK)
       val programInResponse = contentAsString(programsResult)
       val tvprograms = Json.parse(programInResponse).as[Seq[TVContentShort]]
       tvprograms mustEqual Seq(
-        TVShortWithTimeZone(tvProgram5), TVShortWithTimeZone(tvProgram6), TVShortWithTimeZone(tvProgram9))
+        TVShortWithTimeZone(tvProgram5), TVShortWithTimeZone(tvProgram9))
     }
 
-    "return NOT_FOUND by type notExist available today " in {
-      val contentsResult: Future[SimpleResult] = controller.contentByType("notExist").apply(FakeRequest())
+    "return NOT_FOUND by type notExist available today" in {
+      val contentsResult: Future[SimpleResult] = controller.allContentByTypeAndProvider("notExist", "FREEVIEW").apply(FakeRequest())
       status(contentsResult) mustBe (NOT_FOUND)
       val contentsInResponse = contentAsJson(contentsResult).as[NotFoundResponse]
-      contentsInResponse mustEqual (NotFoundResponse(s"No TV content for the type: notExist"))
+      contentsInResponse mustEqual (NotFoundResponse(s"No TV content for type: notExist and provider: FREEVIEW"))
     }
 
-    "return the TV content for type SERIES in upper case available now" in {
+    "return NOT_FOUND by provider notExist available today" in {
+      val contentsResult: Future[SimpleResult] = controller.allContentByTypeAndProvider("program", "notExist").apply(FakeRequest())
+      status(contentsResult) mustBe (NOT_FOUND)
+      val contentsInResponse = contentAsJson(contentsResult).as[NotFoundResponse]
+      contentsInResponse mustEqual (NotFoundResponse(s"No TV content for type: program and provider: notExist"))
+    }
 
-      val contentsResult: Future[SimpleResult] = controller.currentContentByType("SERIES").apply(FakeRequest())
+    "return the TV content for type SERIES and provider FREEVIEW in upper case available now" in {
+
+      val contentsResult: Future[SimpleResult] = controller.currentContentByTypeAndProvider("SERIES", "FREEVIEW").apply(FakeRequest())
       status(contentsResult) mustBe (OK)
       contentType(contentsResult) mustBe (Some("application/json"))
       val contentInResponse = contentAsString(contentsResult)
@@ -167,9 +174,9 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers with TVContentS
       tvcontents mustEqual Seq(TVShortWithTimeZone(tvProgram7))
     }
 
-    "return the TV content for type film in upper case available now" in {
+    "return the TV content for type film and provider freeview available now" in {
 
-      val contentsResult: Future[SimpleResult] = controller.currentContentByType("film").apply(FakeRequest())
+      val contentsResult: Future[SimpleResult] = controller.currentContentByTypeAndProvider("film", "freeview").apply(FakeRequest())
       status(contentsResult) mustBe (OK)
       contentType(contentsResult) mustBe (Some("application/json"))
       val contentInResponse = contentAsString(contentsResult)
@@ -178,27 +185,59 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers with TVContentS
     }
 
     "return NOT_FOUND by type notExist available now" in {
-      val contentsResult: Future[SimpleResult] = controller.currentContentByType("notExist").apply(FakeRequest())
+      val contentsResult: Future[SimpleResult] = controller.currentContentByTypeAndProvider("notExist", "FREEVIEW").apply(FakeRequest())
       status(contentsResult) mustBe (NOT_FOUND)
       val contentsInResponse = contentAsJson(contentsResult).as[NotFoundResponse]
-      contentsInResponse mustEqual (NotFoundResponse(s"No TV content at this moment for the type: notExist"))
+      contentsInResponse mustEqual (NotFoundResponse(s"No TV content at this moment for the type: notExist and provider: FREEVIEW"))
     }
 
-    "return the TV content for type program available from now until the end of the day" in {
+    "return NOT_FOUND by provider notExist available now" in {
+      val contentsResult: Future[SimpleResult] = controller.currentContentByTypeAndProvider("series", "notExist").apply(FakeRequest())
+      status(contentsResult) mustBe (NOT_FOUND)
+      val contentsInResponse = contentAsJson(contentsResult).as[NotFoundResponse]
+      contentsInResponse mustEqual (NotFoundResponse(s"No TV content at this moment for the type: series and provider: notExist"))
+    }
 
-      val programsResult: Future[SimpleResult] = controller.contentLeftByType("program").apply(FakeRequest())
+    "return the TV content for type PROGRAM and provider FREEVIEW available from now until the end of the day" in {
+      val programsResult: Future[SimpleResult] = controller.contentLeftByTypeAndProvider("PROGRAM", "FREEVIEW").apply(FakeRequest())
       status(programsResult) mustBe (OK)
       contentType(programsResult) mustBe (Some("application/json"))
       val programInResponse = contentAsString(programsResult)
       val tvprograms = Json.parse(programInResponse).as[Seq[TVContentShort]]
-      tvprograms mustEqual Seq(TVShortWithTimeZone(tvProgram5), TVShortWithTimeZone(tvProgram6), TVShortWithTimeZone(tvProgram9))
+      tvprograms mustEqual Seq(TVShortWithTimeZone(tvProgram9))
     }
 
+    "return the TV content for type series and provider freeview available from now until the end of the day" in {
+      val programsResult: Future[SimpleResult] = controller.contentLeftByTypeAndProvider("series", "freeview").apply(FakeRequest())
+      status(programsResult) mustBe (OK)
+      contentType(programsResult) mustBe (Some("application/json"))
+      val programInResponse = contentAsString(programsResult)
+      val tvprograms = Json.parse(programInResponse).as[Seq[TVContentShort]]
+      tvprograms mustEqual Seq(TVShortWithTimeZone(tvProgram7))
+    }
+
+    "return the TV content for type FILM and provider freeview available from now until the end of the day" in {
+      val programsResult: Future[SimpleResult] = controller.contentLeftByTypeAndProvider("FILM", "freeview").apply(FakeRequest())
+      status(programsResult) mustBe (OK)
+      contentType(programsResult) mustBe (Some("application/json"))
+      val programInResponse = contentAsString(programsResult)
+      val tvprograms = Json.parse(programInResponse).as[Seq[TVContentShort]]
+      tvprograms mustEqual Seq(TVShortWithTimeZone(tvProgram8))
+    }
+
+
     "return NOT_FOUND by type notExist from now until the end of the day" in {
-      val contentsResult: Future[SimpleResult] = controller.contentLeftByType("notExist").apply(FakeRequest())
+      val contentsResult: Future[SimpleResult] = controller.contentLeftByTypeAndProvider("notExist", "FREEVIEW").apply(FakeRequest())
       status(contentsResult) mustBe (NOT_FOUND)
       val contentsInResponse = contentAsJson(contentsResult).as[NotFoundResponse]
-      contentsInResponse mustEqual (NotFoundResponse(s"No TV content left for the type: notExist"))
+      contentsInResponse mustEqual (NotFoundResponse(s"No TV content left for the type: notExist and provider: FREEVIEW"))
+    }
+
+    "return NOT_FOUND by provider notExist from now until the end of the day" in {
+      val contentsResult: Future[SimpleResult] = controller.contentLeftByTypeAndProvider("series", "notExist").apply(FakeRequest())
+      status(contentsResult) mustBe (NOT_FOUND)
+      val contentsInResponse = contentAsJson(contentsResult).as[NotFoundResponse]
+      contentsInResponse mustEqual (NotFoundResponse(s"No TV content left for the type: series and provider: notExist"))
     }
   }
 }
@@ -213,7 +252,7 @@ trait TVContentSetUpTest {
     None,
     Some(BSONObjectID.generate))
 
-  val tvProgram2 = TVContent("CHANNEL1", List("FREEVIEW", "SKY"), fakeNow.minusHours(2), fakeNow.minusHours(1), Some(List("program_type2", "SPORTS")),
+  val tvProgram2 = TVContent("CHANNEL1", List("SKY"), fakeNow.minusHours(2), fakeNow.minusHours(1), Some(List("program_type2", "SPORTS")),
     Some(Series("serie1", Some("ep1"), None, None, None, None, None)),
     None,
     None,
@@ -237,7 +276,7 @@ trait TVContentSetUpTest {
     Some(Program("p5", Some("d5"))),
     Some(BSONObjectID.generate))
 
-  val tvProgram6 = TVContent("CHANNEL 3", List("FREEVIEW", "SKY"), fakeNow.plusHours(3), fakeNow.plusHours(5), Some(List("HORROR")),
+  val tvProgram6 = TVContent("CHANNEL 3", List("SKY"), fakeNow.plusHours(3), fakeNow.plusHours(5), Some(List("HORROR")),
     None,
     None,
     Some(Program("p6", Some("d6"))),
@@ -298,31 +337,36 @@ trait TVContentSetUpTest {
       else Future.successful(None)
     }
 
-    override def findDayContentByType(contentType: String): Future[Seq[TVContent]] = {
-      contentType match {
-        case "program" => Future.successful(
-          Seq(tvProgram5, tvProgram6, tvProgram9))
-
-        case "series" => Future.successful(Seq(tvProgram1, tvProgram2, tvProgram7))
-
-        case "film" => Future.successful(Seq(tvProgram3, tvProgram4, tvProgram8))
-
-        case _ => Future.successful(Seq())
+    override def findDayContentByTypeAndProvider(contentType: String, provider: String): Future[Seq[TVContent]] = {
+      (contentType, provider) match {
+        case ("series","FREEVIEW") => Future.successful(Seq(tvProgram1, tvProgram7))
+        case ("film","FREEVIEW") => Future.successful(Seq(tvProgram3, tvProgram4, tvProgram8))
+        case ("program","FREEVIEW") => Future.successful(Seq(tvProgram5, tvProgram9))
+        case ("notExist",_) => Future.successful(Seq())
+        case (_,"NOTEXIST") => Future.successful(Seq())
+        case (_, _) => Future.successful(Seq())
       }
     }
 
-    override def findCurrentContentByType(contentType: String): Future[Seq[TVContent]] = {
-      contentType match {
-        case "film" => Future.successful(Seq(tvProgram8))
-        case "series" => Future.successful(Seq(tvProgram7))
-        case _ => Future.successful(Seq())
+    override def findCurrentContentByTypeAndProvider(contentType: String, provider: String): Future[Seq[TVContent]] = {
+      (contentType, provider) match {
+        case ("series","FREEVIEW") => Future.successful(Seq(tvProgram7))
+        case ("film","FREEVIEW") => Future.successful(Seq(tvProgram8))
+        case ("program","FREEVIEW") => Future.successful(Seq(tvProgram9))
+        case ("notExist",_) => Future.successful(Seq())
+        case (_, "notExist") => Future.successful(Seq())
+        case (_,_) => Future.successful(Seq())
       }
     }
 
-    override def findLeftContentByType(contentType: String): Future[Seq[TVContent]] = {
-      contentType match {
-        case "program" => Future.successful(Seq(tvProgram5, tvProgram6, tvProgram9))
-        case _ => Future.successful(Seq())
+    override def findLeftContentByTypeAndProvider(contentType: String, provider: String): Future[Seq[TVContent]] = {
+      (contentType, provider) match {
+        case ("series","FREEVIEW") => Future.successful(Seq(tvProgram7))
+        case ("film","FREEVIEW") => Future.successful(Seq(tvProgram8))
+        case ("program","FREEVIEW") => Future.successful(Seq(tvProgram9))
+        case ("notExist",_) => Future.successful(Seq())
+        case (_, "notExist") => Future.successful(Seq())
+        case (_,_) => Future.successful(Seq())
       }
     }
   }

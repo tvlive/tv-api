@@ -106,80 +106,98 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
     }
   }
 
-  "findDayContentByType" should {
-    "return all the TV content for a type series" in {
-      whenReady(tvContentRepository.findDayContentByType("series")) {
+  "findDayContentByTypeAndProvider" should {
+    "return all the TV content for a type series and provider FREEVIEW" in {
+      whenReady(tvContentRepository.findDayContentByTypeAndProvider("series", "FREEVIEW")) {
         _ mustBe Seq(p1, p2)
       }
     }
 
-    "return all the TV content for a type film" in {
-      whenReady(tvContentRepository.findDayContentByType("film")) {
+    "return all the TV content for a type film and provider FREEVIEW" in {
+      whenReady(tvContentRepository.findDayContentByTypeAndProvider("film", "FREEVIEW")) {
         _ mustBe Seq(p3, p4)
       }
     }
 
-    "return all the TV content for a type program" in {
-      whenReady(tvContentRepository.findDayContentByType("program")) {
+    "return all the TV content for a type program and provider FREEVIEW" in {
+      whenReady(tvContentRepository.findDayContentByTypeAndProvider("program", "FREEVIEW")) {
         _ mustBe Seq(p5, p6)
       }
     }
 
-    "return empty list of TV content for a type nonExist" in {
-      whenReady(tvContentRepository.findDayContentByType("nonExist")) {
+    "return empty list of TV content for a type nonExist and provider FREEVIEW" in {
+      whenReady(tvContentRepository.findDayContentByTypeAndProvider("nonExist", "FREEVIEW")) {
+        _ mustBe Seq()
+      }
+    }
+
+    "return empty list of TV content for a type series and provider nonExist" in {
+      whenReady(tvContentRepository.findDayContentByTypeAndProvider("series", "nonExist")) {
         _ mustBe Seq()
       }
     }
   }
 
 
-  "findCurrentContentByType" should {
-    "return all the TV content for a type series available now" in {
-      whenReady(tvContentRepository.findCurrentContentByType("series")) {
+  "findCurrentContentByTypeAndProvider" should {
+    "return all the TV content for a type series and provider FREEVIEW available now" in {
+      whenReady(tvContentRepository.findCurrentContentByTypeAndProvider("series", "FREEVIEW")) {
         _ mustBe Seq()
       }
     }
 
-    "return all the TV content for a type film available now" in {
-      whenReady(tvContentRepository.findCurrentContentByType("film")) {
+    "return all the TV content for a type film and provider FREEVIEW  available now" in {
+      whenReady(tvContentRepository.findCurrentContentByTypeAndProvider("film", "FREEVIEW")) {
         _ mustBe Seq(p3)
       }
     }
 
-    "return all the TV content for a type program  available now" in {
-      whenReady(tvContentRepository.findCurrentContentByType("program")) {
+    "return all the TV content for a type program and provider FREEVIEW available now" in {
+      whenReady(tvContentRepository.findCurrentContentByTypeAndProvider("program", "FREEVIEW")) {
         _ mustBe Seq()
       }
     }
 
-    "return empty list of TV content for a type nonExist available now" in {
-      whenReady(tvContentRepository.findCurrentContentByType("nonExist")) {
+    "return empty list of TV content for a type nonExist and provider FREEVIEW  available now" in {
+      whenReady(tvContentRepository.findCurrentContentByTypeAndProvider("nonExist", "FREEVIEW")) {
+        _ mustBe Seq()
+      }
+    }
+
+    "return empty list of TV content for a type series and provider nonExist available now" in {
+      whenReady(tvContentRepository.findCurrentContentByTypeAndProvider("film", "nonExist")) {
         _ mustBe Seq()
       }
     }
   }
 
-  "findLeftContentByType" should {
-    "return all the TV content left for a type series" in {
-      whenReady(tvContentRepository.findLeftContentByType("series")) {
+  "findLeftContentByTypeAndProvider" should {
+    "return all the TV content left for a type series and provider FREEVIEW" in {
+      whenReady(tvContentRepository.findLeftContentByTypeAndProvider("series", "FREEVIEW")) {
         _ mustBe Seq()
       }
     }
 
-    "return all the TV content left for a type film" in {
-      whenReady(tvContentRepository.findLeftContentByType("film")) {
+    "return all the TV content left for a type film and provider FREEVIEW" in {
+      whenReady(tvContentRepository.findLeftContentByTypeAndProvider("film", "FREEVIEW")) {
         _ mustBe Seq(p3, p4)
       }
     }
 
-    "return all the TV content left for a type program " in {
-      whenReady(tvContentRepository.findLeftContentByType("program")) {
+    "return all the TV content left for a type program and provider FREEVIEW" in {
+      whenReady(tvContentRepository.findLeftContentByTypeAndProvider("program", "FREEVIEW")) {
         _ mustBe Seq(p5, p6)
       }
     }
 
-    "return empty list of TV content left for a type nonExist" in {
-      whenReady(tvContentRepository.findLeftContentByType("nonExist")) {
+    "return empty list of TV content left for a type nonExist and provider FREEVIEW" in {
+      whenReady(tvContentRepository.findLeftContentByTypeAndProvider("nonExist", "FREEVIEW")) {
+        _ mustBe Seq()
+      }
+    }
+
+    "return empty list of TV content left for a type series and provider nonExist" in {
+      whenReady(tvContentRepository.findLeftContentByTypeAndProvider("program", "nonExist")) {
         _ mustBe Seq()
       }
     }
