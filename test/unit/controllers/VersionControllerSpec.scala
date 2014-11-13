@@ -35,16 +35,5 @@ class VersionControllerSpec extends PlaySpec with MustMatchers {
       version mustEqual Version("0.1.0-SNAPSHOT", "UNSTABLE")
 
     }
-
-    "return INTERNAL_SERVER_ERROR when there is no version defined" in new WithApplication() {
-
-      val versionResult: Future[SimpleResult] = VersionController.fetchVersion().apply(FakeRequest())
-      status(versionResult) mustBe (INTERNAL_SERVER_ERROR)
-      contentType(versionResult) mustBe (Some("application/json"))
-      val versionInResponse = contentAsString(versionResult)
-      val internalErrorServer = Json.parse(versionInResponse).as[InternalErrorServerResponse]
-      internalErrorServer mustEqual InternalErrorServerResponse("No version found")
-    }
   }
-
 }

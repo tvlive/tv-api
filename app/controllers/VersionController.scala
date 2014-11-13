@@ -7,6 +7,7 @@ import play.api.mvc.Action
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+
 case class Version(versionNumber: String, status: String)
 
 object VersionController extends VersionController
