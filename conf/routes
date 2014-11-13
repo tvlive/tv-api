@@ -5,8 +5,6 @@
 # Home page
 GET     /                                               controllers.TVRootController.roots
 
-GET     /version                                        controllers.VersionController.fetchVersion
-
 GET     /channels                           			controllers.TVChannelController.channels
 
 GET     /channels/category/:category                    controllers.TVChannelController.channelsByCategory(category)

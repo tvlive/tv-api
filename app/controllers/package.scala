@@ -117,7 +117,6 @@ package object controllers {
   implicit val linkFmt = Json.format[Link]
   implicit val notFoundResponseFmt = Json.format[NotFoundResponse]
   implicit val internalServerErrorResponseFmt = Json.format[InternalErrorServerResponse]
-  implicit val badRequestResponseFmt = Json.format[BadRequestResponse]
-  implicit val versionFmt = Json.format[Version]
+  implicit val BadRequestResponseFmt = Json.format[BadRequestResponse]
 
 }

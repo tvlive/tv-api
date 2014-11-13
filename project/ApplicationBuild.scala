@@ -1,4 +1,3 @@
-import sbt.Keys._
 import sbt._
 import Keys._
 import scala.util.Properties._
