@@ -44,17 +44,25 @@
 <h3>Current version</h3>
 
 <pre>
+  <code>tv-api version 1.0.11  - Deployed 2 November 2014
+    Issue 56 - Rename endpoint /providers/channels to /providers
+    Issue 55 - Rename endpoint /categories/channels to /categories
+    Issue 54 - Refactor /tvcontent/type/{type}/[current/today/left]
+    Issue 53 - Adding provider in tv content domain model
+    Issue 49 - Add message in the case of notFound for TvChannelCategoryController and TvChannelProviderController
+</code></pre>
+
+<h3>Previous versions</h3>
+
+<pre>
   <code>tv-api version 1.0.7  - Deployed 2 November 2014
     Issue 48 - Refactoring Controllers removing duplicated code
     Issue 23 - remove short versions of the domain model and pass the responsability to controller
     Issue 41 - Refactoring TVContentRepository Repository to be able to find by type
     Issue 12 - Rename field uriTVProgramDetails to uriTVContentDetails
     
-</code></pre>
+</code>
 
-<h3>Previous versions</h3>
-
-<pre>
   <code>tv-api version 1.0.4  - Deployed 19 October 2014
     Issue 40 - Create endpoints for searching based on type of content: Series, Program, Film
     Issue 39 - Remove endpoints related with search based on genre and list of genres
@@ -116,11 +124,11 @@
 
 <pre>List of all the channel TV providers:
 
-<code>$curl http://beta.tvlive.io/providers/channels</code></pre>
+<code>$curl http://beta.tvlive.io/providers</code></pre>
 
 <pre>List of all the channel TV categories:
 
-<code>$curl http://beta.tvlive.io/categories/channels</code></pre>
+<code>$curl http://beta.tvlive.io/categories</code></pre>
 
 <pre>TV content today in BBC One London: 
 
@@ -136,15 +144,15 @@
 
 <pre>TV series today: 
 
-<code>curl http://beta.tvlive.io/tvcontent/type/series/today</code></pre>
+<code>curl http://beta.tvlive.io/tvcontent/series/freeview/today</code></pre>
 
 <pre>TV programs left today: 
 
-<code>curl http://beta.tvlive.io/tvcontent/type/program/left</code></pre>
+<code>curl http://beta.tvlive.io/tvcontent/program/freeview/left</code></pre>
 
 <pre>What films are on TV now: 
 
-<code>curl http://beta.tvlive.io/tvcontent/type/film/current</code></pre>
+<code>curl http://beta.tvlive.io/tvcontent/film/freeview/current</code></pre>
 
 <pre>TV program details: 
 
