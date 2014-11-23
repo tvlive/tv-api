@@ -13,6 +13,7 @@ object ApplicationBuild extends Build {
   lazy val IntTest = config("integration") extend(Test)
 
   val appDependencies = Seq(
+    "org.mockito" % "mockito-core" % "1.9.5",
     "org.reactivemongo" %% "reactivemongo" % "0.10.0"
   )
 
