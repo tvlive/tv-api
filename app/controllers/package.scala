@@ -79,6 +79,7 @@ package object controllers {
       "series" -> tvContent.series,
       "film" -> tvContent.film,
       "program" -> tvContent.program,
+      "onTimeNow" -> tvContent.onTimeNow,
       "id" -> tvContent.id
     )
   }
@@ -92,6 +93,7 @@ package object controllers {
       (__ \ "series").read[Option[SeriesShort]] and
       (__ \ "film").read[Option[FilmShort]] and
       (__ \ "program").read[Option[ProgramShort]] and
+      (__ \ "onTimeNow").read[Boolean] and
       (__ \ "id").read[Option[BSONObjectID]]
     )(TVContentShort.apply _)
 
@@ -107,6 +109,7 @@ package object controllers {
       "film" -> tvContent.film,
       "program" -> tvContent.program,
       "uriTVContentDetails" -> tvContent.uriTVContentDetails,
+      "onTimeNow" -> tvContent.onTimeNow,
       "id" -> tvContent.id
     )
   }

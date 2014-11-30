@@ -15,6 +15,7 @@ object DomainBuilder {
       tvContent.category, tvContent.series.map(s => SeriesShort(s.serieTitle)),
       tvContent.film.map(p => FilmShort(p.title)),
       tvContent.program.map(p => ProgramShort(p.title)),
+      tvContent.onTimeNow,
       tvContent.id)
   }
 

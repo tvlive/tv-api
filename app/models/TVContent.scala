@@ -16,7 +16,9 @@ case class TVContent(channel: String,
                      series: Option[Series],
                      film: Option[Film],
                      program: Option[Program],
-                     id: Option[BSONObjectID] = Some(BSONObjectID.generate))
+                     id: Option[BSONObjectID] = Some(BSONObjectID.generate)) {
+  val onTimeNow = (start.isBeforeNow || start.isEqualNow) && (end.isAfterNow || end.isEqualNow)
+}
 
 
 case class Series(serieTitle: String,

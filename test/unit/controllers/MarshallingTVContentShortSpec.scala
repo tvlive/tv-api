@@ -19,8 +19,9 @@ class MarshallingTVContentShortSpec extends PlaySpec with MustMatchers {
         Some(SeriesShort("titleSerie")),
         Some(FilmShort("titleFilm")),
         Some(ProgramShort("titleProgram")),
+        true,
         Some(id))).toString() mustBe
-        s"""{"channel":"bbc1","provider":["FREEVIEW","SKY"],"start":"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}","end":"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}","category":["documentary"],"series":{"serieTitle":"titleSerie"},"film":{"title":"titleFilm"},"program":{"title":"titleProgram"},"uriTVContentDetails":"/tvcontent/$idString","id":"$idString"}"""
+        s"""{"channel":"bbc1","provider":["FREEVIEW","SKY"],"start":"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}","end":"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}","category":["documentary"],"series":{"serieTitle":"titleSerie"},"film":{"title":"titleFilm"},"program":{"title":"titleProgram"},"uriTVContentDetails":"/tvcontent/$idString","onTimeNow":true,"id":"$idString"}"""
     }
     "transform json to TVProgram object" in {
       Json.parse(
@@ -32,6 +33,7 @@ class MarshallingTVContentShortSpec extends PlaySpec with MustMatchers {
            |"series":{"serieTitle":"titleSerie"},
            |"film":{"title":"titleFilm"},
            |"program":{"title":"titleProgram"},
+           |"onTimeNow":true,
            |"uriTVContentDetails":"/tvcontent/$idString","id":"$idString"}""".stripMargin)
         .as[TVContentShort] mustBe
         TVContentShort("bbc1",
@@ -42,6 +44,7 @@ class MarshallingTVContentShortSpec extends PlaySpec with MustMatchers {
           Some(SeriesShort("titleSerie")),
           Some(FilmShort("titleFilm")),
           Some(ProgramShort("titleProgram")),
+          true,
           Some(id))
     }
   }
