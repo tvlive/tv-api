@@ -38,7 +38,8 @@ package object controllers {
       "id" -> tvchannel.id,
       "uriToday" -> tvchannel.uriToday,
       "uriCurrent" -> tvchannel.uriCurrent,
-      "uriLeft" -> tvchannel.uriLeft
+      "uriLeft" -> tvchannel.uriLeft,
+      "image" -> tvchannel.image
     )
   }
 

@@ -13,6 +13,7 @@ case class TVChannel(name: String, provider: List[String], category: List[String
   val uriToday: String = controllers.routes.TVContentController.allContent(URLEncoder.encode(name, "UTF-8")).url
   val uriCurrent: String = controllers.routes.TVContentController.currentContent(URLEncoder.encode(name, "UTF-8")).url
   val uriLeft: String = controllers.routes.TVContentController.contentLeft(URLEncoder.encode(name,"UTF-8")).url
+  val image = s"/${name.replaceAll("\\s", "_")}.png"
 }
 
 trait ChannelRepository {
