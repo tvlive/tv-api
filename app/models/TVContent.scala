@@ -112,7 +112,7 @@ class TVContentRepository(collectionName: String)(implicit val con: String => AP
     findContentByType(contentType) {
       ct =>
         val query = BSONDocument(
-          "$orderby" -> BSONDocument("channel" -> 1),
+          "$orderby" -> BSONDocument("start" -> 1, "channel" -> 1),
           "$query" -> BSONDocument(
             "provider" -> provider,
             ct -> BSONDocument("$exists" -> true))
@@ -129,7 +129,7 @@ class TVContentRepository(collectionName: String)(implicit val con: String => AP
       ct =>
         val now = currentDate()
         val query = BSONDocument(
-          "$orderby" -> BSONDocument("channel" -> 1),
+          "$orderby" -> BSONDocument("start" -> 1, "channel" -> 1),
           "$query" -> BSONDocument(
             "start" -> BSONDocument("$lte" -> BSONDateTime(now.getMillis)),
             "end" -> BSONDocument("$gt" -> BSONDateTime(now.getMillis)),
@@ -148,7 +148,7 @@ class TVContentRepository(collectionName: String)(implicit val con: String => AP
       ct =>
         val now = currentDate()
         val query = BSONDocument(
-          "$orderby" -> BSONDocument("channel" -> 1),
+          "$orderby" -> BSONDocument("start" -> 1, "channel" -> 1),
           "$query" -> BSONDocument(
             "provider" -> provider,
             ct -> BSONDocument("$exists" -> true),
