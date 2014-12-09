@@ -1,6 +1,5 @@
 package controllers
 
-import models.APIMongoConnection
 import play.api.libs.json.{Json, Writes}
 import play.api.mvc.{Controller, SimpleResult}
 
@@ -25,12 +24,4 @@ trait BaseController extends Controller {
       case None => NotFound(Json.toJson(NotFoundResponse(message)))
     }
   }
-
-  implicit val conn : String => APIMongoConnection = {
-    cn => new APIMongoConnection {
-      override lazy val collectionName = cn
-    }
-  }
-
-
 }

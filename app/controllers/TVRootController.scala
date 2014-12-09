@@ -1,6 +1,7 @@
 package controllers
 
-import models.{ChannelCategoryRepository, ChannelProviderRepository, TVChannelCategoryRepository, TVChannelProviderRepository}
+import configuration.ApplicationContext._
+import models.{ChannelCategoryRepository, ChannelProviderRepository}
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 import play.api.mvc.Action
@@ -9,8 +10,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 object TVRootController extends TVRootController {
-  override val providerRepository = new TVChannelProviderRepository("tvChannelProvider")
-  override val categoryRepository = new TVChannelCategoryRepository("tvChannelCategory")
+  override val providerRepository = tvChannelProviderReporitory
+  override val categoryRepository = tvChannelCategoryRepository
 }
 
 trait TVRootController extends BaseController {

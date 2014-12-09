@@ -2,6 +2,7 @@ package controllers
 
 import java.net.URLDecoder
 
+import configuration.ApplicationContext
 import models._
 import org.joda.time.DateTime
 import play.api.mvc.Action
@@ -10,7 +11,7 @@ import reactivemongo.bson.BSONObjectID
 import scala.concurrent.ExecutionContext.Implicits.global
 
 object TVContentController extends TVContentController {
-  override val contentRepository = new TVContentRepository("tvContent")
+  override val contentRepository = ApplicationContext.tvContentRepository
 }
 
 trait TVContentController extends BaseController {

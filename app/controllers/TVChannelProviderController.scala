@@ -1,12 +1,13 @@
 package controllers
 
-import models.{ChannelProviderRepository, TVChannelProviderRepository}
+import configuration.ApplicationContext._
+import models.ChannelProviderRepository
 import play.api.mvc.Action
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
 object TVChannelProviderController extends TVChannelProviderController {
-  override val channelProviderReporitory = new TVChannelProviderRepository("tvChannelProvider")
+  override val channelProviderReporitory = tvChannelProviderReporitory
 }
 
 trait TVChannelProviderController extends BaseController {
