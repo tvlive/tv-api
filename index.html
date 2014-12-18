@@ -1,204 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="images/tvliveio_icono_new.png">
 
+    <title>tvlive.io SAAS</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="cover.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-
-    <title>TVLIVE by tvlive</title>
   </head>
 
   <body>
-    <header>
-      <div class="inner">
-        <h1>TVLIVE.IO</h1>
-        <h2>TV guide API for FREEVIEW and SATELLITE television in UK</h2>
+
+    <div class="site-wrapper">
+
+      <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+          <div class="masthead clearfix">
+            <div class="inner">
+              <h4 class="masthead-brand">API version 1.0.15</h4>              
+            </div>            
+          </div>
+          <div class="inner cover">
+            <img src="images/tvliveio_icono_new.png" alt="tvlive.io icon">
+            <p class="lead">Open Source learning exercise with the coolest techologies.</p>
+            <p class="lead"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> TV guide API for Freeview and Satellite television in UK </p>
+            <p class="lead"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Mobile app under construction</p> 
+            <p class="lead">
+              <a href="http://docs.tvlive.apiary.io" class="btn btn-lg btn-default">
+                Learn how to use it
+              </a>
+            </p>                 
+            <p class="lead">
+              <a href="http://beta.tvlive.io/" class="btn btn-lg btn-default">
+                Start using beta.tvlive.io
+              </a>
+            </p>                                   
+           <a href="https://twitter.com/tvliveio">
+              <i class="fa fa-twitter-square fa-3x"></i>
+            </a>
+           <a href="https://github.com/tvlive">
+              <i class="fa fa-github-square fa-3x"></i>
+            </a>
+           <a href="https://www.linkedin.com/in/avilaplana2008">
+              <i class="fa fa-linkedin-square fa-3x"></i>
+            </a>
+           <a href="mailto:alvaro.vilaplana@tvlive.io"><i class="fa fa-envelope fa-3x"></i></a>
+
+          </div>
+        </div>
+
       </div>
-    </header>
 
-    <div id="content-wrapper">
-      <div class="inner clearfix">
-        <section id="main-content">
-<h3>The purpose of the API</h3>
-
-<p>The reason why I decided to start this open source project is because I wanted to develop a mobile application to show me the content of the tv and provide rate of that. I am aware that all the modern smart tvs provide really cool user interface showing all the the tv guide. But I personally struggle to find the right content and fitted to my taste. I really missed a good search based on genres, series, programs and very important, a really relaible rate indicating the level of that tv program.</p>
-
-<h3>API doc</h3>
-
-<p>You can find all the details of the API here: <a href="http://docs.tvlive.apiary.io">http://docs.tvlive.apiary.io</a>
-
-<h3>Software as a service</h3>
-
-
-<p>Everybody can use the service deployed in <a href="http://beta.tvlive.io">http://beta.tvlive.io</a> by free.
-
-
-<h3>Current version</h3>
-
-<pre>
-  <code>tv-api version 1.0.15  - Deployed 14 December 2014
-    Issue 38 - Create ApplocationContext that contains singleton for all the repositories
-    
-    tv-crawler version 1.0.4 - Deployed 14 December 2014
-      Issue 18 - Bug in Series without episode definition
-</code></pre>
-
-<h3>Previous versions</h3>
-
-<pre>
-  <code>tv-api version 1.0.14  - Deployed 2 December 2014
-    Issue 61 - Add property in channel for image
-    Issue 60 - Add property in tvcontent telling if content is on TV now
-    Issue 57 - content by type and provider should be listed: by time and by channel
-    
-    tv-crawler version 1.0.2 - Deployed 2 December 2014
-      Issue 17 - Bug in the description of programs because contain &lt;br&gt;
-</code>
-
-   <code>tv-api version 1.0.11  - Deployed 13 November 2014
-    Issue 56 - Rename endpoint /providers/channels to /providers
-    Issue 55 - Rename endpoint /categories/channels to /categories
-    Issue 54 - Refactor /tvcontent/type/{type}/[current/today/left]
-    Issue 53 - Adding provider in tv content domain model
-    Issue 49 - Add message in the case of notFound for TvChannelCategoryController and TvChannelProviderController
-
-    tv-crawler version 1.0.1 - Deployed 16 October 2014
-      Issue 16 - Bug - Series without episodes title fails
-</code>
-
-  <code>tv-api version 1.0.7  - Deployed 2 November 2014
-    Issue 48 - Refactoring Controllers removing duplicated code
-    Issue 23 - remove short versions of the domain model and pass the responsability to controller
-    Issue 41 - Refactoring TVContentRepository Repository to be able to find by type
-    Issue 12 - Rename field uriTVProgramDetails to uriTVContentDetails
-    
-</code>
-
-  <code>tv-api version 1.0.4  - Deployed 19 October 2014
-    Issue 40 - Create endpoints for searching based on type of content: Series, Program, Film
-    Issue 39 - Remove endpoints related with search based on genre and list of genres
-    Issue 18 - Managing exceptions and error responses in json
-    Issue 37 - Add Rest roots to API
-    Issue 35 - Rewrite the model
-    
-  tv-crawler version 1.0.0 - Deployed 19 October 2014
-      Issue 13 - Rewrite the new crawler
-</code>
-  <code>tv-api version 0.16.0  - Deployed 30 Septemer 2014
-    Issue 27 - List of genres per tvcontent
-    Issue 33 - Change the url  resource 'genre for channels'
-    
-  tv-crawler version 0.3.0 - Deployed 29 Septemer 2014
-      Issue 11 - Collection for genre for tvcontent
-</code>
-  <code>tv-api version 0.15.0  - Deployed 24 Septemer 2014
-    Issue 26 - List of genres for channels
-    Issue 24 - Remove configuration hardcoded
-    Issue 25 - Refactoring Connection trait
-    Issue 17 - Adding Filter for auditing purposes
-
-  tv-crawler version 0.2.0 - Deployed 24 Septemer 2014
-      Issue 10 - Collection for genre for channels
-
-  tv-api version 0.13.0  - Deployed 16 Septemer 2014
-    Issue 19 - Renaming routes
-    Issue 15 - List of tv programs left today by genre
-    Issue 7 - Fix production problem with dates (UTC vs Europe/London)
-  
-  tv-api version 0.9.0 - Deployed 10 Septemer 2014
-    Issue 13 - List of channels by genre
-    Issue 16 - List of tv programs current on tv by genre
-  
-  tv-crawler version 0.1.1 - Deployed 10 Septemer 2014
-    Issue 9 - Transform to uppercase the genres in the tvcontent
-
-</code></pre>
-
-<h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Let's test it</h3>
-
-<pre>List of roots (resources/endpoints to start navigating through the content ): 
-
-<code>$curl http://beta.tvlive.io</code></pre>
-
-<pre>List of TV channels: 
-
-<code>$curl http://beta.tvlive.io/channels</code></pre>
-
-<pre>List of TV channels with category 'kids': 
-
-<code>$curl http://beta.tvlive.io/channels/category/kids</code></pre>
-
-<pre>List of TV channels with TV provider 'freeview': 
-
-<code>$curl http://beta.tvlive.io/channels/provider/freeview</code></pre>
-
-<pre>List of all the channel TV providers:
-
-<code>$curl http://beta.tvlive.io/providers</code></pre>
-
-<pre>List of all the channel TV categories:
-
-<code>$curl http://beta.tvlive.io/categories</code></pre>
-
-<pre>TV content today in BBC One London: 
-
-<code>$curl http://beta.tvlive.io/tvcontent/channel/BBC+ONE+LONDON/today</code></pre>
-
-<pre>TV content left today in BBC One London: 
-
-<code>$curl http://beta.tvlive.io/tvcontent/channel/BBC+ONE+LONDON/left</code></pre>
-
-<pre>What's on in BBC One London: 
-
-<code>$curl http://beta.tvlive.io/tvcontent/channel/BBC+ONE+LONDON/current</code></pre>
-
-<pre>TV series for FREEVIEW today: 
-
-<code>curl http://beta.tvlive.io/tvcontent/series/freeview/today</code></pre>
-
-<pre>TV programs for FREEVIEW left today: 
-
-<code>curl http://beta.tvlive.io/tvcontent/program/freeview/left</code></pre>
-
-<pre>What films for FREEVIEW are on TV now: 
-
-<code>curl http://beta.tvlive.io/tvcontent/film/freeview/current</code></pre>
-
-<pre>TV program details: 
-
-<code>curl http://beta.tvlive.io/tvcontent/540c028aa3d9bd4ae35dbfbe</code></pre>
-
-
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
-
-<p>Alvaro Vilaplana García(<a href="https://github.com/avilaplana" class="user-mention">@avilaplana</a>)</p>
-
-        </section>
-
-        <aside id="sidebar">
-           <a href="https://github.com/tvlive/tv-api">
-            <img src="images/tvliveio_icono.png" />
-          </a>
-
-          <a href="https://twitter.com/tvliveio" >
-            <img src="images/twitter_icono.png"/>Follow @tvliveio            
-          </a> 
-          
-          <!-- <p class="repo-owner"><a src= href="https://github.com/tvlive/tv-api"></a> is maintained by <a href="https://github.com/tvlive">tvlive</a>.</p>       -->
-        </aside>
-      </div>
     </div>
-
-  
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="javascript/bootstrap.min.js"></script>
+    <script src="javascript/docs.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="javascript/ie10-viewport-bug-workaround.js"></script>
   </body>
 </html>
