@@ -1,0 +1,4 @@
+[0m[[0minfo[0m] [0m[32mMarshallingTVProgramShortSpec:[0m[0m
+[0m[[0minfo[0m] [0m[32mWrite and reads[0m[0m
+[0m[[0minfo[0m] [0m[32m- should transform TVProgram object to json[0m[0m
+[0m[[0minfo[0m] [0m[32m- should transform json to TVProgram object[0m[0m

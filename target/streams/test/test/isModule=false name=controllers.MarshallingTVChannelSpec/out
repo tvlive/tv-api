@@ -1,0 +1,4 @@
+[0m[[0minfo[0m] [0m[32mMarshallingTVChannelSpec:[0m[0m
+[0m[[0minfo[0m] [0m[32mWrite and reads[0m[0m
+[0m[[0minfo[0m] [0m[32m- should transform TVChannel object to json[0m[0m
+[0m[[0minfo[0m] [0m[32m- should transform json to TVChannel object[0m[0m

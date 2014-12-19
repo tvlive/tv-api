@@ -1,0 +1,96 @@
+2014-10-19 21:35:58,900 - [INFO] - from play in pool-5-thread-5 
+Listening for HTTP on /0:0:0:0:0:0:0:0:9000
+
+2014-10-19 21:36:35,818 - [INFO] - from play in play-internal-execution-context-1 
+Application started (Dev)
+
+2014-10-19 21:36:35,861 - [INFO] - from application in New I/O worker #1 
+loading the environment with run mode Dev
+
+2014-10-19 21:36:37,110 - [INFO] - from application in play-akka.actor.default-dispatcher-7 
+GET / took 964ms and returned 200
+
+2014-10-19 21:36:37,476 - [INFO] - from application in play-akka.actor.default-dispatcher-2 
+GET /favicon.ico took 9ms and returned 400
+
+2014-10-19 21:37:03,885 - [INFO] - from application in play-akka.actor.default-dispatcher-5 
+GET /tvcontent/type/aaaa/today took 4ms and returned 404
+
+2014-10-19 21:37:03,985 - [INFO] - from application in play-akka.actor.default-dispatcher-4 
+GET /favicon.ico took 1ms and returned 400
+
+2014-10-19 21:37:12,210 - [INFO] - from application in play-akka.actor.default-dispatcher-5 
+GET /tvcontent/type/series/today took 744ms and returned 200
+
+2014-10-19 21:37:12,401 - [INFO] - from application in play-akka.actor.default-dispatcher-8 
+GET /favicon.ico took 1ms and returned 400
+
+2014-10-19 21:37:48,284 - [INFO] - from application in play-akka.actor.default-dispatcher-11 
+GET /tvcontent/type/film/today took 104ms and returned 200
+
+2014-10-19 21:37:48,632 - [INFO] - from application in play-akka.actor.default-dispatcher-11 
+GET /favicon.ico took 1ms and returned 400
+
+2014-10-19 21:38:00,446 - [INFO] - from application in play-akka.actor.default-dispatcher-4 
+GET /tvcontent/type/program/today took 294ms and returned 200
+
+2014-10-19 21:38:00,702 - [INFO] - from application in play-akka.actor.default-dispatcher-4 
+GET /favicon.ico took 1ms and returned 400
+
+2014-10-19 21:38:11,516 - [INFO] - from application in play-akka.actor.default-dispatcher-13 
+GET /tvcontent/type/program/current took 13ms and returned 200
+
+2014-10-19 21:38:11,692 - [INFO] - from application in play-akka.actor.default-dispatcher-7 
+GET /favicon.ico took 0ms and returned 400
+
+2014-10-19 21:38:28,569 - [INFO] - from application in play-akka.actor.default-dispatcher-10 
+GET /tvcontent/type/film/current took 8ms and returned 200
+
+2014-10-19 21:38:28,642 - [INFO] - from application in play-akka.actor.default-dispatcher-13 
+GET /favicon.ico took 0ms and returned 400
+
+2014-10-19 21:39:16,099 - [INFO] - from application in play-akka.actor.default-dispatcher-17 
+GET /tvcontent/type/series/current took 16ms and returned 200
+
+2014-10-19 21:39:16,170 - [INFO] - from application in play-akka.actor.default-dispatcher-17 
+GET /favicon.ico took 1ms and returned 400
+
+2014-10-19 21:40:46,751 - [INFO] - from application in play-akka.actor.default-dispatcher-21 
+GET /tvcontent/type/series/left took 36ms and returned 200
+
+2014-10-19 21:40:46,838 - [INFO] - from application in play-akka.actor.default-dispatcher-21 
+GET /favicon.ico took 1ms and returned 400
+
+2014-10-19 21:41:28,125 - [INFO] - from application in play-akka.actor.default-dispatcher-22 
+GET /tvcontent/type/films/left took 2ms and returned 404
+
+2014-10-19 21:41:28,215 - [INFO] - from application in play-akka.actor.default-dispatcher-22 
+GET /favicon.ico took 1ms and returned 400
+
+2014-10-19 21:41:31,759 - [INFO] - from application in play-akka.actor.default-dispatcher-23 
+GET /tvcontent/type/films/left took 0ms and returned 404
+
+2014-10-19 21:41:31,799 - [INFO] - from application in play-akka.actor.default-dispatcher-24 
+GET /favicon.ico took 0ms and returned 400
+
+2014-10-19 21:41:35,193 - [INFO] - from application in play-akka.actor.default-dispatcher-23 
+GET /tvcontent/type/film/left took 18ms and returned 200
+
+2014-10-19 21:41:35,274 - [INFO] - from application in play-akka.actor.default-dispatcher-23 
+GET /favicon.ico took 0ms and returned 400
+
+2014-10-19 21:42:09,619 - [INFO] - from application in play-akka.actor.default-dispatcher-22 
+GET /tvcontent/type/program/left took 28ms and returned 200
+
+2014-10-19 21:42:09,704 - [INFO] - from application in play-akka.actor.default-dispatcher-22 
+GET /favicon.ico took 1ms and returned 400
+
+2014-10-19 21:44:50,737 - [INFO] - from application in pool-5-thread-5-ScalaTest-running-EnvironmentSpec 
+loading the environment with run mode Test
+
+2014-10-19 21:44:50,788 - [INFO] - from application in pool-5-thread-5-ScalaTest-running-EnvironmentSpec 
+loading the environment with run mode Test
+
+2014-10-19 21:44:50,824 - [INFO] - from application in pool-5-thread-5-ScalaTest-running-EnvironmentSpec 
+loading the environment with run mode Test
+

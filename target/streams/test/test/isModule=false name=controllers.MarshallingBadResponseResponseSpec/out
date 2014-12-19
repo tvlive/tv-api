@@ -1,0 +1,4 @@
+[0m[[0minfo[0m] [0m[32mMarshallingBadResponseResponseSpec:[0m[0m
+[0m[[0minfo[0m] [0m[32mWrite and reads[0m[0m
+[0m[[0minfo[0m] [0m[32m- should transform BadRequestResponse object to json[0m[0m
+[0m[[0minfo[0m] [0m[32m- should transform json to BadRequestResponse object[0m[0m

@@ -1,0 +1,38 @@
+[0m[[0mdebug[0m] [0mRunning TaskDef(controllers.TVChannelGenreControllerSpec, org.scalatest.tools.Framework$$anon$1@4238378f, false, [SuiteSelector])[0m
+[0m[[0mdebug[0m] [0mRunning TaskDef(controllers.MarshallingTVChannelSpec, org.scalatest.tools.Framework$$anon$1@4238378f, false, [SuiteSelector])[0m
+[0m[[0mdebug[0m] [0mRunning TaskDef(controllers.MarshallingTVChannelCategorySpec, org.scalatest.tools.Framework$$anon$1@4238378f, false, [SuiteSelector])[0m
+[0m[[0mdebug[0m] [0mRunning TaskDef(controllers.MarshallingNotFoundResponseSpec, org.scalatest.tools.Framework$$anon$1@4238378f, false, [SuiteSelector])[0m
+[0m[[0mdebug[0m] [0mRunning TaskDef(controllers.TVChannelProviderControllerSpec, org.scalatest.tools.Framework$$anon$1@4238378f, false, [SuiteSelector])[0m
+[0m[[0mdebug[0m] [0mRunning TaskDef(controllers.MarshallingBadResponseResponseSpec, org.scalatest.tools.Framework$$anon$1@4238378f, false, [SuiteSelector])[0m
+[0m[[0mdebug[0m] [0mRunning TaskDef(controllers.MarshallingTVProgramShortSpec, org.scalatest.tools.Framework$$anon$1@4238378f, false, [SuiteSelector])[0m
+[0m[[0mdebug[0m] [0mRunning TaskDef(controllers.MarshallingTVChannelProviderSpec, org.scalatest.tools.Framework$$anon$1@4238378f, false, [SuiteSelector])[0m
+[0m[[0mdebug[0m] [0mRunning TaskDef(controllers.TVRootControllerSpec, org.scalatest.tools.Framework$$anon$1@4238378f, false, [SuiteSelector])[0m
+[0m[[0mdebug[0m] [0mRunning TaskDef(controllers.TVContentControllerSpec, org.scalatest.tools.Framework$$anon$1@4238378f, false, [SuiteSelector])[0m
+[0m[[0mdebug[0m] [0mRunning TaskDef(controllers.MarshallingLinkSpec, org.scalatest.tools.Framework$$anon$1@4238378f, false, [SuiteSelector])[0m
+[0m[[0mdebug[0m] [0mRunning TaskDef(controllers.MarshallingTVProgramSpec, org.scalatest.tools.Framework$$anon$1@4238378f, false, [SuiteSelector])[0m
+[0m[[0mdebug[0m] [0mRunning TaskDef(controllers.TVChannelControllerSpec, org.scalatest.tools.Framework$$anon$1@4238378f, false, [SuiteSelector])[0m
+[0m[[0mdebug[0m] [0mRunning TaskDef(configuration.EnvironmentSpec, org.scalatest.tools.Framework$$anon$1@4238378f, false, [SuiteSelector])[0m
+[0m[[0minfo[0m] [0mScalaTest[0m
+[0m[[0minfo[0m] [0m[36mRun completed in 2 seconds, 527 milliseconds.[0m[0m
+[0m[[0minfo[0m] [0m[36mTotal number of tests run: 48[0m[0m
+[0m[[0minfo[0m] [0m[36mSuites: completed 14, aborted 0[0m[0m
+[0m[[0minfo[0m] [0m[36mTests: succeeded 48, failed 0, canceled 0, ignored 0, pending 0[0m[0m
+[0m[[0minfo[0m] [0m[32mAll tests passed.[0m[0m
+[0m[[0mdebug[0m] [0mSummary for JUnit not available.[0m
+[0m[[0mdebug[0m] [0mSummary for specs2 not available.[0m
+[0m[[0minfo[0m] [0mPassed: Total 48, Failed 0, Errors 0, Passed 48[0m
+[0m[[0mdebug[0m] [0mPassed tests:[0m
+[0m[[0mdebug[0m] [0m	controllers.MarshallingLinkSpec[0m
+[0m[[0mdebug[0m] [0m	configuration.EnvironmentSpec[0m
+[0m[[0mdebug[0m] [0m	controllers.MarshallingTVChannelCategorySpec[0m
+[0m[[0mdebug[0m] [0m	controllers.MarshallingTVChannelProviderSpec[0m
+[0m[[0mdebug[0m] [0m	controllers.TVChannelControllerSpec[0m
+[0m[[0mdebug[0m] [0m	controllers.TVChannelProviderControllerSpec[0m
+[0m[[0mdebug[0m] [0m	controllers.MarshallingTVProgramShortSpec[0m
+[0m[[0mdebug[0m] [0m	controllers.TVChannelGenreControllerSpec[0m
+[0m[[0mdebug[0m] [0m	controllers.MarshallingTVProgramSpec[0m
+[0m[[0mdebug[0m] [0m	controllers.MarshallingBadResponseResponseSpec[0m
+[0m[[0mdebug[0m] [0m	controllers.MarshallingNotFoundResponseSpec[0m
+[0m[[0mdebug[0m] [0m	controllers.MarshallingTVChannelSpec[0m
+[0m[[0mdebug[0m] [0m	controllers.TVRootControllerSpec[0m
+[0m[[0mdebug[0m] [0m	controllers.TVContentControllerSpec[0m

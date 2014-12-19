@@ -1,0 +1,3 @@
+[0m[[0minfo[0m] [0m[32mTVChannelProviderRepositoryIntSpec:[0m[0m
+[0m[[0minfo[0m] [0m[32mfindAll[0m[0m
+[0m[[0minfo[0m] [0m[32m- should return all the providers for the tv channels order alphabetically[0m[0m
