@@ -1,4 +1,0 @@
-[0m[[0mdebug[0m] [0mCopy resource mappings: [0m
-[0m[[0mdebug[0m] [0m	(/Users/alvaro/personal/tv-api/conf/application.conf,/Users/alvaro/personal/tv-api/target/scala-2.10/classes/application.conf)[0m
-[0m[[0mdebug[0m] [0m	(/Users/alvaro/personal/tv-api/conf/messages,/Users/alvaro/personal/tv-api/target/scala-2.10/classes/messages)[0m
-[0m[[0mdebug[0m] [0m	(/Users/alvaro/personal/tv-api/conf/routes,/Users/alvaro/personal/tv-api/target/scala-2.10/classes/routes)[0m

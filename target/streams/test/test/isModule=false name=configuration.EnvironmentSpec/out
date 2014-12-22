@@ -1,5 +1,0 @@
-[0m[[0minfo[0m] [0m[32mEnvironmentSpec:[0m[0m
-[0m[[0minfo[0m] [0m[32mEnvironment[0m[0m
-[0m[[0minfo[0m] [0m[32m- should be configured with all the values[0m[0m
-[0m[[0minfo[0m] [0m[32m- should throw an IllegalArgumentException when no properyty mongodbURI defined[0m[0m
-[0m[[0minfo[0m] [0m[32m- should throw an IllegalArgumentException when no properyty mongodbDatabaseName defined[0m[0m

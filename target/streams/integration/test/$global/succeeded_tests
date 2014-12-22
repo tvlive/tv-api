@@ -1,6 +1,0 @@
-#Successful Tests
-#Sun Oct 19 21:45:18 BST 2014
-integration.models.TVChannelProviderRepositoryIntSpec=1413751513333
-models.TVChannelCategoryRepositoryIntSpec=1413751518375
-models.TVChannelContentRepositoryIntSpec=1413751503141
-models.TVChannelRepositoryIntSpec=1413751508288

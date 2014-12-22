@@ -1,7 +1,0 @@
-[0m[[0minfo[0m] [0m[32mTVChannelRepositoryIntSpec:[0m[0m
-[0m[[0minfo[0m] [0m[32mlistOfTVChannels[0m[0m
-[0m[[0minfo[0m] [0m[32m- should return the list of TV Channels available today[0m[0m
-[0m[[0minfo[0m] [0m[32m- should return the list of TV Channels by category ENTERTAINMENT[0m[0m
-[0m[[0minfo[0m] [0m[32m- should return empty list of TV Channels by category NONEXIST[0m[0m
-[0m[[0minfo[0m] [0m[32m- should return the list of TV Channels by provider PROVIDER3[0m[0m
-[0m[[0minfo[0m] [0m[32m- should return empty list of TV Channels by provider NONEXIST[0m[0m

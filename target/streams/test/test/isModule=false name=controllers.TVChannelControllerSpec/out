@@ -1,9 +1,0 @@
-[0m[[0minfo[0m] [0m[32mTVChannelControllerSpec:[0m[0m
-[0m[[0minfo[0m] [0m[32mTVChannelController[0m[0m
-[0m[[0minfo[0m] [0m[32m- should provide the list of channels available in TV[0m[0m
-[0m[[0minfo[0m] [0m[32m- should provide the list of channels for that contains category ENTERTAINMENT in upper case[0m[0m
-[0m[[0minfo[0m] [0m[32m- should provide the list of channels for that contains category documentary in lower case[0m[0m
-[0m[[0minfo[0m] [0m[32m- should provide NOT_FOUND if category does not exist[0m[0m
-[0m[[0minfo[0m] [0m[32m- should provide the list of channels for that contains provider PROVIDER2 in upper case[0m[0m
-[0m[[0minfo[0m] [0m[32m- should provide the list of channels for that contains provider provider1 in lower case[0m[0m
-[0m[[0minfo[0m] [0m[32m- should provide NOT_FOUND if provider does not exist[0m[0m
