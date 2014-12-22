@@ -9,6 +9,7 @@ object DomainBuilder {
   object TVShortWithTimeZone {
     def apply(tvContent: TVContent): TVContentShort = TVContentShort(
       tvContent.channel,
+      tvContent.channelImageURL,
       tvContent.provider,
       tvContent.start.withZone(DateTimeZone.forID("Europe/London")),
       tvContent.end.withZone(DateTimeZone.forID("Europe/London")),

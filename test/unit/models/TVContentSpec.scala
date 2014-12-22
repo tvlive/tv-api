@@ -44,7 +44,17 @@ class TVContentSpec extends PlaySpec with MustMatchers {
       val content = TVContent("channel1", List("provider1"), now.plusHours(2), now.plusHours(3), None, None, None, None, None)
       content.perCentTimeElapsed mustBe None
     }
-
   }
 
+  "channelImageURL" should {
+    "be channel1.png when the channel is channel1" in {
+      val content = TVContent("channel1", List("provider1"), now.plusHours(2), now.plusHours(3), None, None, None, None, None)
+      content.channelImageURL mustBe "/channel1.png"
+    }
+
+    "be channel_exampe.png when the channel is channel example" in {
+      val content = TVContent("channel example", List("provider1"), now.plusHours(2), now.plusHours(3), None, None, None, None, None)
+      content.channelImageURL mustBe "/channel_example.png"
+    }
+  }
 }

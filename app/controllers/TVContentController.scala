@@ -67,6 +67,7 @@ trait TVContentController extends BaseController {
 
 
 case class TVContentShort(channel: String,
+                          channelImageURL: String,
                           provider: List[String],
                           start: DateTime,
                           end: DateTime,
@@ -90,6 +91,7 @@ case class ProgramShort(title: String)
 object TVShort {
   def apply(tvContent: TVContent): TVContentShort = TVContentShort(
     tvContent.channel,
+    tvContent.channelImageURL,
     tvContent.provider,
     tvContent.start,
     tvContent.end,

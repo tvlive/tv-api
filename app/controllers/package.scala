@@ -1,4 +1,3 @@
-import _root_.utils.TimeProvider
 import models._
 import org.joda.time.{DateTime, DateTimeZone}
 import play.api.libs.functional.syntax._
@@ -74,6 +73,7 @@ package object controllers {
   implicit val tvProgramWrites = new Writes[TVContent] {
     override def writes(tvContent: TVContent): JsValue = Json.obj(
       "channel" -> tvContent.channel,
+      "channelImageURL" -> tvContent.channelImageURL,
       "provider" -> tvContent.provider,
       "start" -> tvContent.start.toDateTime(DateTimeZone.forID("Europe/London")),
       "end" -> tvContent.end.toDateTime(DateTimeZone.forID("Europe/London")),
@@ -89,6 +89,7 @@ package object controllers {
 
   implicit val tvProgramShortReads: Reads[TVContentShort] = (
     (__ \ "channel").read[String] and
+    (__ \ "channelImageURL").read[String] and
     (__ \ "provider").read[List[String]] and
       (__ \ "start").read[DateTime].map[DateTime](dt => dt.withZoneRetainFields(DateTimeZone.forID("Europe/London"))) and
       (__ \ "end").read[DateTime].map[DateTime](dt => dt.withZoneRetainFields(DateTimeZone.forID("Europe/London"))) and
@@ -105,6 +106,7 @@ package object controllers {
   implicit val tvProgramShortWrites = new Writes[TVContentShort] {
     override def writes(tvContentShort: TVContentShort): JsValue = Json.obj(
       "channel" -> tvContentShort.channel,
+      "channelImageURL" -> tvContentShort.channelImageURL,
       "provider" -> tvContentShort.provider,
       "start" -> tvContentShort.start.toDateTime(DateTimeZone.forID("Europe/London")),
       "end" -> tvContentShort.end.toDateTime(DateTimeZone.forID("Europe/London")),

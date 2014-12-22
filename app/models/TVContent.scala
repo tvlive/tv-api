@@ -16,7 +16,7 @@ case class TVContent(channel: String,
                      series: Option[Series],
                      film: Option[Film],
                      program: Option[Program],
-                     id: Option[BSONObjectID] = Some(BSONObjectID.generate)) extends TimeProvider {
+                     id: Option[BSONObjectID] = Some(BSONObjectID.generate)) extends TimeProvider with ChannelImageURLBuilder {
 
   val onTimeNow = (start.isBeforeNow || start.isEqualNow) && (end.isAfterNow || end.isEqualNow)
 
@@ -30,6 +30,8 @@ case class TVContent(channel: String,
       case false => None
     }
   }
+  
+  val channelImageURL = buildUrl(channel)
 }
 
 

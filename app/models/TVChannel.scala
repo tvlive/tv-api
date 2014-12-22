@@ -9,11 +9,11 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 
-case class TVChannel(name: String, provider: List[String], category: List[String], id: Option[BSONObjectID] = Some(BSONObjectID.generate)) {
+case class TVChannel(name: String, provider: List[String], category: List[String], id: Option[BSONObjectID] = Some(BSONObjectID.generate)) extends ChannelImageURLBuilder {
   val uriToday: String = controllers.routes.TVContentController.allContent(URLEncoder.encode(name, "UTF-8")).url
   val uriCurrent: String = controllers.routes.TVContentController.currentContent(URLEncoder.encode(name, "UTF-8")).url
   val uriLeft: String = controllers.routes.TVContentController.contentLeft(URLEncoder.encode(name,"UTF-8")).url
-  val image = s"/${name.replaceAll("\\s", "_")}.png"
+  val image = buildUrl(name)
 }
 
 trait ChannelRepository {
