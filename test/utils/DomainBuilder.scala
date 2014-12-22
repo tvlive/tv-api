@@ -16,6 +16,7 @@ object DomainBuilder {
       tvContent.film.map(p => FilmShort(p.title)),
       tvContent.program.map(p => ProgramShort(p.title)),
       tvContent.onTimeNow,
+      tvContent.perCentTimeElapsed,
       tvContent.id)
   }
 

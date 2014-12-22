@@ -21,7 +21,7 @@ class MarshallingTVContentSpec extends PlaySpec with MustMatchers {
         Some(Film("program1", None, Some(List()), Some("2014"))),
         Some(Program("program1", Some("d1"))),
         Some(id))).toString() mustBe
-        s"""{"channel":"bbc1","provider":["FREEVIEW","SKY"],"start":"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}","end":"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}","category":["documentary"],"series":{"serieTitle":"serie1","episodeTitle":"ep1","actors":["actor1"]},"film":{"title":"program1","actors":[],"year":"2014"},"program":{"title":"program1","description":"d1"},"onTimeNow":false,"id":"$idString"}""".stripMargin
+        s"""{"channel":"bbc1","provider":["FREEVIEW","SKY"],"start":"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}","end":"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}","category":["documentary"],"series":{"serieTitle":"serie1","episodeTitle":"ep1","actors":["actor1"]},"film":{"title":"program1","actors":[],"year":"2014"},"program":{"title":"program1","description":"d1"},"onTimeNow":false,"perCentTimeElapsed":null,"id":"$idString"}""".stripMargin
     }
     "transform json to TVContent object" in {
       Json.parse(

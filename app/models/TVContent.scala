@@ -1,7 +1,7 @@
 package models
 
-import _root_.utils.TimeProvider
-import org.joda.time.DateTime
+import utils.TimeProvider
+import org.joda.time.{Duration, DateTime}
 import play.api.libs.iteratee.Enumerator
 import reactivemongo.bson._
 
@@ -16,8 +16,20 @@ case class TVContent(channel: String,
                      series: Option[Series],
                      film: Option[Film],
                      program: Option[Program],
-                     id: Option[BSONObjectID] = Some(BSONObjectID.generate)) {
+                     id: Option[BSONObjectID] = Some(BSONObjectID.generate)) extends TimeProvider {
+
   val onTimeNow = (start.isBeforeNow || start.isEqualNow) && (end.isAfterNow || end.isEqualNow)
+
+  val perCentTimeElapsed : Option[Long] = {
+    onTimeNow match {
+      case true => {
+        val initialDuration = new Duration(start, end).getStandardMinutes
+        val currentDuration = new Duration(start, currentDate).getStandardMinutes
+        Some(currentDuration * 100 / initialDuration)
+      }
+      case false => None
+    }
+  }
 }
 
 

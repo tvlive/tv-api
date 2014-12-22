@@ -1,3 +1,4 @@
+import _root_.utils.TimeProvider
 import models._
 import org.joda.time.{DateTime, DateTimeZone}
 import play.api.libs.functional.syntax._
@@ -81,6 +82,7 @@ package object controllers {
       "film" -> tvContent.film,
       "program" -> tvContent.program,
       "onTimeNow" -> tvContent.onTimeNow,
+      "perCentTimeElapsed" -> tvContent.perCentTimeElapsed,
       "id" -> tvContent.id
     )
   }
@@ -95,23 +97,25 @@ package object controllers {
       (__ \ "film").read[Option[FilmShort]] and
       (__ \ "program").read[Option[ProgramShort]] and
       (__ \ "onTimeNow").read[Boolean] and
+      (__ \ "perCentTimeElapsed").read[Option[Long]] and
       (__ \ "id").read[Option[BSONObjectID]]
     )(TVContentShort.apply _)
 
 
   implicit val tvProgramShortWrites = new Writes[TVContentShort] {
-    override def writes(tvContent: TVContentShort): JsValue = Json.obj(
-      "channel" -> tvContent.channel,
-      "provider" -> tvContent.provider,
-      "start" -> tvContent.start.toDateTime(DateTimeZone.forID("Europe/London")),
-      "end" -> tvContent.end.toDateTime(DateTimeZone.forID("Europe/London")),
-      "category" -> tvContent.category,
-      "series" -> tvContent.series,
-      "film" -> tvContent.film,
-      "program" -> tvContent.program,
-      "uriTVContentDetails" -> tvContent.uriTVContentDetails,
-      "onTimeNow" -> tvContent.onTimeNow,
-      "id" -> tvContent.id
+    override def writes(tvContentShort: TVContentShort): JsValue = Json.obj(
+      "channel" -> tvContentShort.channel,
+      "provider" -> tvContentShort.provider,
+      "start" -> tvContentShort.start.toDateTime(DateTimeZone.forID("Europe/London")),
+      "end" -> tvContentShort.end.toDateTime(DateTimeZone.forID("Europe/London")),
+      "category" -> tvContentShort.category,
+      "series" -> tvContentShort.series,
+      "film" -> tvContentShort.film,
+      "program" -> tvContentShort.program,
+      "uriTVContentDetails" -> tvContentShort.uriTVContentDetails,
+      "onTimeNow" -> tvContentShort.onTimeNow,
+      "perCentTimeElapsed" -> tvContentShort.perCentTimeElapsed,
+      "id" -> tvContentShort.id
     )
   }
 

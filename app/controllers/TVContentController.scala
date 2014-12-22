@@ -75,6 +75,7 @@ case class TVContentShort(channel: String,
                           film: Option[FilmShort],
                           program: Option[ProgramShort],
                           onTimeNow: Boolean,
+                          perCentTimeElapsed : Option[Long],
                           id: Option[BSONObjectID] = Some(BSONObjectID.generate)) {
 
   val uriTVContentDetails = controllers.routes.TVContentController.tvContentDetails(id.get.stringify).toString()
@@ -96,5 +97,6 @@ object TVShort {
     tvContent.film.map(f => FilmShort(f.title)),
     tvContent.program.map(p => ProgramShort(p.title)),
     tvContent.onTimeNow,
+    tvContent.perCentTimeElapsed,
     tvContent.id)
 }

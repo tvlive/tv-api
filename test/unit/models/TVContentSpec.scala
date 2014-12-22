@@ -24,4 +24,27 @@ class TVContentSpec extends PlaySpec with MustMatchers {
     }
   }
 
+  "perCentTimeElapsed" should {
+    "be 50% when tvContent started 1 hour ago and finishes in 1 hour" in {
+      val content = TVContent("channel1", List("provider1"), now.minusHours(1), now.plusHours(1), None, None, None, None, None)
+      content.perCentTimeElapsed mustBe Some(50)
+    }
+
+    "be 20% when tvContent started 1 hour ago and finishes in 4 hour" in {
+      val content = TVContent("channel1", List("provider1"), now.minusHours(1), now.plusHours(4), None, None, None, None, None)
+      content.perCentTimeElapsed mustBe Some(20)
+    }
+
+    "be None when tvContent started 2 hour ago and finishes in 1 hour" in {
+      val content = TVContent("channel1", List("provider1"), now.minusHours(2), now.minusHours(1), None, None, None, None, None)
+      content.perCentTimeElapsed mustBe None
+    }
+
+    "be None when tvContent starts in 2 hours and finishes in 3 hour" in {
+      val content = TVContent("channel1", List("provider1"), now.plusHours(2), now.plusHours(3), None, None, None, None, None)
+      content.perCentTimeElapsed mustBe None
+    }
+
+  }
+
 }
