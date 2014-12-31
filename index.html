@@ -62,27 +62,27 @@
             <p class="lead"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> TV guide API for Freeview and Satellite television in UK </p>
             <p class="lead"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Mobile app under construction</p> 
             <p class="lead">
-              <a href="http://docs.tvlive.apiary.io" class="btn btn-lg btn-default" target="_blank" onClick="_gaq.push(['_trackEvent', 'API', 'Documentation', 'Opening the Apiary Doc']);">
+              <a href="http://docs.tvlive.apiary.io" class="btn btn-lg btn-default" target="_blank">
                 Learn how to use it
               </a>
             </p>                 
             <p class="lead">
-              <a href="http://beta.tvlive.io/" class="btn btn-lg btn-default" target="_blank"  onClick="_gaq.push(['_trackEvent', 'API', 'Test API', 'Testing the API in the cloud']);">
+              <a id="button" href="http://beta.tvlive.io/" class="btn btn-lg btn-default" target="_blank">
                 Start using beta.tvlive.io
               </a>
             </p>                                   
             <p class="lead">
-              <a href="http://mobile.tvlive.io/" class="btn btn-lg btn-default" target="_blank" onClick="_gaq.push(['_trackEvent', 'API', 'Mobile App', 'Testing the mobile web app']);">
+              <a href="http://mobile.tvlive.io/" class="btn btn-lg btn-default" target="_blank">
                 Use the mobile web app prototype
               </a>
             </p>                                   
-           <a href="https://twitter.com/tvliveio" target="_blank" onClick="_gaq.push(['_trackEvent', 'API', 'Twitter', 'Open twitter accpunt']);">
+           <a href="https://twitter.com/tvliveio" target="_blank">
               <i class="fa fa-twitter-square fa-3x"></i>
             </a>
-           <a href="https://github.com/tvlive" target="_blank" onClick="_gaq.push(['_trackEvent', 'API', 'Github', 'Open Github repository']);">
+           <a href="https://github.com/tvlive" target="_blank">
               <i class="fa fa-github-square fa-3x"></i>
             </a>
-           <a href="https://www.linkedin.com/in/avilaplana2008" target="_blank" onClick="_gaq.push(['_trackEvent', 'API', 'Linkedin', 'Open Linkedin account']);">
+           <a href="https://www.linkedin.com/in/avilaplana2008" target="_blank">
               <i class="fa fa-linkedin-square fa-3x"></i>
             </a>
            <a href="mailto:alvaro.vilaplana@tvlive.io"><i class="fa fa-envelope fa-3x"></i></a>
@@ -102,5 +102,26 @@
     <script src="javascript/docs.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="javascript/ie10-viewport-bug-workaround.js"></script>
+    <script type="text/javascript">
+        var downloadLink = document.getElementById('button');
+        addListener(downloadLink, 'click', function() {
+          ga('send', 'event', 'button', 'click', 'nav-buttons');
+        });
+
+
+        /**
+         * Utility to wrap the different behaviors between W3C-compliant browsers
+         * and IE when adding event handlers.
+         *
+         * @param {Object} element Object on which to attach the event listener.
+         * @param {string} type A string representing the event type to listen for
+         *     (e.g. load, click, etc.).
+         * @param {function()} callback The function that receives the notification.
+         */
+        function addListener(element, type, callback) {
+         if (element.addEventListener) element.addEventListener(type, callback);
+         else if (element.attachEvent) element.attachEvent('on' + type, callback);
+}
+    </script>
   </body>
 </html>
