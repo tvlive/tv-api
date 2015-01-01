@@ -62,12 +62,12 @@
             <p class="lead"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> TV guide API for Freeview and Satellite television in UK </p>
             <p class="lead"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Mobile app under construction</p> 
             <p class="lead">
-              <a href="http://docs.tvlive.apiary.io" class="btn btn-lg btn-default" target="_blank">
+              <a onclick=”trackOutboundLink(‘http://docs.tvlive.apiary.io’); return false;" href="http://docs.tvlive.apiary.io" class="btn btn-lg btn-default" target="_blank">
                 Learn how to use it
               </a>
             </p>                 
             <p class="lead">
-              <a id="button" href="http://beta.tvlive.io/" class="btn btn-lg btn-default" target="_blank">
+              <a href="http://beta.tvlive.io/" class="btn btn-lg btn-default" target="_blank">
                 Start using beta.tvlive.io
               </a>
             </p>                                   
@@ -102,26 +102,19 @@
     <script src="javascript/docs.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="javascript/ie10-viewport-bug-workaround.js"></script>
-    <script type="text/javascript">
-        var downloadLink = document.getElementById('button');
-        addListener(downloadLink, 'click', function() {
-          ga('send', 'event', 'button', 'click', 'nav-buttons');
-        });
-
-
+    <script>
         /**
-         * Utility to wrap the different behaviors between W3C-compliant browsers
-         * and IE when adding event handlers.
-         *
-         * @param {Object} element Object on which to attach the event listener.
-         * @param {string} type A string representing the event type to listen for
-         *     (e.g. load, click, etc.).
-         * @param {function()} callback The function that receives the notification.
-         */
-        function addListener(element, type, callback) {
-         if (element.addEventListener) element.addEventListener(type, callback);
-         else if (element.attachEvent) element.attachEvent('on' + type, callback);
-}
+        * Function that tracks a click on an outbound link in Google Analytics.
+        * This function takes a valid URL string as an argument, and uses that URL string
+        * as the event label.
+        */
+        var trackOutboundLink = function(url) {
+           ga('send', 'event', 'outbound', 'click', url, {'hitCallback':
+             function () {
+             document.location = url;
+             }
+           });
+        }
     </script>
   </body>
 </html>
