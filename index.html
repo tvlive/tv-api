@@ -62,59 +62,35 @@
             <p class="lead"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> TV guide API for Freeview and Satellite television in UK </p>
             <p class="lead"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Mobile app under construction</p> 
             <p class="lead">
-              <a onclick=”trackOutboundLink(‘http://docs.tvlive.apiary.io’); return false;" href="http://docs.tvlive.apiary.io" class="btn btn-lg btn-default" target="_blank">
+              <a href="http://docs.tvlive.apiary.io" class="btn btn-lg btn-default" target="_blank">
                 Learn how to use it
               </a>
             </p>                 
             <p class="lead">
-              <a onclick=”trackOutboundLink(‘http://beta.tvlive.io/’); return false;" href="http://beta.tvlive.io/" class="btn btn-lg btn-default" target="_blank">
+              <a href="http://beta.tvlive.io/" class="btn btn-lg btn-default" target="_blank" onclick="ga('send','event','TVLIVE API','beta.tvlive.io')">
                 Start using beta.tvlive.io
               </a>
             </p>                                   
             <p class="lead">
-              <a onclick=”trackOutboundLink(‘http://mobile.tvlive.io/’); return false;" href="http://mobile.tvlive.io/" class="btn btn-lg btn-default" target="_blank">
+              <a href="http://mobile.tvlive.io/" class="btn btn-lg btn-default" target="_blank">
                 Use the mobile web app prototype
               </a>
             </p>                                   
-           <a onclick=”trackOutboundLink(‘https://twitter.com/tvliveio’); return false;" href="https://twitter.com/tvliveio" target="_blank">
+           <a href="https://twitter.com/tvliveio" target="_blank">
               <i class="fa fa-twitter-square fa-3x"></i>
             </a>
-           <a onclick=”trackOutboundLink(‘https://github.com/tvlive’); return false;" href="https://twitter.com/tvliveio" href="https://github.com/tvlive" target="_blank">
+           <a href="https://github.com/tvlive" target="_blank">
               <i class="fa fa-github-square fa-3x"></i>
             </a>
-           <a onclick=”trackOutboundLink(‘https://www.linkedin.com/in/avilaplana2008’); return false;" href="https://www.linkedin.com/in/avilaplana2008" target="_blank">
+           <a target="_blank">
               <i class="fa fa-linkedin-square fa-3x"></i>
             </a>
-           <a onclick=”trackOutboundLink(‘mailto:alvaro.vilaplana@tvlive.io’); return false;" href="mailto:alvaro.vilaplana@tvlive.io"><i class="fa fa-envelope fa-3x"></i></a>
+           <a href="mailto:alvaro.vilaplana@tvlive.io"><i class="fa fa-envelope fa-3x"></i></a>
 
           </div>
         </div>
 
       </div>
-
-    </div>
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="javascript/bootstrap.min.js"></script>
-    <script src="javascript/docs.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="javascript/ie10-viewport-bug-workaround.js"></script>
-    <script>
-        /**
-        * Function that tracks a click on an outbound link in Google Analytics.
-        * This function takes a valid URL string as an argument, and uses that URL string
-        * as the event label.
-        */
-        var trackOutboundLink = function(url) {
-           ga('send', 'event', 'outbound', 'click', url, {'hitCallback':
-             function () {
-             document.location = url;
-             }
-           });
-        }
-    </script>
+    </div>    
   </body>
 </html>
