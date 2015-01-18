@@ -25,17 +25,17 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
   Thread.sleep(5000)
 
   val p1 = TVContent("channel1", List("FREEVIEW", "SKY"),current.minusHours(4), current.minusHours(2), Some(List("documentary", "ENTERTAINMENT")),
-    Some(Series("serie1", Some("ep1"), None, None, None, None, Some(List("actor1")))),
+    Some(Series("serie1", Some(Episode(Some("ep1"), None, None, None, None)), Some(List("actor1")))),
     None,
     None)
 
   val p2 = TVContent("channel1", List("FREEVIEW", "SKY"),current.minusHours(2), current, Some(List("documentary")),
-    Some(Series("serie2", Some("ep1"), None, None, None, None, Some(List("actor1")))),
+    Some(Series("serie2", Some(Episode(Some("ep1"), None, None, None, None)), Some(List("actor1")))),
     None,
     None)
 
   val p7 = TVContent("channel2", List("FREEVIEW", "SKY"),current.minusHours(5), current, Some(List("documentary")),
-    Some(Series("serie2", Some("ep1"), None, None, None, None, Some(List("actor1")))),
+    Some(Series("serie2", Some(Episode(Some("ep1"), None, None, None, None)), Some(List("actor1")))),
     None,
     None)
 

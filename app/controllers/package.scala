@@ -44,6 +44,7 @@ package object controllers {
   }
 
   implicit val filmFmt = Json.format[Film]
+  implicit val episodeFmt = Json.format[Episode]
   implicit val serieFmt = Json.format[Series]
   implicit val programFmt = Json.format[Program]
 
@@ -54,6 +55,7 @@ package object controllers {
     Writes.jodaDateWrites(pattern))
 
   implicit val filmShortFmt = Json.format[FilmShort]
+  implicit val episodeShortFmt = Json.format[EpisodeShort]
   implicit val serieShortFmt = Json.format[SeriesShort]
   implicit val programShortFmt = Json.format[ProgramShort]
 
