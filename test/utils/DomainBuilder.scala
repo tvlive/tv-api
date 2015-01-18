@@ -13,7 +13,7 @@ object DomainBuilder {
       tvContent.provider,
       tvContent.start.withZone(DateTimeZone.forID("Europe/London")),
       tvContent.end.withZone(DateTimeZone.forID("Europe/London")),
-      tvContent.category, tvContent.series.map(s => SeriesShort(s.serieTitle)),
+      tvContent.category, tvContent.series.map(s => SeriesShort(s.serieTitle, s.episodeTitle, s.seasonNumber, s.episodeNumber)),
       tvContent.film.map(p => FilmShort(p.title)),
       tvContent.program.map(p => ProgramShort(p.title)),
       tvContent.onTimeNow,

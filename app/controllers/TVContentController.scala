@@ -82,7 +82,10 @@ case class TVContentShort(channel: String,
   val uriTVContentDetails = controllers.routes.TVContentController.tvContentDetails(id.get.stringify).toString()
 }
 
-case class SeriesShort(serieTitle: String)
+case class SeriesShort(serieTitle: String,
+                       episodeTitle: Option[String],
+                       seasonNumber: Option[String],
+                       episodeNumber: Option[String])
 
 case class FilmShort(title: String)
 
@@ -95,7 +98,7 @@ object TVShort {
     tvContent.provider,
     tvContent.start,
     tvContent.end,
-    tvContent.category, tvContent.series.map(s => SeriesShort(s.serieTitle)),
+    tvContent.category, tvContent.series.map(s => SeriesShort(s.serieTitle, s.episodeTitle, s.seasonNumber, s.episodeNumber)),
     tvContent.film.map(f => FilmShort(f.title)),
     tvContent.program.map(p => ProgramShort(p.title)),
     tvContent.onTimeNow,
