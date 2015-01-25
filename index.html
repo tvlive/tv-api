@@ -37,6 +37,11 @@
       ga('send', 'pageview');
 
     </script>
+    <script>
+      $('#api-doc').on('click', function() {
+        ga('send', 'event', 'link', 'click', 'api-doc');
+      });
+    </script>
     <!-- End Google Analytics -->
   </head>
 
@@ -62,30 +67,30 @@
             <p class="lead"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> TV guide API for Freeview and Satellite television in UK </p>
             <p class="lead"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Mobile app under construction</p> 
             <p class="lead">
-              <a href="http://docs.tvlive.apiary.io" class="btn btn-lg btn-default" target="_blank">
+              <a id="api-doc" href="http://docs.tvlive.apiary.io" class="btn btn-lg btn-default" target="_blank">
                 Learn how to use it
               </a>
             </p>                 
             <p class="lead">
-              <a href="http://beta.tvlive.io/" class="btn btn-lg btn-default" target="_blank" onclick="ga('send','event','TVLIVE API','beta.tvlive.io')">
+              <a href="http://beta.tvlive.io/" class="btn btn-lg btn-default" target="_blank">
                 Start using beta.tvlive.io
               </a>
             </p>                                   
             <p class="lead">
-              <a href="http://mobile.tvlive.io/" class="btn btn-lg btn-default" target="_blank" onclick="ga('send','event','Mobile App','mobile.tvlive.io')">
+              <a href="http://mobile.tvlive.io/" class="btn btn-lg btn-default" target="_blank">
                 Use the mobile app prototype
               </a>
             </p>                                   
-           <a href="https://twitter.com/tvliveio" target="_blank" onclick="ga('send','event','TWITTER','twitter.com/tvliveio')">
+           <a href="https://twitter.com/tvliveio" target="_blank">
               <i class="fa fa-twitter-square fa-3x"></i>
             </a>
-           <a href="https://github.com/tvlive" target="_blank" onclick="ga('send','event','GITHUB','github.com/tvlive')">
+           <a href="https://github.com/tvlive" target="_blank">
               <i class="fa fa-github-square fa-3x"></i>
             </a>
-           <a href="https://www.linkedin.com/in/avilaplana2008" target="_blank" onclick="ga('send','event','LINKEDIN','www.linkedin.com/in/avilaplana2008')">
+           <a href="https://www.linkedin.com/in/avilaplana2008" target="_blank">
               <i class="fa fa-linkedin-square fa-3x"></i>
             </a>
-           <a href="mailto:alvaro.vilaplana@tvlive.io" onclick="ga('send','event','EMAIL','alvaro.vilaplana@tvlive.io')"><i class="fa fa-envelope fa-3x"></i>
+           <a href="mailto:alvaro.vilaplana@tvlive.io"><i class="fa fa-envelope fa-3x"></i>
            </a>
 
           </div>
