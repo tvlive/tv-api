@@ -38,11 +38,7 @@
       ga('send', 'pageview');
 
     </script>
-    <script>
-      $('#api-doc').on('click', function() {
-        ga('send', 'event', 'link', 'click', 'api-doc');
-      });
-    </script>
+    
     <!-- End Google Analytics -->
   </head>
 
@@ -73,31 +69,55 @@
               </a>
             </p>                 
             <p class="lead">
-              <a href="http://beta.tvlive.io/" class="btn btn-lg btn-default" target="_blank">
+              <a id="api-beta" href="http://beta.tvlive.io/" class="btn btn-lg btn-default" target="_blank">
                 Start using beta.tvlive.io
               </a>
             </p>                                   
             <p class="lead">
-              <a href="http://mobile.tvlive.io/" class="btn btn-lg btn-default" target="_blank">
+              <a id="mobile-app" href="http://mobile.tvlive.io/" class="btn btn-lg btn-default" target="_blank">
                 Use the mobile app prototype
               </a>
             </p>                                   
-           <a href="https://twitter.com/tvliveio" target="_blank">
+           <a id="twitter" href="https://twitter.com/tvliveio" target="_blank">
               <i class="fa fa-twitter-square fa-3x"></i>
             </a>
-           <a href="https://github.com/tvlive" target="_blank">
+           <a id="github" href="https://github.com/tvlive" target="_blank">
               <i class="fa fa-github-square fa-3x"></i>
             </a>
-           <a href="https://www.linkedin.com/in/avilaplana2008" target="_blank">
+           <a id="linkedin" href="https://www.linkedin.com/in/avilaplana2008" target="_blank">
               <i class="fa fa-linkedin-square fa-3x"></i>
             </a>
-           <a href="mailto:alvaro.vilaplana@tvlive.io"><i class="fa fa-envelope fa-3x"></i>
+           <a id="email" href="mailto:alvaro.vilaplana@tvlive.io"><i class="fa fa-envelope fa-3x"></i>
            </a>
 
           </div>
         </div>
 
       </div>
-    </div>    
+    </div>
+    <script>
+      $('#api-doc').on('click', function() {
+        ga('send', 'event', 'link', 'click', 'api-doc');
+      });
+      $('#api-beta').on('click', function() {
+        ga('send', 'event', 'link', 'click', 'api-beta');
+      });
+      $('#mobile-app').on('click', function() {
+        ga('send', 'event', 'link', 'click', 'mobile-app');
+      });
+      $('#twitter').on('click', function() {
+        ga('send', 'event', 'link', 'click', 'twitter');
+      });
+      $('#github').on('click', function() {
+        ga('send', 'event', 'link', 'click', 'github');
+      });
+      $('#linkedin').on('click', function() {
+        ga('send', 'event', 'link', 'click', 'linkedin');
+      });
+      $('#email').on('click', function() {
+        ga('send', 'event', 'link', 'click', 'email');
+      });
+
+    </script>    
   </body>
 </html>
