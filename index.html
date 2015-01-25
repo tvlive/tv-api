@@ -96,26 +96,36 @@
       </div>
     </div>
     <script>
+      function send_event(type){
+        ga('send', 'event', 'link', 'click', type);
+      }
+      
       $('#api-doc').on('click', function() {
-        ga('send', 'event', 'link', 'click', 'api-doc');
+        send_event('api-doc');
       });
+      
       $('#api-beta').on('click', function() {
-        ga('send', 'event', 'link', 'click', 'api-beta');
+        send_event('api-beta');
       });
+      
       $('#mobile-app').on('click', function() {
-        ga('send', 'event', 'link', 'click', 'mobile-app');
+        send_event('mobile-app');
       });
+
       $('#twitter').on('click', function() {
-        ga('send', 'event', 'link', 'click', 'twitter');
+        send_event('twitter');
       });
+
       $('#github').on('click', function() {
-        ga('send', 'event', 'link', 'click', 'github');
+        send_event('github');
       });
+
       $('#linkedin').on('click', function() {
-        ga('send', 'event', 'link', 'click', 'linkedin');
+        send_event('linkedin');
       });
+
       $('#email').on('click', function() {
-        ga('send', 'event', 'link', 'click', 'email');
+        send_event('email');
       });
 
     </script>    
