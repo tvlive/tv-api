@@ -62,11 +62,7 @@ package object models {
     def read(doc: BSONDocument): Series = {
       Series(
         doc.getAs[BSONString]("serieTitle").get.value,
-        doc.getAs[BSONString]("episodeTitle").map(_.value),
-        doc.getAs[BSONString]("description").map(_.value),
-        doc.getAs[BSONString]("seasonNumber").map(_.value),
-        doc.getAs[BSONString]("episodeNumber").map(_.value),
-        doc.getAs[BSONString]("totalNumber").map(_.value),
+        doc.getAs[BSONDocument]("episode").map(EpisodeBSONReader.read(_)),
         Option(doc.getAs[List[String]]("actors").toList.flatten)
       )
     }
@@ -77,15 +73,36 @@ package object models {
     override def write(t: Series): BSONDocument = {
       BSONDocument(
         "serieTitle" -> t.serieTitle,
-        "episodeTitle" -> t.episodeTitle,
-        "description" -> t.description,
-        "seasonNumber" -> t.seasonNumber,
-        "episodeNumber" -> t.episodeNumber,
-        "totalNumber" -> t.totalNumber,
+        "episode" -> t.episode,
         "actors" -> t.actors
       )
     }
   }
+
+  implicit object EpisodeBSONReader extends BSONDocumentReader[Episode] {
+    def read(doc: BSONDocument): Episode = {
+      Episode(
+        doc.getAs[BSONString]("episodeTitle").map(_.value),
+        doc.getAs[BSONString]("episodePlot").map(_.value),
+        doc.getAs[BSONString]("seasonNumber").map(_.value),
+        doc.getAs[BSONString]("episodeNumber").map(_.value),
+        doc.getAs[BSONString]("totalNumber").map(_.value))
+    }
+  }
+
+
+  implicit object EpisodeBSONWriter extends BSONDocumentWriter[Episode] {
+    override def write(t: Episode): BSONDocument = {
+      BSONDocument(
+        "episodeTitle" -> t.episodeTitle,
+        "episodePlot" -> t.episodePlot,
+        "seasonNumber" -> t.seasonNumber,
+        "episodeNumber" -> t.episodeNumber,
+        "totalNumber" -> t.totalNumber
+      )
+    }
+  }
+
 
   implicit object FilmBSONReader extends BSONDocumentReader[Film] {
     def read(doc: BSONDocument): Film = {

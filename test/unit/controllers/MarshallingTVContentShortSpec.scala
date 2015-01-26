@@ -16,7 +16,7 @@ class MarshallingTVContentShortSpec extends PlaySpec with MustMatchers {
   "Write and reads" should {
     "transform TVProgram object to json" in {
       Json.toJson(TVContentShort("bbc1", "/bbc1.png", List("FREEVIEW", "SKY"), now, now.plusHours(2), Some(List("documentary")),
-        Some(SeriesShort("titleSerie", Some("episodeTitle1"), Some("1"), Some("2"))),
+        Some(SeriesShort("titleSerie", Some(EpisodeShort(Some("episodeTitle1"), Some("1"), Some("2"))))),
         Some(FilmShort("titleFilm")),
         Some(ProgramShort("titleProgram")),
         true,
@@ -45,7 +45,7 @@ class MarshallingTVContentShortSpec extends PlaySpec with MustMatchers {
           now.withZone(DateTimeZone.forID("Europe/London")),
           now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")),
           Some(List("documentary")),
-          Some(SeriesShort("titleSerie",Some("episodeTitle1"),Some("1"), Some("2"))),
+          Some(SeriesShort("titleSerie",Some(EpisodeShort(Some("episodeTitle1"),Some("1"), Some("2"))))),
           Some(FilmShort("titleFilm")),
           Some(ProgramShort("titleProgram")),
           true,
