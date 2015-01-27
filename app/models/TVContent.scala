@@ -20,7 +20,7 @@ case class TVContent(channel: String,
 
   val onTimeNow = (start.isBeforeNow || start.isEqualNow) && (end.isAfterNow || end.isEqualNow)
 
-  val perCentTimeElapsed : Option[Long] = {
+  val perCentTimeElapsed: Option[Long] = {
     onTimeNow match {
       case true => {
         val initialDuration = new Duration(start, end).getStandardMinutes
@@ -30,25 +30,27 @@ case class TVContent(channel: String,
       case false => None
     }
   }
-  
+
   val channelImageURL = buildUrl(channel)
 }
 
 
 case class Series(serieTitle: String,
-                  episodeTitle: Option[String],
-                  description: Option[String],
-                  seasonNumber: Option[String],
-                  episodeNumber: Option[String],
-                  totalNumber: Option[String],
+                  episode: Option[Episode],
                   actors: Option[List[String]])
 
+case class Episode(episodeTitle: Option[String],
+                   episodePlot: Option[String],
+                   seasonNumber: Option[String],
+                   episodeNumber: Option[String],
+                   totalNumber: Option[String])
+
 case class Film(title: String,
-                description: Option[String],
+                plot: Option[String],
                 actors: Option[List[String]],
                 year: Option[String])
 
-case class Program(title: String, description: Option[String])
+case class Program(title: String, plot: Option[String])
 
 trait ContentRepository {
 

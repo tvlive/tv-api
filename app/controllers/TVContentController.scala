@@ -76,32 +76,47 @@ case class TVContentShort(channel: String,
                           film: Option[FilmShort],
                           program: Option[ProgramShort],
                           onTimeNow: Boolean,
-                          perCentTimeElapsed : Option[Long],
+                          perCentTimeElapsed: Option[Long],
                           id: Option[BSONObjectID] = Some(BSONObjectID.generate)) {
 
   val uriTVContentDetails = controllers.routes.TVContentController.tvContentDetails(id.get.stringify).toString()
 }
 
 case class SeriesShort(serieTitle: String,
-                       episodeTitle: Option[String],
-                       seasonNumber: Option[String],
-                       episodeNumber: Option[String])
+                       episode: Option[EpisodeShort])
+
+case class EpisodeShort(episodeTitle: Option[String],
+                        seasonNumber: Option[String],
+                        episodeNumber: Option[String])
 
 case class FilmShort(title: String)
 
 case class ProgramShort(title: String)
 
 object TVShort {
-  def apply(tvContent: TVContent): TVContentShort = TVContentShort(
-    tvContent.channel,
-    tvContent.channelImageURL,
-    tvContent.provider,
-    tvContent.start,
-    tvContent.end,
-    tvContent.category, tvContent.series.map(s => SeriesShort(s.serieTitle, s.episodeTitle, s.seasonNumber, s.episodeNumber)),
-    tvContent.film.map(f => FilmShort(f.title)),
-    tvContent.program.map(p => ProgramShort(p.title)),
-    tvContent.onTimeNow,
-    tvContent.perCentTimeElapsed,
-    tvContent.id)
+  def apply(tvContent: TVContent): TVContentShort = {
+    val episode = for {
+      s <- tvContent.series
+      e <- s.episode
+    } yield (e.episodeTitle, e.seasonNumber, e.episodeNumber)
+
+    val es = episode match {
+      case None => None
+      case Some((et, sn, en)) => Some(EpisodeShort(et, sn, en))
+    }
+
+      TVContentShort(
+        tvContent.channel,
+        tvContent.channelImageURL,
+        tvContent.provider,
+        tvContent.start,
+        tvContent.end,
+        tvContent.category,
+        tvContent.series.map(s => SeriesShort(s.serieTitle, es)),
+        tvContent.film.map(f => FilmShort(f.title)),
+        tvContent.program.map(p => ProgramShort(p.title)),
+        tvContent.onTimeNow,
+        tvContent.perCentTimeElapsed,
+        tvContent.id)
+  }
 }
