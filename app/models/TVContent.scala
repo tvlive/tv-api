@@ -12,7 +12,7 @@ case class TVContent(channel: String,
                      provider: List[String],
                      start: DateTime,
                      end: DateTime,
-                     category: Option[List[String]],
+                     category: List[String],
                      series: Option[Series],
                      film: Option[Film],
                      program: Option[Program],
@@ -37,7 +37,18 @@ case class TVContent(channel: String,
 
 case class Series(serieTitle: String,
                   episode: Option[Episode],
-                  actors: Option[List[String]])
+                  actors: List[String],
+                  writer: List[String],
+                  director: List[String],
+                  genre: List[String],
+                  language: Option[String],
+                  country: Option[String],
+                  rating: Option[String],
+                  awards: Option[String],
+                  poster: Option[String],
+                  plot: Option[String],
+                  year: Option[String],
+                  imdbId: Option[String])
 
 case class Episode(episodeTitle: Option[String],
                    episodePlot: Option[String],
@@ -46,9 +57,19 @@ case class Episode(episodeTitle: Option[String],
                    totalNumber: Option[String])
 
 case class Film(title: String,
+                actors: List[String],
+                writer: List[String],
+                director: List[String],
+                genre: List[String],
+                language: Option[String],
+                country: Option[String],
+                rating: Option[String],
+                awards: Option[String],
+                poster: Option[String],
                 plot: Option[String],
-                actors: Option[List[String]],
-                year: Option[String])
+                year: Option[String],
+                imdbId: Option[String])
+
 
 case class Program(title: String, plot: Option[String])
 

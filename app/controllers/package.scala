@@ -65,7 +65,7 @@ package object controllers {
       (__ \ "provider").read[List[String]] and
       (__ \ "start").read[DateTime].map[DateTime]{ dt => dt.withZoneRetainFields(DateTimeZone.forID("Europe/London"))} and
       (__ \ "end").read[DateTime].map[DateTime](dt => dt.withZoneRetainFields(DateTimeZone.forID("Europe/London"))) and
-      (__ \ "category").read[Option[List[String]]] and
+      (__ \ "category").read[List[String]] and
       (__ \ "series").read[Option[Series]] and
       (__ \ "film").read[Option[Film]] and
       (__ \ "program").read[Option[Program]] and
@@ -95,7 +95,7 @@ package object controllers {
     (__ \ "provider").read[List[String]] and
       (__ \ "start").read[DateTime].map[DateTime](dt => dt.withZoneRetainFields(DateTimeZone.forID("Europe/London"))) and
       (__ \ "end").read[DateTime].map[DateTime](dt => dt.withZoneRetainFields(DateTimeZone.forID("Europe/London"))) and
-      (__ \ "category").read[Option[List[String]]] and
+      (__ \ "category").read[List[String]] and
       (__ \ "series").read[Option[SeriesShort]] and
       (__ \ "film").read[Option[FilmShort]] and
       (__ \ "program").read[Option[ProgramShort]] and

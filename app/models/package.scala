@@ -32,7 +32,7 @@ package object models {
         doc.getAs[List[String]]("provider").toList.flatten,
         new DateTime(doc.getAs[BSONDateTime]("start").get.value, DateTimeZone.forID("UTC")),
         new DateTime(doc.getAs[BSONDateTime]("end").get.value, DateTimeZone.forID("UTC")),
-        Option(doc.getAs[List[String]]("category").toList.flatten),
+        doc.getAs[List[String]]("category").toList.flatten,
         doc.getAs[BSONDocument]("series").map(SerieBSONReader.read(_)),
         doc.getAs[BSONDocument]("film").map(FilmBSONReader.read(_)),
         doc.getAs[BSONDocument]("program").map(ProgramBSONReader.read(_)),
@@ -63,8 +63,18 @@ package object models {
       Series(
         doc.getAs[BSONString]("serieTitle").get.value,
         doc.getAs[BSONDocument]("episode").map(EpisodeBSONReader.read(_)),
-        Option(doc.getAs[List[String]]("actors").toList.flatten)
-      )
+        doc.getAs[List[String]]("actors").toList.flatten,
+        doc.getAs[List[String]]("writer").toList.flatten,
+        doc.getAs[List[String]]("director").toList.flatten,
+        doc.getAs[List[String]]("genre").toList.flatten,
+        doc.getAs[BSONString]("language").map(_.value),
+        doc.getAs[BSONString]("country").map(_.value),
+        doc.getAs[BSONString]("rating").map(_.value),
+        doc.getAs[BSONString]("awards").map(_.value),
+        doc.getAs[BSONString]("poster").map(_.value),
+        doc.getAs[BSONString]("plot").map(_.value),
+        doc.getAs[BSONString]("year").map(_.value),
+        doc.getAs[BSONString]("imdbId").map(_.value))
     }
   }
 
@@ -74,7 +84,17 @@ package object models {
       BSONDocument(
         "serieTitle" -> t.serieTitle,
         "episode" -> t.episode,
-        "actors" -> t.actors
+        "actors" -> t.actors,
+        "writer" -> t.writer,
+        "director" -> t.director,
+        "genre" -> t.genre,
+        "language" -> t.language,
+        "country" -> t.country,
+        "rating" -> t.rating,
+        "awards" -> t.awards,
+        "poster" -> t.poster,
+        "plot" -> t.plot,
+        "year" -> t.year
       )
     }
   }
@@ -98,8 +118,7 @@ package object models {
         "episodePlot" -> t.episodePlot,
         "seasonNumber" -> t.seasonNumber,
         "episodeNumber" -> t.episodeNumber,
-        "totalNumber" -> t.totalNumber
-      )
+        "totalNumber" -> t.totalNumber)
     }
   }
 
@@ -108,10 +127,18 @@ package object models {
     def read(doc: BSONDocument): Film = {
       Film(
         doc.getAs[BSONString]("title").get.value,
+        doc.getAs[List[String]]("actors").toList.flatten,
+        doc.getAs[List[String]]("writer").toList.flatten,
+        doc.getAs[List[String]]("director").toList.flatten,
+        doc.getAs[List[String]]("genre").toList.flatten,
+        doc.getAs[BSONString]("language").map(_.value),
+        doc.getAs[BSONString]("country").map(_.value),
+        doc.getAs[BSONString]("rating").map(_.value),
+        doc.getAs[BSONString]("awards").map(_.value),
+        doc.getAs[BSONString]("poster").map(_.value),
         doc.getAs[BSONString]("plot").map(_.value),
-        Option(doc.getAs[List[String]]("actors").toList.flatten),
-        doc.getAs[BSONString]("year").map(_.value)
-      )
+        doc.getAs[BSONString]("year").map(_.value),
+        doc.getAs[BSONString]("imdbId").map(_.value))
     }
   }
 
@@ -122,8 +149,16 @@ package object models {
         "title" -> t.title,
         "plot" -> t.plot,
         "actors" -> t.actors,
-        "year" -> t.year
-      )
+        "writer" -> t.writer,
+        "director" -> t.director,
+        "genre" -> t.genre,
+        "language" -> t.language,
+        "country" -> t.country,
+        "rating" -> t.rating,
+        "awards" -> t.awards,
+        "poster" -> t.poster,
+        "plot" -> t.plot,
+        "year" -> t.year)
     }
   }
 
