@@ -19,7 +19,6 @@ class MarshallingProgramSpec extends PlaySpec with MustMatchers {
     provider = List("FREEVIEW", "SKY"),
     start = now,
     end = now.plusHours(2),
-    category = List("documentary"),
     program = Some(Program(
       title = "program3",
       plot = Some("plot3"))),
@@ -35,7 +34,6 @@ class MarshallingProgramSpec extends PlaySpec with MustMatchers {
       (tvContentJson \ "channel").as[String] mustBe "bbc1"
       (tvContentJson \ "channelImageURL").as[String] mustBe "/bbc1.png"
       (tvContentJson \ "provider").as[List[String]] mustBe Seq("FREEVIEW", "SKY")
-      (tvContentJson \ "category").as[List[String]] mustBe Seq("documentary")
       (tvContentJson \ "start").as[String] mustBe s"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}"
       (tvContentJson \ "end").as[String] mustBe s"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}"
       (tvContentJson \ "program" \ "title").as[String] mustBe "program3"
@@ -50,7 +48,6 @@ class MarshallingProgramSpec extends PlaySpec with MustMatchers {
         |"provider":["FREEVIEW","SKY"],
         |"start":"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}",
         |"end":"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}",
-        |"category":["documentary"],
         |"program":{
         | "title":"program3",
         | "plot":"plot3"},

@@ -18,7 +18,6 @@ class MarshallingTVContentShortSpec extends PlaySpec with MustMatchers {
     provider = List("FREEVIEW", "SKY"),
     start = now,
     end = now.plusHours(2),
-    category = List("documentary"),
     series = Some(SeriesShort("titleSerie", Some(EpisodeShort(Some("episodeTitle1"), Some("1"), Some("2"))), Some("7"))),
     film = Some(FilmShort("titleFilm", Some("8"))),
     program = Some(ProgramShort("titleProgram")),
@@ -34,7 +33,6 @@ class MarshallingTVContentShortSpec extends PlaySpec with MustMatchers {
       (tvContentJson \ "provider").as[List[String]] mustBe Seq("FREEVIEW", "SKY")
       (tvContentJson \ "start").as[String] mustBe s"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}"
       (tvContentJson \ "end").as[String] mustBe s"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}"
-      (tvContentJson \ "category").as[List[String]] mustBe Seq("documentary")
       (tvContentJson \ "series" \ "serieTitle").as[String] mustBe "titleSerie"
       (tvContentJson \ "series" \ "episode" \ "episodeTitle").as[String] mustBe "episodeTitle1"
       (tvContentJson \ "series" \ "episode" \ "seasonNumber").as[String] mustBe "1"
@@ -56,7 +54,6 @@ class MarshallingTVContentShortSpec extends PlaySpec with MustMatchers {
           |"provider":["FREEVIEW","SKY"],
           |"start":"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}",
           |"end":"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}",
-          |"category":["documentary"],
           |"series":{
           | "serieTitle":"titleSerie",
           | "episode":{"episodeTitle":"episodeTitle1","seasonNumber":"1","episodeNumber":"2"},

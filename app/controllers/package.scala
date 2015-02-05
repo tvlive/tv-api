@@ -65,7 +65,6 @@ package object controllers {
       (__ \ "provider").read[List[String]] and
       (__ \ "start").read[DateTime].map[DateTime]{ dt => dt.withZoneRetainFields(DateTimeZone.forID("Europe/London"))} and
       (__ \ "end").read[DateTime].map[DateTime](dt => dt.withZoneRetainFields(DateTimeZone.forID("Europe/London"))) and
-      (__ \ "category").read[List[String]] and
       (__ \ "series").read[Option[Series]] and
       (__ \ "film").read[Option[Film]] and
       (__ \ "program").read[Option[Program]] and
@@ -79,7 +78,6 @@ package object controllers {
       "provider" -> tvContent.provider,
       "start" -> tvContent.start.toDateTime(DateTimeZone.forID("Europe/London")),
       "end" -> tvContent.end.toDateTime(DateTimeZone.forID("Europe/London")),
-      "category" -> tvContent.category,
       "series" -> tvContent.series,
       "film" -> tvContent.film,
       "program" -> tvContent.program,
@@ -95,7 +93,6 @@ package object controllers {
     (__ \ "provider").read[List[String]] and
       (__ \ "start").read[DateTime].map[DateTime](dt => dt.withZoneRetainFields(DateTimeZone.forID("Europe/London"))) and
       (__ \ "end").read[DateTime].map[DateTime](dt => dt.withZoneRetainFields(DateTimeZone.forID("Europe/London"))) and
-      (__ \ "category").read[List[String]] and
       (__ \ "series").read[Option[SeriesShort]] and
       (__ \ "film").read[Option[FilmShort]] and
       (__ \ "program").read[Option[ProgramShort]] and
@@ -112,7 +109,6 @@ package object controllers {
       "provider" -> tvContentShort.provider,
       "start" -> tvContentShort.start.toDateTime(DateTimeZone.forID("Europe/London")),
       "end" -> tvContentShort.end.toDateTime(DateTimeZone.forID("Europe/London")),
-      "category" -> tvContentShort.category,
       "series" -> tvContentShort.series,
       "film" -> tvContentShort.film,
       "program" -> tvContentShort.program,

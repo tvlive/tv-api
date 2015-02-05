@@ -18,7 +18,6 @@ class MarshallingSeriesSpec extends PlaySpec with MustMatchers {
     provider = List("FREEVIEW", "SKY"),
     start = now,
     end = now.plusHours(2),
-    category = List("documentary"),
     series = Some(Series("serie1",
       episode = Some(Episode(
         episodeTitle = Some("et1"),
@@ -50,7 +49,6 @@ class MarshallingSeriesSpec extends PlaySpec with MustMatchers {
       (tvContentJson \ "channel").as[String] mustBe "bbc1"
       (tvContentJson \ "channelImageURL").as[String] mustBe "/bbc1.png"
       (tvContentJson \ "provider").as[List[String]] mustBe Seq("FREEVIEW", "SKY")
-      (tvContentJson \ "category").as[List[String]] mustBe Seq("documentary")
       (tvContentJson \ "start").as[String] mustBe s"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}"
       (tvContentJson \ "end").as[String] mustBe s"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}"
       (tvContentJson \ "series" \ "serieTitle").as[String] mustBe "serie1"
@@ -81,7 +79,6 @@ class MarshallingSeriesSpec extends PlaySpec with MustMatchers {
        |"provider":["FREEVIEW","SKY"],
        |"start":"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}",
        |"end":"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}",
-       |"category":["documentary"],
        |"series":{
        |  "serieTitle":"serie1",
        |  "episode":{

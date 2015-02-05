@@ -25,7 +25,6 @@ object DomainBuilder {
         tvContent.provider,
         tvContent.start.withZone(DateTimeZone.forID("Europe/London")),
         tvContent.end.withZone(DateTimeZone.forID("Europe/London")),
-        tvContent.category,
         tvContent.series.map(s => SeriesShort(s.serieTitle, es, s.rating)),
         tvContent.film.map(p => FilmShort(p.title, p.rating)),
         tvContent.program.map(p => ProgramShort(p.title)),

@@ -423,51 +423,51 @@ trait TVContentSetUpTest extends MockitoSugar {
 
   val fakeNow = new DateTime(2014, 4, 4, 10, 0, 0, DateTimeZone.forID("UTC"))
 
-  val tvProgram1 = TVContent("CHANNEL1", List("FREEVIEW", "SKY"), fakeNow.minusHours(3), fakeNow.minusHours(2), List("program_type1", "ENTERTAINMENT"),
+  val tvProgram1 = TVContent("CHANNEL1", List("FREEVIEW", "SKY"), fakeNow.minusHours(3), fakeNow.minusHours(2),
     Some(Series("serie1", Some(Episode(Some("ep1"), None, None, None, None)), List(), List(), List(),  List(), List(), None,  None, None, None, None, None, None)), None, None,
     Some(BSONObjectID.generate))
 
-  val tvProgram2 = TVContent("CHANNEL1", List("SKY"), fakeNow.minusHours(2), fakeNow.minusHours(1), List("program_type2", "SPORTS"),
+  val tvProgram2 = TVContent("CHANNEL1", List("SKY"), fakeNow.minusHours(2), fakeNow.minusHours(1),
     Some(Series("serie1", Some(Episode(Some("ep1"), None, None, None, None)), List(), List(), List(),  List(), List(), None,  None, None, None, None, None, None)), None, None,
     Some(BSONObjectID.generate))
 
-  val tvProgram3 = TVContent("CHANNEL1", List("FREEVIEW", "SKY"), fakeNow.minusHours(1), fakeNow.plusHours(1), List("program_type3", "ENTERTAINMENT"),
+  val tvProgram3 = TVContent("CHANNEL1", List("FREEVIEW", "SKY"), fakeNow.minusHours(1), fakeNow.plusHours(1),
     None,
     Some(Film("program1", List(), List(), List(), List(),  List(), None, None, None, None, None, None, None)),
     None,
     Some(BSONObjectID.generate))
 
-  val tvProgram4 = TVContent("CHANNEL1", List("FREEVIEW", "SKY"), fakeNow.plusHours(1), fakeNow.plusHours(3), List("program_type4", "SPORTS"),
+  val tvProgram4 = TVContent("CHANNEL1", List("FREEVIEW", "SKY"), fakeNow.plusHours(1), fakeNow.plusHours(3),
     None,
     Some(Film("program1", List(), List(), List(), List(),  List(), None, None, None, None, None, None, None)),
     None,
     Some(BSONObjectID.generate))
 
-  val tvProgram5 = TVContent("CHANNEL1", List("FREEVIEW", "SKY"), fakeNow.plusHours(3), fakeNow.plusHours(4), List("HORROR", "program_type5"),
+  val tvProgram5 = TVContent("CHANNEL1", List("FREEVIEW", "SKY"), fakeNow.plusHours(3), fakeNow.plusHours(4),
     None,
     None,
     Some(Program("p5", Some("d5"))),
     Some(BSONObjectID.generate))
 
-  val tvProgram6 = TVContent("CHANNEL 3", List("SKY"), fakeNow.plusHours(3), fakeNow.plusHours(5), List("HORROR"),
+  val tvProgram6 = TVContent("CHANNEL 3", List("SKY"), fakeNow.plusHours(3), fakeNow.plusHours(5), 
     None,
     None,
     Some(Program("p6", Some("d6"))),
     Some(BSONObjectID.generate))
 
-  val tvProgram7 = TVContent("CHANNEL4", List("FREEVIEW", "SKY"), fakeNow.minusHours(1), fakeNow.plusHours(2), List("program_type3", "SPORTS"),
+  val tvProgram7 = TVContent("CHANNEL4", List("FREEVIEW", "SKY"), fakeNow.minusHours(1), fakeNow.plusHours(2),
     Some(Series("serie1", Some(Episode(Some("ep1"), None, None, None, None)), List(), List(), List(), List(), List(), None, None, None, None, None, None, None)),
     None,
     None,
     Some(BSONObjectID.generate))
 
-  val tvProgram8 = TVContent("CHANNEL5", List("FREEVIEW", "SKY"), fakeNow.minusHours(1), fakeNow.plusHours(2), List("program_type8", "SPORTS"),
+  val tvProgram8 = TVContent("CHANNEL5", List("FREEVIEW", "SKY"), fakeNow.minusHours(1), fakeNow.plusHours(2),
     None,
     Some(Film("program1", List(), List(), List(), List(),  List(), None, None, None, None,None, None, None)),
     None,
     Some(BSONObjectID.generate))
 
-  val tvProgram9 = TVContent("CHANNEL5", List("FREEVIEW", "SKY"), fakeNow.minusHours(4), fakeNow.plusHours(5), List("program_type8", "HORROR"),
+  val tvProgram9 = TVContent("CHANNEL5", List("FREEVIEW", "SKY"), fakeNow.minusHours(4), fakeNow.plusHours(5),
     None,
     None,
     Some(Program("p9", Some("d9"))),

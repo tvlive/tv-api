@@ -32,7 +32,6 @@ package object models {
         doc.getAs[List[String]]("provider").toList.flatten,
         new DateTime(doc.getAs[BSONDateTime]("start").get.value, DateTimeZone.forID("UTC")),
         new DateTime(doc.getAs[BSONDateTime]("end").get.value, DateTimeZone.forID("UTC")),
-        doc.getAs[List[String]]("category").toList.flatten,
         doc.getAs[BSONDocument]("series").map(SerieBSONReader.read(_)),
         doc.getAs[BSONDocument]("film").map(FilmBSONReader.read(_)),
         doc.getAs[BSONDocument]("program").map(ProgramBSONReader.read(_)),
@@ -49,7 +48,6 @@ package object models {
         "provider" -> t.provider,
         "start" -> new BSONDateTime(t.start.getMillis),
         "end" -> new BSONDateTime(t.end.getMillis),
-        "category" -> t.category,
         "series" -> t.series.map(SerieBSONWriter.write(_)),
         "film" -> t.film.map(FilmBSONWriter.write(_)),
         "program" -> t.program.map(ProgramBSONWriter.write(_))
