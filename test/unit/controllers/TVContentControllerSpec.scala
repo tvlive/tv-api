@@ -424,22 +424,22 @@ trait TVContentSetUpTest extends MockitoSugar {
   val fakeNow = new DateTime(2014, 4, 4, 10, 0, 0, DateTimeZone.forID("UTC"))
 
   val tvProgram1 = TVContent("CHANNEL1", List("FREEVIEW", "SKY"), fakeNow.minusHours(3), fakeNow.minusHours(2), List("program_type1", "ENTERTAINMENT"),
-    Some(Series("serie1", Some(Episode(Some("ep1"), None, None, None, None)), List(), List(), List(),  List(), None, None,  None, None, None, None, None, None)), None, None,
+    Some(Series("serie1", Some(Episode(Some("ep1"), None, None, None, None)), List(), List(), List(),  List(), List(), None,  None, None, None, None, None, None)), None, None,
     Some(BSONObjectID.generate))
 
   val tvProgram2 = TVContent("CHANNEL1", List("SKY"), fakeNow.minusHours(2), fakeNow.minusHours(1), List("program_type2", "SPORTS"),
-    Some(Series("serie1", Some(Episode(Some("ep1"), None, None, None, None)), List(), List(), List(),  List(), None, None,  None, None, None, None, None, None)), None, None,
+    Some(Series("serie1", Some(Episode(Some("ep1"), None, None, None, None)), List(), List(), List(),  List(), List(), None,  None, None, None, None, None, None)), None, None,
     Some(BSONObjectID.generate))
 
   val tvProgram3 = TVContent("CHANNEL1", List("FREEVIEW", "SKY"), fakeNow.minusHours(1), fakeNow.plusHours(1), List("program_type3", "ENTERTAINMENT"),
     None,
-    Some(Film("program1", List(), List(), List(), List(), None, None, None, None, None, None, None, None)),
+    Some(Film("program1", List(), List(), List(), List(),  List(), None, None, None, None, None, None, None)),
     None,
     Some(BSONObjectID.generate))
 
   val tvProgram4 = TVContent("CHANNEL1", List("FREEVIEW", "SKY"), fakeNow.plusHours(1), fakeNow.plusHours(3), List("program_type4", "SPORTS"),
     None,
-    Some(Film("program1", List(), List(), List(), List(), None, None, None, None, None, None, None, None)),
+    Some(Film("program1", List(), List(), List(), List(),  List(), None, None, None, None, None, None, None)),
     None,
     Some(BSONObjectID.generate))
 
@@ -456,14 +456,14 @@ trait TVContentSetUpTest extends MockitoSugar {
     Some(BSONObjectID.generate))
 
   val tvProgram7 = TVContent("CHANNEL4", List("FREEVIEW", "SKY"), fakeNow.minusHours(1), fakeNow.plusHours(2), List("program_type3", "SPORTS"),
-    Some(Series("serie1", Some(Episode(Some("ep1"), None, None, None, None)), List(), List(), List(), List(), None, None, None, None, None, None, None, None)),
+    Some(Series("serie1", Some(Episode(Some("ep1"), None, None, None, None)), List(), List(), List(), List(), List(), None, None, None, None, None, None, None)),
     None,
     None,
     Some(BSONObjectID.generate))
 
   val tvProgram8 = TVContent("CHANNEL5", List("FREEVIEW", "SKY"), fakeNow.minusHours(1), fakeNow.plusHours(2), List("program_type8", "SPORTS"),
     None,
-    Some(Film("program1", List(), List(), List(), List(), None, None, None, None, None,None, None, None)),
+    Some(Film("program1", List(), List(), List(), List(),  List(), None, None, None, None,None, None, None)),
     None,
     Some(BSONObjectID.generate))
 
