@@ -1,0 +1,5 @@
+root.uri=List of all the channels
+provider.list.uri=List of all the channel TV providers
+category.list.uri=List of all the channel TV categories
+provider.uri=List of channels by provider: {0}
+category.uri=List of channels by category: {0}

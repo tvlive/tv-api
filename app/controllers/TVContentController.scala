@@ -83,13 +83,13 @@ case class TVContentShort(channel: String,
 
 case class SeriesShort(serieTitle: String,
                        episode: Option[EpisodeShort],
-                       rating: Option[String])
+                       rating: Option[Double])
 
 case class EpisodeShort(episodeTitle: Option[String],
                         seasonNumber: Option[String],
                         episodeNumber: Option[String])
 
-case class FilmShort(title: String, rating: Option[String])
+case class FilmShort(title: String, rating: Option[Double])
 
 case class ProgramShort(title: String)
 

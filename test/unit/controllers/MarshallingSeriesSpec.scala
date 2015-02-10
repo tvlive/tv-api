@@ -31,7 +31,7 @@ class MarshallingSeriesSpec extends PlaySpec with MustMatchers {
       genre = List("cat1"),
       country = List("count1"),
       language = Some("lang1"),
-      rating = Some("7"),
+      rating = Some(7),
       awards = Some("awards"),
       poster = Some("poster1"),
       plot = Some("plot1"),
@@ -63,7 +63,7 @@ class MarshallingSeriesSpec extends PlaySpec with MustMatchers {
       (tvContentJson \ "series" \ "genre").as[List[String]] mustBe Seq("cat1")
       (tvContentJson \ "series" \ "country").as[List[String]] mustBe Seq("count1")
       (tvContentJson \ "series" \ "language").as[String] mustBe "lang1"
-      (tvContentJson \ "series" \ "rating").as[String] mustBe "7"
+      (tvContentJson \ "series" \ "rating").as[Double] mustBe 7
       (tvContentJson \ "series" \ "awards").as[String] mustBe "awards"
       (tvContentJson \ "series" \ "poster").as[String] mustBe "poster1"
       (tvContentJson \ "series" \ "plot").as[String] mustBe "plot1"
@@ -93,7 +93,7 @@ class MarshallingSeriesSpec extends PlaySpec with MustMatchers {
        |    "genre":["cat1"],
        |    "country":["count1"],
        |    "language":"lang1",
-       |    "rating":"7",
+       |    "rating":7,
        |    "awards":"awards",
        |    "poster":"poster1",
        |    "plot":"plot1",
