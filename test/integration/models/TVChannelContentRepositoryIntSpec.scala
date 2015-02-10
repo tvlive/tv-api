@@ -24,58 +24,74 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
   tvContentRepository.drop()
   Thread.sleep(5000)
 
-  val p1 = TVContent("channel1", List("FREEVIEW", "SKY"), current.minusHours(4), current.minusHours(2),
-    Some(Series("serie1", Some(Episode(Some("ep1"), None, None, None, None)), List("actor1"),
-      List(), List(), List(), List(), None, None, None, None, None, None, None)),
-    None,
-    None)
+  object Channel1 {
+    val series1 = TVContent("channel1", List("FREEVIEW", "SKY"), current.minusHours(4), current.minusHours(2),
+      Some(Series("serie1", Some(Episode(Some("ep1"), None, None, None, None)), List("actor1"),
+        List(), List(), List(), List(), None, None, None, None, None, None, None)),
+      None,
+      None)
 
-  val p2 = TVContent("channel1", List("FREEVIEW", "SKY"), current.minusHours(2), current,
-    Some(Series("serie2", Some(Episode(Some("ep1"), None, None, None, None)), List("actor1"),
-      List(), List(), List(), List(), None, None, None, None, None, None, None)),
-    None,
-    None)
+    val series2 = TVContent("channel1", List("FREEVIEW", "SKY"), current.minusHours(2), current,
+      Some(Series("serie2", Some(Episode(Some("ep1"), None, None, None, None)), List("actor1"),
+        List(), List(), List(), List(), None, None, None, None, None, None, None)),
+      None,
+      None)
 
-  val p7 = TVContent("channel2", List("FREEVIEW", "SKY"), current.minusHours(5), current,
-    Some(Series("serie2", Some(Episode(Some("ep1"), None, None, None, None)), List("actor1"),
-      List(), List(), List(), List(), None, None, None, None, None, None, None)),
-    None,
-    None)
+    val film1 = TVContent("channel1", List("FREEVIEW", "SKY"), current, current.plusHours(1),
+      None,
+      Some(Film("film1", List("actor5"), List(), List(), List(), List(), None, Some(7), None, None, None, None, None)),
+      None)
 
-  val p3 = TVContent("channel1", List("FREEVIEW", "SKY"), current, current.plusHours(1),
-    None,
-    Some(Film("program1", List("actor5"),List(), List(), List(), List(), None, None, None, None, None, None, None)),
-    None)
+    val film2 = TVContent("channel1", List("FREEVIEW", "SKY"), current.plusHours(1), current.plusHours(3),
+      None,
+      Some(Film("film2", List("actor1"), List(), List(), List(), List(), None, None, None, None, None, None, None)),
+      None)
 
-  val p4 = TVContent("channel1", List("FREEVIEW", "SKY"), current.plusHours(1), current.plusHours(3),
-    None,
-    Some(Film("program1", List("actor1"), List(), List(), List(), List(), None, None, None, None, None, None, None)),
-    None)
+    val program1 = TVContent("channel1", List("FREEVIEW", "SKY"), current.plusHours(3), current.plusHours(5),
+      None,
+      None,
+      Some(Program("p5", Some("d5"))))
 
-  val p8 = TVContent("channel2", List("FREEVIEW", "SKY"), current, current.plusHours(3),
-    None,
-    Some(Film("program1", List("actor1"), List(), List(), List(), List(), None, None, None, None, None, None, None)),
-    None)
+    val program2 = TVContent("channel1", List("FREEVIEW", "SKY"), current.plusHours(5), current.plusHours(7),
+      None,
+      None,
+      Some(Program("p6", Some("d6"))))
+  }
 
-  val p5 = TVContent("channel1", List("FREEVIEW", "SKY"), current.plusHours(3), current.plusHours(5),
-    None,
-    None,
-    Some(Program("p5", Some("d5"))))
+  object Channel2 {
+    val series3 = TVContent("channel2", List("FREEVIEW", "SKY"), current.minusHours(5), current,
+      Some(Series("serie2", Some(Episode(Some("ep1"), None, None, None, None)), List("actor1"),
+        List(), List(), List(), List(), None, None, None, None, None, None, None)),
+      None,
+      None)
 
-  val p6 = TVContent("channel1", List("FREEVIEW", "SKY"), current.plusHours(5), current.plusHours(7),
-    None,
-    None,
-    Some(Program("p6", Some("d6"))))
+    val film3 = TVContent("channel2", List("FREEVIEW", "SKY"), current, current.plusHours(3),
+      None,
+      Some(Film("film3", List("actor1"), List(), List(), List(), List(), None, None, None, None, None, None, None)),
+      None)
 
-  val p9 = TVContent("channel2", List("FREEVIEW", "SKY"), current.plusHours(2), current.plusHours(7),
-    None,
-    None,
-    Some(Program("p6", Some("d6"))))
+    val program3 = TVContent("channel2", List("FREEVIEW", "SKY"), current.plusHours(2), current.plusHours(7),
+      None,
+      None,
+      Some(Program("p6", Some("d6"))))
+  }
+
+  object Channel3 {
+    val film4 = TVContent("channel2", List("FREEVIEW", "SKY"), current, current.plusHours(3),
+      None,
+      Some(Film("film4", List("actor1"), List(), List(), List(), List(), None, Some(8), None, None, None, None, None)),
+      None)
+  }
+
 
 
   before {
-    whenReady(tvContentRepository.insertBulk(Enumerator(p1, p2, p3, p4, p5, p6, p7, p8, p9))) {
-      response => response mustBe 9
+    import Channel1._
+    import Channel2._
+    import Channel3._
+    whenReady(tvContentRepository.insertBulk(
+      Enumerator(series1, series2, film1, film2, program1, program2, series3, film3, program3, film4))) {
+      response => response mustBe 10
     }
   }
 
@@ -85,35 +101,39 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
     }
   }
 
+
   "findDayContentByChannel" should {
-    "return all the TV content for a particular channel available today" in {
+    "return all the TV content for channel1 available today" in {
       whenReady(tvContentRepository.findDayContentByChannel("channel1")) {
-        _ mustBe Seq(p1, p2, p3, p4, p5, p6)
+        import Channel1._
+        _ mustBe Seq(series1, series2, film1, film2, program1, program2)
       }
     }
   }
 
   "findCurrentContentByChannel" should {
-    "return the TV content for a particular channel available now" in {
-
+    "return the TV content for channel1 available now" in {
       whenReady(tvContentRepository.findCurrentContentByChannel("channel1")) {
-        _ mustBe Some(p3)
+        import Channel1._
+        _ mustBe Some(film1)
       }
     }
   }
 
   "findLeftContentByChannel" should {
-    "return the TV content for a particular channel available from now until the end of the day" in {
+    "return the TV content for channel 1 available from now until the end of the day" in {
       whenReady(tvContentRepository.findLeftContentByChannel("channel1")) {
-        _ mustBe Seq(p3, p4, p5, p6)
+        import Channel1._
+        _ mustBe Seq(film1, film2, program1, program2)
       }
     }
   }
 
   "findContentByID" should {
     "return some TV Content for a particular ID" in {
-      whenReady(tvContentRepository.findContentByID(p1.id.get.stringify)) {
-        _.get mustBe p1
+      import Channel1._
+      whenReady(tvContentRepository.findContentByID(series1.id.get.stringify)) {
+        _.get mustBe series1
       }
     }
 
@@ -127,19 +147,19 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
   "findDayContentByTypeAndProvider" should {
     "return all the TV content for a type series and provider FREEVIEW" in {
       whenReady(tvContentRepository.findDayContentByTypeAndProvider("series", "FREEVIEW")) {
-        _ mustBe Seq(p7, p1, p2)
+        _ mustBe Seq(Channel2.series3, Channel1.series1, Channel1.series2)
       }
     }
 
     "return all the TV content for a type film and provider FREEVIEW" in {
       whenReady(tvContentRepository.findDayContentByTypeAndProvider("film", "FREEVIEW")) {
-        _ mustBe Seq(p3, p8, p4)
+        _ mustBe Seq(Channel1.film1, Channel2.film3, Channel3.film4, Channel1.film2)
       }
     }
 
     "return all the TV content for a type program and provider FREEVIEW" in {
       whenReady(tvContentRepository.findDayContentByTypeAndProvider("program", "FREEVIEW")) {
-        _ mustBe Seq(p9, p5, p6)
+        _ mustBe Seq(Channel2.program3, Channel1.program1, Channel1.program2)
       }
     }
 
@@ -166,7 +186,7 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
 
     "return all the TV content for a type film and provider FREEVIEW  available now" in {
       whenReady(tvContentRepository.findCurrentContentByTypeAndProvider("film", "FREEVIEW")) {
-        _ mustBe Seq(p3, p8)
+        _ mustBe Seq(Channel3.film4, Channel1.film1, Channel2.film3)
       }
     }
 
@@ -198,13 +218,13 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
 
     "return all the TV content left for a type film and provider FREEVIEW" in {
       whenReady(tvContentRepository.findLeftContentByTypeAndProvider("film", "FREEVIEW")) {
-        _ mustBe Seq(p3, p8, p4)
+        _ mustBe Seq(Channel1.film1, Channel2.film3,Channel3.film4, Channel1.film2)
       }
     }
 
     "return all the TV content left for a type program and provider FREEVIEW" in {
       whenReady(tvContentRepository.findLeftContentByTypeAndProvider("program", "FREEVIEW")) {
-        _ mustBe Seq(p9, p5, p6)
+        _ mustBe Seq(Channel2.program3, Channel1.program1, Channel1.program2)
       }
     }
 

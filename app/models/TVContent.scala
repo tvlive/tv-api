@@ -165,7 +165,7 @@ class TVContentRepository(collectionName: String)(implicit val con: String => AP
       ct =>
         val now = currentDate()
         val query = BSONDocument(
-          "$orderby" -> BSONDocument("start" -> 1, "channel" -> 1),
+          "$orderby" -> BSONDocument("series.rating" -> -1, "film.rating" -> -1, "start" -> 1, "channel" -> 1),
           "$query" -> BSONDocument(
             "start" -> BSONDocument("$lte" -> BSONDateTime(now.getMillis)),
             "end" -> BSONDocument("$gt" -> BSONDateTime(now.getMillis)),
