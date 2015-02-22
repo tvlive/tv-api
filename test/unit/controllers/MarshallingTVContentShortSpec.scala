@@ -18,8 +18,8 @@ class MarshallingTVContentShortSpec extends PlaySpec with MustMatchers {
     provider = List("FREEVIEW", "SKY"),
     start = now,
     end = now.plusHours(2),
-    series = Some(SeriesShort("titleSerie", Some(EpisodeShort(Some("episodeTitle1"), Some("1"), Some("2"))), Some(7))),
-    film = Some(FilmShort("titleFilm", Some(8))),
+    series = Some(SeriesShort("titleSerie", Some(EpisodeShort(Some("episodeTitle1"), Some("1"), Some("2"))), Some(7), Some("poster1"))),
+    film = Some(FilmShort("titleFilm", Some(8), Some("poster2"))),
     program = Some(ProgramShort("titleProgram")),
     onTimeNow = true,
     perCentTimeElapsed = Some(10),
@@ -38,8 +38,10 @@ class MarshallingTVContentShortSpec extends PlaySpec with MustMatchers {
       (tvContentJson \ "series" \ "episode" \ "seasonNumber").as[String] mustBe "1"
       (tvContentJson \ "series" \ "episode" \ "episodeNumber").as[String] mustBe "2"
       (tvContentJson \ "series" \ "rating").as[Double] mustBe 7
+      (tvContentJson \ "series" \ "poster").as[String] mustBe "poster1"
       (tvContentJson \ "film" \ "title").as[String] mustBe "titleFilm"
       (tvContentJson \ "film" \ "rating").as[Double] mustBe 8
+      (tvContentJson \ "film" \ "poster").as[String] mustBe "poster2"
       (tvContentJson \ "program" \ "title").as[String] mustBe "titleProgram"
       (tvContentJson \ "uriTVContentDetails").as[String] mustBe s"/tvcontent/$idString"
       (tvContentJson \ "onTimeNow").as[Boolean] mustBe true
@@ -57,9 +59,11 @@ class MarshallingTVContentShortSpec extends PlaySpec with MustMatchers {
           |"series":{
           | "serieTitle":"titleSerie",
           | "episode":{"episodeTitle":"episodeTitle1","seasonNumber":"1","episodeNumber":"2"},
+          | "poster":"poster1",
           | "rating":7},
           |"film":{"title":"titleFilm",
-          | "rating":8},
+          | "rating":8,
+          | "poster":"poster2"},
           |"program":{"title":"titleProgram"},
           |"uriTVContentDetails":"/tvcontent/54cbe9810100000100af8be0",
           |"onTimeNow":true,

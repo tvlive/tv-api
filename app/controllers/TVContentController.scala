@@ -83,13 +83,14 @@ case class TVContentShort(channel: String,
 
 case class SeriesShort(serieTitle: String,
                        episode: Option[EpisodeShort],
-                       rating: Option[Double])
+                       rating: Option[Double],
+                       poster: Option[String])
 
 case class EpisodeShort(episodeTitle: Option[String],
                         seasonNumber: Option[String],
                         episodeNumber: Option[String])
 
-case class FilmShort(title: String, rating: Option[Double])
+case class FilmShort(title: String, rating: Option[Double], poster: Option[String])
 
 case class ProgramShort(title: String)
 
@@ -111,8 +112,8 @@ object TVShort {
         tvContent.provider,
         tvContent.start,
         tvContent.end,
-        tvContent.series.map(s => SeriesShort(s.serieTitle, es, s.rating)),
-        tvContent.film.map(f => FilmShort(f.title, f.rating)),
+        tvContent.series.map(s => SeriesShort(s.serieTitle, es, s.rating, s.poster)),
+        tvContent.film.map(f => FilmShort(f.title, f.rating, f.poster)),
         tvContent.program.map(p => ProgramShort(p.title)),
         tvContent.onTimeNow,
         tvContent.perCentTimeElapsed,
