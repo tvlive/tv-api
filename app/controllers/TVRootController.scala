@@ -29,19 +29,59 @@ trait TVRootController extends BaseController {
     val links: Future[Seq[Link]] = r.map {
       case (providers, categories) =>
         val linkProviders: Seq[Link] = providers.map {
-          p => Link(controllers.routes.TVChannelController.channelsByProvider(p.provider).url,
+          p => Link(
+            controllers.routes.TVChannelController.channelsByProvider(p.provider).url,
             Messages("provider.uri", p.provider))
         }
 
+        val linksFilmByProvider = providers.map {
+          p =>
+            Link(
+              controllers.routes.TVContentController.allContentByTypeAndProvider("film", p.provider).url,
+              Messages("tvcontent.today.type.provider.uri", "FILMS", p.provider)) ::
+              Link(
+                controllers.routes.TVContentController.currentContentByTypeAndProvider("film", p.provider).url,
+                Messages("tvcontent.current.type.provider.uri", "FILMS", p.provider)) ::
+              Link(
+                controllers.routes.TVContentController.contentLeftByTypeAndProvider("film", p.provider).url,
+                Messages("tvcontent.left.type.provider.uri", "FILMS", p.provider)) ::
+              Link(
+                controllers.routes.TVContentController.allContentByTypeAndProvider("series", p.provider).url,
+                Messages("tvcontent.today.type.provider.uri", "SERIES", p.provider)) ::
+              Link(
+                controllers.routes.TVContentController.currentContentByTypeAndProvider("series", p.provider).url,
+                Messages("tvcontent.current.type.provider.uri", "SERIES", p.provider)) ::
+              Link(
+                controllers.routes.TVContentController.contentLeftByTypeAndProvider("series", p.provider).url,
+                Messages("tvcontent.left.type.provider.uri", "SERIES", p.provider)) ::
+              Link(
+                controllers.routes.TVContentController.allContentByTypeAndProvider("program", p.provider).url,
+                Messages("tvcontent.today.type.provider.uri", "PROGRAMS", p.provider)) ::
+              Link(
+                controllers.routes.TVContentController.currentContentByTypeAndProvider("program", p.provider).url,
+                Messages("tvcontent.current.type.provider.uri", "PROGRAMS", p.provider)) ::
+              Link(
+                controllers.routes.TVContentController.contentLeftByTypeAndProvider("program", p.provider).url,
+                Messages("tvcontent.left.type.provider.uri", "PROGRAMS", p.provider)) :: Nil
+        }
+
         val linkCategories: Seq[Link] = categories.map {
-          c => Link(controllers.routes.TVChannelController.channelsByCategory(c.category).url,
+          c => Link(
+            controllers.routes.TVChannelController.channelsByCategory(c.category).url,
             Messages("category.uri", c.category))
         }
 
-        Seq(Link(controllers.routes.TVChannelController.channels().url, Messages("root.uri"))) ++
-          Seq(Link(controllers.routes.TVChannelProviderController.providers().url, Messages("provider.list.uri"))) ++
-          Seq(Link(controllers.routes.TVChannelCategoryController.categories().url, Messages("category.list.uri"))) ++
-        linkProviders ++ linkCategories
+        Seq(
+          Link(
+            controllers.routes.TVChannelController.channels().url,
+            Messages("root.uri")),
+          Link(
+            controllers.routes.TVChannelProviderController.providers().url,
+            Messages("provider.list.uri")),
+          Link(
+            controllers.routes.TVChannelCategoryController.categories().url,
+            Messages("category.list.uri"))) ++
+          linkProviders ++ linkCategories ++ linksFilmByProvider.flatten
     }
 
     links map (l => Ok(Json.toJson(l)))

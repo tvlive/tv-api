@@ -3,3 +3,6 @@ provider.list.uri=List of all the channel TV providers
 category.list.uri=List of all the channel TV categories
 provider.uri=List of channels by provider: {0}
 category.uri=List of channels by category: {0}
+tvcontent.today.type.provider.uri={0} today on TV by provider: {1}
+tvcontent.current.type.provider.uri={0} now on TV by provider: {1}
+tvcontent.left.type.provider.uri={0} left on TV by provider: {1}

@@ -13,16 +13,16 @@ import org.mockito.Mockito._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class TVRootControllerSpec extends PlaySpec with MustMatchers  {
+class TVRootControllerSpec extends PlaySpec with MustMatchers {
 
 
   "root" should {
-    "return the list of tv links that help to start the navigation across the API" in  new WithApplication() with RootSetup  {
+    "return the list of tv links that help to start the navigation across the API" in new WithApplication() with RootSetup {
       //GIVEN
       when(providerRepo.findAll()).thenReturn(Future(Seq(tvChannelProvider3, tvChannelProvider1, tvChannelProvider2)))
       when(categoryRepo.findAll()).thenReturn(Future(Seq(tvChannelCategory1, tvChannelCategory2, tvChannelCategory3)))
 
-     //WHEN
+      //WHEN
       val rootsResponse: Future[SimpleResult] = rootController.roots.apply(FakeRequest())
 
       //THEN
@@ -39,7 +39,35 @@ class TVRootControllerSpec extends PlaySpec with MustMatchers  {
         Link("/channels/provider/TERRESTRIAL", "List of channels by provider: TERRESTRIAL"),
         Link("/channels/category/FILMS", "List of channels by category: FILMS"),
         Link("/channels/category/KID", "List of channels by category: KID"),
-        Link("/channels/category/NEWS", "List of channels by category: NEWS"))
+        Link("/channels/category/NEWS", "List of channels by category: NEWS"),
+        Link("/tvcontent/film/CABLE/today", "FILMS today on TV by provider: CABLE"),
+        Link("/tvcontent/film/CABLE/current", "FILMS now on TV by provider: CABLE"),
+        Link("/tvcontent/film/CABLE/left", "FILMS left on TV by provider: CABLE"),
+        Link("/tvcontent/series/CABLE/today", "SERIES today on TV by provider: CABLE"),
+        Link("/tvcontent/series/CABLE/current", "SERIES now on TV by provider: CABLE"),
+        Link("/tvcontent/series/CABLE/left", "SERIES left on TV by provider: CABLE"),
+        Link("/tvcontent/program/CABLE/today", "PROGRAMS today on TV by provider: CABLE"),
+        Link("/tvcontent/program/CABLE/current", "PROGRAMS now on TV by provider: CABLE"),
+        Link("/tvcontent/program/CABLE/left", "PROGRAMS left on TV by provider: CABLE"),
+        Link("/tvcontent/film/FREEVIEW/today", "FILMS today on TV by provider: FREEVIEW"),
+        Link("/tvcontent/film/FREEVIEW/current", "FILMS now on TV by provider: FREEVIEW"),
+        Link("/tvcontent/film/FREEVIEW/left", "FILMS left on TV by provider: FREEVIEW"),
+        Link("/tvcontent/series/FREEVIEW/today", "SERIES today on TV by provider: FREEVIEW"),
+        Link("/tvcontent/series/FREEVIEW/current", "SERIES now on TV by provider: FREEVIEW"),
+        Link("/tvcontent/series/FREEVIEW/left", "SERIES left on TV by provider: FREEVIEW"),
+        Link("/tvcontent/program/FREEVIEW/today", "PROGRAMS today on TV by provider: FREEVIEW"),
+        Link("/tvcontent/program/FREEVIEW/current", "PROGRAMS now on TV by provider: FREEVIEW"),
+        Link("/tvcontent/program/FREEVIEW/left", "PROGRAMS left on TV by provider: FREEVIEW"),
+        Link("/tvcontent/film/TERRESTRIAL/today", "FILMS today on TV by provider: TERRESTRIAL"),
+        Link("/tvcontent/film/TERRESTRIAL/current", "FILMS now on TV by provider: TERRESTRIAL"),
+        Link("/tvcontent/film/TERRESTRIAL/left", "FILMS left on TV by provider: TERRESTRIAL"),
+        Link("/tvcontent/series/TERRESTRIAL/today", "SERIES today on TV by provider: TERRESTRIAL"),
+        Link("/tvcontent/series/TERRESTRIAL/current", "SERIES now on TV by provider: TERRESTRIAL"),
+        Link("/tvcontent/series/TERRESTRIAL/left", "SERIES left on TV by provider: TERRESTRIAL"),
+        Link("/tvcontent/program/TERRESTRIAL/today", "PROGRAMS today on TV by provider: TERRESTRIAL"),
+        Link("/tvcontent/program/TERRESTRIAL/current", "PROGRAMS now on TV by provider: TERRESTRIAL"),
+        Link("/tvcontent/program/TERRESTRIAL/left", "PROGRAMS left on TV by provider: TERRESTRIAL")
+    )
 
       verify(providerRepo).findAll()
       verify(categoryRepo).findAll()
