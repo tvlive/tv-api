@@ -132,7 +132,7 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers {
       status(programsResult) mustBe (OK)
       contentType(programsResult) mustBe (Some("application/json"))
       val programInResponse = contentAsString(programsResult)
-      val tvprogram = Json.parse(programInResponse).as[TVContent]
+      val tvprogram = Json.parse(programInResponse).as[TVContentLong]
       tvprogram mustBe (TVProgramWithTimeZone(tvProgram3))
 
       //AND
@@ -190,7 +190,7 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers {
       //THEN
       status(programResult) mustBe (OK)
       val programInResponse = contentAsString(programResult)
-      val tvprogram = Json.parse(programInResponse).as[TVContent]
+      val tvprogram = Json.parse(programInResponse).as[TVContentLong]
       tvprogram mustBe (TVProgramWithTimeZone(tvProgram1))
 
       //AND
@@ -449,7 +449,7 @@ trait TVContentSetUpTest extends MockitoSugar {
     Some(Program("p5", Some("d5"))),
     Some(BSONObjectID.generate))
 
-  val tvProgram6 = TVContent("CHANNEL 3", List("SKY"), fakeNow.plusHours(3), fakeNow.plusHours(5), 
+  val tvProgram6 = TVContent("CHANNEL 3", List("SKY"), fakeNow.plusHours(3), fakeNow.plusHours(5),
     None,
     None,
     Some(Program("p6", Some("d6"))),

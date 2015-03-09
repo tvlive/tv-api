@@ -1,4 +1,4 @@
-import models._
+import models.{TVChannelProvider, TVChannelCategory, TVChannel}
 import org.joda.time.{DateTime, DateTimeZone}
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
@@ -43,10 +43,10 @@ package object controllers {
     )
   }
 
-  implicit val filmFmt = Json.format[Film]
-  implicit val episodeFmt = Json.format[Episode]
-  implicit val serieFmt = Json.format[Series]
-  implicit val programFmt = Json.format[Program]
+  implicit val filmFmt = Json.format[FilmLong]
+  implicit val episodeFmt = Json.format[EpisodeLong]
+  implicit val serieFmt = Json.format[SeriesLong]
+  implicit val programFmt = Json.format[ProgramLong]
 
   val pattern = "yyyy-MM-dd'T'HH:mm:ss"
 
@@ -60,37 +60,40 @@ package object controllers {
   implicit val programShortFmt = Json.format[ProgramShort]
 
 
-  implicit val tvProgramReads: Reads[TVContent] = (
-      (__ \ "channel").read[String] and
+  implicit val tvProgramReads: Reads[TVContentLong] = (
+    (__ \ "channel").read[String] and
+      (__ \ "channelImageURL").read[String] and
       (__ \ "provider").read[List[String]] and
-      (__ \ "start").read[DateTime].map[DateTime]{ dt => dt.withZoneRetainFields(DateTimeZone.forID("Europe/London"))} and
+      (__ \ "start").read[DateTime].map[DateTime] { dt => dt.withZoneRetainFields(DateTimeZone.forID("Europe/London"))} and
       (__ \ "end").read[DateTime].map[DateTime](dt => dt.withZoneRetainFields(DateTimeZone.forID("Europe/London"))) and
-      (__ \ "series").read[Option[Series]] and
-      (__ \ "film").read[Option[Film]] and
-      (__ \ "program").read[Option[Program]] and
+      (__ \ "series").read[Option[SeriesLong]] and
+      (__ \ "film").read[Option[FilmLong]] and
+      (__ \ "program").read[Option[ProgramLong]] and
+      (__ \ "onTimeNow").read[Boolean] and
+      (__ \ "perCentTimeElapsed").read[Option[Long]] and
       (__ \ "id").read[Option[BSONObjectID]]
-      )(TVContent.apply _)
+    )(TVContentLong.apply _)
 
-  implicit val tvProgramWrites = new Writes[TVContent] {
-    override def writes(tvContent: TVContent): JsValue = Json.obj(
-      "channel" -> tvContent.channel,
-      "channelImageURL" -> tvContent.channelImageURL,
-      "provider" -> tvContent.provider,
-      "start" -> tvContent.start.toDateTime(DateTimeZone.forID("Europe/London")),
-      "end" -> tvContent.end.toDateTime(DateTimeZone.forID("Europe/London")),
-      "series" -> tvContent.series,
-      "film" -> tvContent.film,
-      "program" -> tvContent.program,
-      "onTimeNow" -> tvContent.onTimeNow,
-      "perCentTimeElapsed" -> tvContent.perCentTimeElapsed,
-      "id" -> tvContent.id
+  implicit val tvProgramWrites = new Writes[TVContentLong] {
+    override def writes(tvContentLong: TVContentLong): JsValue = Json.obj(
+      "channel" -> tvContentLong.channel,
+      "channelImageURL" -> tvContentLong.channelImageURL,
+      "provider" -> tvContentLong.provider,
+      "start" -> tvContentLong.start.toDateTime(DateTimeZone.forID("Europe/London")),
+      "end" -> tvContentLong.end.toDateTime(DateTimeZone.forID("Europe/London")),
+      "series" -> tvContentLong.series,
+      "film" -> tvContentLong.film,
+      "program" -> tvContentLong.program,
+      "onTimeNow" -> tvContentLong.onTimeNow,
+      "perCentTimeElapsed" -> tvContentLong.perCentTimeElapsed,
+      "id" -> tvContentLong.id
     )
   }
 
   implicit val tvProgramShortReads: Reads[TVContentShort] = (
     (__ \ "channel").read[String] and
-    (__ \ "channelImageURL").read[String] and
-    (__ \ "provider").read[List[String]] and
+      (__ \ "channelImageURL").read[String] and
+      (__ \ "provider").read[List[String]] and
       (__ \ "start").read[DateTime].map[DateTime](dt => dt.withZoneRetainFields(DateTimeZone.forID("Europe/London"))) and
       (__ \ "end").read[DateTime].map[DateTime](dt => dt.withZoneRetainFields(DateTimeZone.forID("Europe/London"))) and
       (__ \ "series").read[Option[SeriesShort]] and

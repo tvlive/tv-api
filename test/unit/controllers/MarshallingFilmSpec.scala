@@ -13,30 +13,31 @@ class MarshallingFilmSpec extends PlaySpec with MustMatchers {
   val idString = id.stringify
   val now = new DateTime(2014, 10, 10, 10, 0, 0, DateTimeZone.forID("UTC"))
   val fmt = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
-  val film =  TVContent(
-    channel = "bbc1",
-    provider = List("FREEVIEW", "SKY"),
-    start = now,
-    end = now.plusHours(2),
-    film = Some(Film("film2",
-      actors = List("actor2"),
-      writer = List("writer2"),
-      director = List("director2"),
-      genre = List("cat2"),
-      country = List("count2"),
-      language = Some("lang2"),
-      rating = Some(8),
-      awards = Some("awards2"),
-      poster = Some("poster2"),
-      plot = Some("plot2"),
-      year = Some("1977"),
-      imdbId = Some("imdbId1"))),
-    series = None,
-    program = None,
-    id = Some(id))
+  val film = TVLong(
+    TVContent(
+      channel = "bbc1",
+      provider = List("FREEVIEW", "SKY"),
+      start = now,
+      end = now.plusHours(2),
+      film = Some(Film("film2",
+        actors = List("actor2"),
+        writer = List("writer2"),
+        director = List("director2"),
+        genre = List("cat2"),
+        country = List("count2"),
+        language = Some("lang2"),
+        rating = Some(8),
+        awards = Some("awards2"),
+        poster = Some("poster2"),
+        plot = Some("plot2"),
+        year = Some("1977"),
+        imdbId = Some("imdbId1"))),
+      series = None,
+      program = None,
+      id = Some(id)))
 
   "Write and reads" should {
-    "transform TVContent 'film' object to json" in {
+    "transform TVContentLong 'film' object to json" in {
 
       val tvContentJson = Json.toJson(film)
 
@@ -62,34 +63,34 @@ class MarshallingFilmSpec extends PlaySpec with MustMatchers {
       (tvContentJson \ "id").as[String] mustBe s"$idString"
     }
 
-    "transform film json to TVContent 'film' object" in {
+    "transform film json to TVContentLong 'film' object" in {
       val filmJson = s"""{"channel":"bbc1",
-        |"channelImageURL":"/bbc1.png",
-        |"provider":["FREEVIEW","SKY"],
-        |"start":"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}",
-        |"end":"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}",
-        |"series":null,
-        |"film":{
-        | "title":"film2",
-        | "actors":["actor2"],
-        | "writer":["writer2"],
-        | "director":["director2"],
-        | "genre":["cat2"],
-        | "country":["count2"],
-        | "language":"lang2",
-        | "rating":8,
-        | "awards":"awards2",
-        | "poster":"poster2",
-        | "plot":"plot2",
-        | "year":"1977",
-        | "imdbId":"imdbId1"},
-        |"program":null,
-        |"onTimeNow":false,
-        |"perCentTimeElapsed":null,
-        |"id":"$idString"}""".stripMargin
+                        |"channelImageURL":"/bbc1.png",
+                        |"provider":["FREEVIEW","SKY"],
+                        |"start":"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}",
+                                                                                                   |"end":"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}",
+                                                                                                                                                                                         |"series":null,
+                                                                                                                                                                                         |"film":{
+                                                                                                                                                                                         |"title":"film2",
+                                                                                                                                                                                         |"actors":["actor2"],
+                                                                                                                                                                                         |"writer":["writer2"],
+                                                                                                                                                                                         |"director":["director2"],
+                                                                                                                                                                                         |"genre":["cat2"],
+                                                                                                                                                                                         |"country":["count2"],
+                                                                                                                                                                                         |"language":"lang2",
+                                                                                                                                                                                         |"rating":8,
+                                                                                                                                                                                         |"awards":"awards2",
+                                                                                                                                                                                         |"poster":"poster2",
+                                                                                                                                                                                         |"plot":"plot2",
+                                                                                                                                                                                         |"year":"1977",
+                                                                                                                                                                                         |"imdbId":"imdbId1"},
+                                                                                                                                                                                         |"program":null,
+                                                                                                                                                                                         |"onTimeNow":false,
+                                                                                                                                                                                         |"perCentTimeElapsed":null,
+                                                                                                                                                                                         |"id":"$idString"}""".stripMargin
 
-      Json.parse(filmJson).as[TVContent] mustBe film.copy(
-        start =   now.withZone(DateTimeZone.forID("Europe/London")),
+      Json.parse(filmJson).as[TVContentLong] mustBe film.copy(
+        start = now.withZone(DateTimeZone.forID("Europe/London")),
         end = now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))
     }
   }

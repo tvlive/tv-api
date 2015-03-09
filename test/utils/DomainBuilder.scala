@@ -21,22 +21,25 @@ object DomainBuilder {
 
       TVContentShort(
         tvContent.channel,
-        tvContent.channelImageURL,
+//        tvContent.channelImageURL,
+        "",
         tvContent.provider,
         tvContent.start.withZone(DateTimeZone.forID("Europe/London")),
         tvContent.end.withZone(DateTimeZone.forID("Europe/London")),
         tvContent.series.map(s => SeriesShort(s.serieTitle, es, s.rating, s.poster)),
         tvContent.film.map(p => FilmShort(p.title, p.rating, p.poster)),
         tvContent.program.map(p => ProgramShort(p.title)),
-        tvContent.onTimeNow,
-        tvContent.perCentTimeElapsed,
+//        tvContent.onTimeNow,
+        true,
+//        tvContent.perCentTimeElapsed,
+        Some(70),
         tvContent.id)
     }
   }
 
   object TVProgramWithTimeZone {
-    def apply(tvProgram: TVContent): TVContent = tvProgram.copy(
+    def apply(tvProgram: TVContent): TVContentLong = TVLong(tvProgram.copy(
       start = tvProgram.start.withZone(DateTimeZone.forID("Europe/London")),
-      end = tvProgram.end.withZone(DateTimeZone.forID("Europe/London")))
+      end = tvProgram.end.withZone(DateTimeZone.forID("Europe/London"))))
   }
 }

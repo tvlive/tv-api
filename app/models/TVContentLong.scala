@@ -1,8 +1,8 @@
 package models
 
-import utils.TimeProvider
-import org.joda.time.{Duration, DateTime}
+import org.joda.time.DateTime
 import play.api.libs.iteratee.Enumerator
+import utils.TimeProvider
 import reactivemongo.bson._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -15,24 +15,7 @@ case class TVContent(channel: String,
                      series: Option[Series],
                      film: Option[Film],
                      program: Option[Program],
-                     id: Option[BSONObjectID] = Some(BSONObjectID.generate)) extends TimeProvider with ChannelImageURLBuilder {
-
-  val onTimeNow = (start.isBeforeNow || start.isEqualNow) && (end.isAfterNow || end.isEqualNow)
-
-  val perCentTimeElapsed: Option[Long] = {
-    onTimeNow match {
-      case true => {
-        val initialDuration = new Duration(start, end).getStandardMinutes
-        val currentDuration = new Duration(start, currentDate).getStandardMinutes
-        Some(currentDuration * 100 / initialDuration)
-      }
-      case false => None
-    }
-  }
-
-  val channelImageURL = buildUrl(channel)
-}
-
+                     id: Option[BSONObjectID] = Some(BSONObjectID.generate))
 
 case class Series(serieTitle: String,
                   episode: Option[Episode],

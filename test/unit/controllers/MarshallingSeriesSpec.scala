@@ -13,7 +13,8 @@ class MarshallingSeriesSpec extends PlaySpec with MustMatchers {
   val idString = id.stringify
   val now = new DateTime(2014, 10, 10, 10, 0, 0, DateTimeZone.forID("UTC"))
   val fmt = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
-  val series = TVContent(
+  val series = TVLong(
+    TVContent(
     channel = "bbc1",
     provider = List("FREEVIEW", "SKY"),
     start = now,
@@ -39,10 +40,10 @@ class MarshallingSeriesSpec extends PlaySpec with MustMatchers {
       imdbId = Some("imdbId1"))),
     film = None,
     program = None,
-    id = Some(id))
+    id = Some(id)))
 
   "Write and reads" should {
-    "transform TVContent 'series' object to json" in {
+    "transform TVContent Long 'series' object to json" in {
 
       val tvContentJson = Json.toJson(series)
 
@@ -73,7 +74,7 @@ class MarshallingSeriesSpec extends PlaySpec with MustMatchers {
       (tvContentJson \ "id").as[String] mustBe s"$idString"
     }
 
-    "transform series json to TVContent 'series' object" in {
+    "transform series json to TVContent Long 'series' object" in {
       val seriesJson = s"""{"channel":"bbc1",
        |"channelImageURL":"/bbc1.png",
        |"provider":["FREEVIEW","SKY"],
@@ -105,7 +106,7 @@ class MarshallingSeriesSpec extends PlaySpec with MustMatchers {
        |"perCentTimeElapsed":null,
        |"id":"$idString"}""".stripMargin
 
-      Json.parse(seriesJson).as[TVContent] mustBe series.copy(
+      Json.parse(seriesJson).as[TVContentLong] mustBe series.copy(
         start =   now.withZone(DateTimeZone.forID("Europe/London")),
         end = now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))
     }

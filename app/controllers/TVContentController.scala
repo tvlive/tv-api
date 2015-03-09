@@ -4,9 +4,7 @@ import java.net.URLDecoder
 
 import configuration.ApplicationContext
 import models._
-import org.joda.time.DateTime
 import play.api.mvc.Action
-import reactivemongo.bson.BSONObjectID
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -16,17 +14,20 @@ object TVContentController extends TVContentController {
 
 trait TVContentController extends BaseController {
 
+  val toTVShorts: Seq[TVContent] => Seq[TVContentShort] = _.map(TVShort(_))
+  val toTVLong: TVContent => TVContentLong = TVLong(_)
+
   val contentRepository: ContentRepository
 
-  def currentContent(channelName: String) = Action.async {
-    contentRepository.findCurrentContentByChannel(URLDecoder.decode(channelName, "UTF-8").toUpperCase).map {
-      buildResponse(_, s"No TV content at this moment for the channel: $channelName")
+  def currentContent(channelName: String) = Action.async { c =>
+    contentRepository.findCurrentContentByChannel(URLDecoder.decode(channelName, "UTF-8").toUpperCase).map { c =>
+      buildResponse(c.map(toTVLong(_)), s"No TV content at this moment for the channel: $channelName")
     }
   }
 
   def tvContentDetails(tvContentID: String) = Action.async {
-    contentRepository.findContentByID(tvContentID).map {
-      buildResponse(_, s"No TV content details with id: $tvContentID")
+    contentRepository.findContentByID(tvContentID).map { c =>
+      buildResponse(c.map(toTVLong(_)), s"No TV content details with id: $tvContentID")
     }
   }
 
@@ -61,62 +62,5 @@ trait TVContentController extends BaseController {
     }
   }
 
-  private def toTVShorts(content: Seq[TVContent]): Seq[TVContentShort] = content.map(TVShort(_))
 
-}
-
-
-case class TVContentShort(channel: String,
-                          channelImageURL: String,
-                          provider: List[String],
-                          start: DateTime,
-                          end: DateTime,
-                          series: Option[SeriesShort],
-                          film: Option[FilmShort],
-                          program: Option[ProgramShort],
-                          onTimeNow: Boolean,
-                          perCentTimeElapsed: Option[Long],
-                          id: Option[BSONObjectID] = Some(BSONObjectID.generate)) {
-
-  val uriTVContentDetails = controllers.routes.TVContentController.tvContentDetails(id.get.stringify).toString()
-}
-
-case class SeriesShort(serieTitle: String,
-                       episode: Option[EpisodeShort],
-                       rating: Option[Double],
-                       poster: Option[String])
-
-case class EpisodeShort(episodeTitle: Option[String],
-                        seasonNumber: Option[String],
-                        episodeNumber: Option[String])
-
-case class FilmShort(title: String, rating: Option[Double], poster: Option[String])
-
-case class ProgramShort(title: String)
-
-object TVShort {
-  def apply(tvContent: TVContent): TVContentShort = {
-    val episode = for {
-      s <- tvContent.series
-      e <- s.episode
-    } yield (e.episodeTitle, e.seasonNumber, e.episodeNumber)
-
-    val es = episode match {
-      case None => None
-      case Some((et, sn, en)) => Some(EpisodeShort(et, sn, en))
-    }
-
-      TVContentShort(
-        tvContent.channel,
-        tvContent.channelImageURL,
-        tvContent.provider,
-        tvContent.start,
-        tvContent.end,
-        tvContent.series.map(s => SeriesShort(s.serieTitle, es, s.rating, s.poster)),
-        tvContent.film.map(f => FilmShort(f.title, f.rating, f.poster)),
-        tvContent.program.map(p => ProgramShort(p.title)),
-        tvContent.onTimeNow,
-        tvContent.perCentTimeElapsed,
-        tvContent.id)
-  }
 }
