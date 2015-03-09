@@ -31,42 +31,42 @@ class TVRootControllerSpec extends PlaySpec with MustMatchers {
       val linksInResponse = contentAsString(rootsResponse)
       val links = Json.parse(linksInResponse).as[Seq[Link]]
       links mustEqual Seq(
-        Link("/channels", "List of all the channels"),
-        Link("/providers", "List of all the channel TV providers"),
-        Link("/categories", "List of all the channel TV categories"),
-        Link("/channels/provider/CABLE", "List of channels by provider: CABLE"),
-        Link("/channels/provider/FREEVIEW", "List of channels by provider: FREEVIEW"),
-        Link("/channels/provider/TERRESTRIAL", "List of channels by provider: TERRESTRIAL"),
-        Link("/channels/category/FILMS", "List of channels by category: FILMS"),
-        Link("/channels/category/KID", "List of channels by category: KID"),
-        Link("/channels/category/NEWS", "List of channels by category: NEWS"),
-        Link("/tvcontent/film/CABLE/today", "FILMS today on TV by provider: CABLE"),
-        Link("/tvcontent/film/CABLE/current", "FILMS now on TV by provider: CABLE"),
-        Link("/tvcontent/film/CABLE/left", "FILMS left on TV by provider: CABLE"),
-        Link("/tvcontent/series/CABLE/today", "SERIES today on TV by provider: CABLE"),
-        Link("/tvcontent/series/CABLE/current", "SERIES now on TV by provider: CABLE"),
-        Link("/tvcontent/series/CABLE/left", "SERIES left on TV by provider: CABLE"),
-        Link("/tvcontent/program/CABLE/today", "PROGRAMS today on TV by provider: CABLE"),
-        Link("/tvcontent/program/CABLE/current", "PROGRAMS now on TV by provider: CABLE"),
-        Link("/tvcontent/program/CABLE/left", "PROGRAMS left on TV by provider: CABLE"),
-        Link("/tvcontent/film/FREEVIEW/today", "FILMS today on TV by provider: FREEVIEW"),
-        Link("/tvcontent/film/FREEVIEW/current", "FILMS now on TV by provider: FREEVIEW"),
-        Link("/tvcontent/film/FREEVIEW/left", "FILMS left on TV by provider: FREEVIEW"),
-        Link("/tvcontent/series/FREEVIEW/today", "SERIES today on TV by provider: FREEVIEW"),
-        Link("/tvcontent/series/FREEVIEW/current", "SERIES now on TV by provider: FREEVIEW"),
-        Link("/tvcontent/series/FREEVIEW/left", "SERIES left on TV by provider: FREEVIEW"),
-        Link("/tvcontent/program/FREEVIEW/today", "PROGRAMS today on TV by provider: FREEVIEW"),
-        Link("/tvcontent/program/FREEVIEW/current", "PROGRAMS now on TV by provider: FREEVIEW"),
-        Link("/tvcontent/program/FREEVIEW/left", "PROGRAMS left on TV by provider: FREEVIEW"),
-        Link("/tvcontent/film/TERRESTRIAL/today", "FILMS today on TV by provider: TERRESTRIAL"),
-        Link("/tvcontent/film/TERRESTRIAL/current", "FILMS now on TV by provider: TERRESTRIAL"),
-        Link("/tvcontent/film/TERRESTRIAL/left", "FILMS left on TV by provider: TERRESTRIAL"),
-        Link("/tvcontent/series/TERRESTRIAL/today", "SERIES today on TV by provider: TERRESTRIAL"),
-        Link("/tvcontent/series/TERRESTRIAL/current", "SERIES now on TV by provider: TERRESTRIAL"),
-        Link("/tvcontent/series/TERRESTRIAL/left", "SERIES left on TV by provider: TERRESTRIAL"),
-        Link("/tvcontent/program/TERRESTRIAL/today", "PROGRAMS today on TV by provider: TERRESTRIAL"),
-        Link("/tvcontent/program/TERRESTRIAL/current", "PROGRAMS now on TV by provider: TERRESTRIAL"),
-        Link("/tvcontent/program/TERRESTRIAL/left", "PROGRAMS left on TV by provider: TERRESTRIAL")
+        Link("http://beta.tvlive.io/channels", "List of all the channels"),
+        Link("http://beta.tvlive.io/providers", "List of all the channel TV providers"),
+        Link("http://beta.tvlive.io/categories", "List of all the channel TV categories"),
+        Link("http://beta.tvlive.io/channels/provider/CABLE", "List of channels by provider: CABLE"),
+        Link("http://beta.tvlive.io/channels/provider/FREEVIEW", "List of channels by provider: FREEVIEW"),
+        Link("http://beta.tvlive.io/channels/provider/TERRESTRIAL", "List of channels by provider: TERRESTRIAL"),
+        Link("http://beta.tvlive.io/channels/category/FILMS", "List of channels by category: FILMS"),
+        Link("http://beta.tvlive.io/channels/category/KID", "List of channels by category: KID"),
+        Link("http://beta.tvlive.io/channels/category/NEWS", "List of channels by category: NEWS"),
+        Link("http://beta.tvlive.io/tvcontent/film/CABLE/today", "FILMS today on TV by provider: CABLE"),
+        Link("http://beta.tvlive.io/tvcontent/film/CABLE/current", "FILMS now on TV by provider: CABLE"),
+        Link("http://beta.tvlive.io/tvcontent/film/CABLE/left", "FILMS left on TV by provider: CABLE"),
+        Link("http://beta.tvlive.io/tvcontent/series/CABLE/today", "SERIES today on TV by provider: CABLE"),
+        Link("http://beta.tvlive.io/tvcontent/series/CABLE/current", "SERIES now on TV by provider: CABLE"),
+        Link("http://beta.tvlive.io/tvcontent/series/CABLE/left", "SERIES left on TV by provider: CABLE"),
+        Link("http://beta.tvlive.io/tvcontent/program/CABLE/today", "PROGRAMS today on TV by provider: CABLE"),
+        Link("http://beta.tvlive.io/tvcontent/program/CABLE/current", "PROGRAMS now on TV by provider: CABLE"),
+        Link("http://beta.tvlive.io/tvcontent/program/CABLE/left", "PROGRAMS left on TV by provider: CABLE"),
+        Link("http://beta.tvlive.io/tvcontent/film/FREEVIEW/today", "FILMS today on TV by provider: FREEVIEW"),
+        Link("http://beta.tvlive.io/tvcontent/film/FREEVIEW/current", "FILMS now on TV by provider: FREEVIEW"),
+        Link("http://beta.tvlive.io/tvcontent/film/FREEVIEW/left", "FILMS left on TV by provider: FREEVIEW"),
+        Link("http://beta.tvlive.io/tvcontent/series/FREEVIEW/today", "SERIES today on TV by provider: FREEVIEW"),
+        Link("http://beta.tvlive.io/tvcontent/series/FREEVIEW/current", "SERIES now on TV by provider: FREEVIEW"),
+        Link("http://beta.tvlive.io/tvcontent/series/FREEVIEW/left", "SERIES left on TV by provider: FREEVIEW"),
+        Link("http://beta.tvlive.io/tvcontent/program/FREEVIEW/today", "PROGRAMS today on TV by provider: FREEVIEW"),
+        Link("http://beta.tvlive.io/tvcontent/program/FREEVIEW/current", "PROGRAMS now on TV by provider: FREEVIEW"),
+        Link("http://beta.tvlive.io/tvcontent/program/FREEVIEW/left", "PROGRAMS left on TV by provider: FREEVIEW"),
+        Link("http://beta.tvlive.io/tvcontent/film/TERRESTRIAL/today", "FILMS today on TV by provider: TERRESTRIAL"),
+        Link("http://beta.tvlive.io/tvcontent/film/TERRESTRIAL/current", "FILMS now on TV by provider: TERRESTRIAL"),
+        Link("http://beta.tvlive.io/tvcontent/film/TERRESTRIAL/left", "FILMS left on TV by provider: TERRESTRIAL"),
+        Link("http://beta.tvlive.io/tvcontent/series/TERRESTRIAL/today", "SERIES today on TV by provider: TERRESTRIAL"),
+        Link("http://beta.tvlive.io/tvcontent/series/TERRESTRIAL/current", "SERIES now on TV by provider: TERRESTRIAL"),
+        Link("http://beta.tvlive.io/tvcontent/series/TERRESTRIAL/left", "SERIES left on TV by provider: TERRESTRIAL"),
+        Link("http://beta.tvlive.io/tvcontent/program/TERRESTRIAL/today", "PROGRAMS today on TV by provider: TERRESTRIAL"),
+        Link("http://beta.tvlive.io/tvcontent/program/TERRESTRIAL/current", "PROGRAMS now on TV by provider: TERRESTRIAL"),
+        Link("http://beta.tvlive.io/tvcontent/program/TERRESTRIAL/left", "PROGRAMS left on TV by provider: TERRESTRIAL")
     )
 
       verify(providerRepo).findAll()
@@ -91,6 +91,7 @@ trait RootSetup extends MockitoSugar {
   class App extends TVRootController {
     override val providerRepository: ChannelProviderRepository = providerRepo
     override val categoryRepository: ChannelCategoryRepository = categoryRepo
+    override val host: String = "http://beta.tvlive.io"
   }
 
   val rootController = new App

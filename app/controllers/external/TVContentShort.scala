@@ -1,9 +1,9 @@
-package controllers
+package controllers.external
 
 import models._
-import org.joda.time.{DateTime, Duration}
+import org.joda.time.DateTime
 import reactivemongo.bson.BSONObjectID
-import utils.TimeProvider
+import utils.{URLBuilder, ModelUtils, TimeProvider}
 
 
 
@@ -17,9 +17,10 @@ case class TVContentShort(channel: String,
                           program: Option[ProgramShort],
                           onTimeNow: Boolean,
                           perCentTimeElapsed: Option[Long],
+                          uriTVContentDetails: String,
                           id: Option[BSONObjectID] = Some(BSONObjectID.generate)) {
 
-  val uriTVContentDetails = controllers.routes.TVContentController.tvContentDetails(id.get.stringify).toString()
+
 }
 
 case class SeriesShort(serieTitle: String,
@@ -35,36 +36,22 @@ case class FilmShort(title: String, rating: Option[Double], poster: Option[Strin
 
 case class ProgramShort(title: String)
 
-object TVShort extends TimeProvider with ChannelImageURLBuilder {
-  def apply(tvContent: TVContent): TVContentShort = {
-    val episode = for {
-      s <- tvContent.series
-      e <- s.episode
-    } yield (e.episodeTitle, e.seasonNumber, e.episodeNumber)
+object TVShort extends TimeProvider with URLBuilder with ModelUtils {
+  def apply(tvContent: TVContent)(implicit host: String): TVContentShort = {
+    val es = epishoShort(tvContent)
 
-    val es = episode match {
-      case None => None
-      case Some((et, sn, en)) => Some(EpisodeShort(et, sn, en))
-    }
+    val onTimeNow = isNowShowing(tvContent)
 
-    val channelImageURL = buildUrl(tvContent.channel)
-
-    val onTimeNow = (tvContent.start.isBeforeNow || tvContent.start.isEqualNow) && (tvContent.end.isAfterNow || tvContent.end.isEqualNow)
-
-    val perCentTimeElapsed: Option[Long] = {
-      onTimeNow match {
-        case true => {
-          val initialDuration = new Duration(tvContent.start, tvContent.end).getStandardMinutes
-          val currentDuration = new Duration(tvContent.start, currentDate).getStandardMinutes
-          Some(currentDuration * 100 / initialDuration)
-        }
+    val perCentTimeElapsed = onTimeNow match {
+        case true => calculateElapsed(tvContent)
         case false => None
       }
-    }
+
+    val uriTVContentDetails = buildUrl(host, controllers.routes.TVContentController.tvContentDetails(tvContent.id.get.stringify).url)
 
     TVContentShort(
       tvContent.channel,
-      channelImageURL,
+      buildImageUrl(host, "/", tvContent.channel),
       tvContent.provider,
       tvContent.start,
       tvContent.end,
@@ -73,6 +60,7 @@ object TVShort extends TimeProvider with ChannelImageURLBuilder {
       tvContent.program.map(p => ProgramShort(p.title)),
       onTimeNow,
       perCentTimeElapsed,
+      uriTVContentDetails,
       tvContent.id)
   }
 }

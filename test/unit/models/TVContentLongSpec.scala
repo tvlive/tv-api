@@ -1,12 +1,13 @@
 package models
 
-import controllers.TVLong
+import controllers.external.TVLong
 import org.joda.time.{DateTime, DateTimeZone}
 import org.scalatest.MustMatchers
 import org.scalatestplus.play.PlaySpec
 
-class TVContentSpec extends PlaySpec with MustMatchers {
+class TVContentLongSpec extends PlaySpec with MustMatchers {
   val now = new DateTime(DateTimeZone.forID("UTC"))
+  implicit val host: String = "http://localhost:9000"
 
   "onTimeNow" should {
     "be true when tvContent start time is before now and after time is after now" in {
@@ -58,13 +59,13 @@ class TVContentSpec extends PlaySpec with MustMatchers {
     "be channel1.png when the channel is channel1" in {
       val content = TVLong(
         TVContent("channel1", List("provider1"), now.plusHours(2), now.plusHours(3), None, None, None, None))
-      content.channelImageURL mustBe "/channel1.png"
+      content.channelImageURL mustBe "http://localhost:9000/channel1.png"
     }
 
     "be channel_exampe.png when the channel is channel example" in {
       val content = TVLong(
         TVContent("channel example", List("provider1"), now.plusHours(2), now.plusHours(3), None, None, None, None))
-      content.channelImageURL mustBe "/channel_example.png"
+      content.channelImageURL mustBe "http://localhost:9000/channel_example.png"
     }
   }
 }

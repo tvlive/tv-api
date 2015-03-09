@@ -2,6 +2,7 @@ package controllers
 
 import java.net.URLDecoder
 
+import controllers.external.{TVContentShort, TVContentLong}
 import models._
 import org.joda.time.{DateTime, DateTimeZone}
 import org.mockito.Mockito._
@@ -13,13 +14,13 @@ import play.api.mvc.SimpleResult
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import reactivemongo.bson.BSONObjectID
-import utils.DomainBuilder.{TVProgramWithTimeZone, TVShortWithTimeZone}
+import utils.DomainBuilder.{TVLongWithTimeZone, TVShortWithTimeZone}
 
 import scala.concurrent.Future
 
 class TVContentControllerSpec extends PlaySpec with MustMatchers {
 
-
+//TODO create explicit TVContentLong and TVContentShort per TVContent persisted
   "TVContentController" should {
 
     "return NOT_FOUND if there is no TV content for CHANNEL2 available today" in new TVContentSetUpTest() {
@@ -133,7 +134,7 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers {
       contentType(programsResult) mustBe (Some("application/json"))
       val programInResponse = contentAsString(programsResult)
       val tvprogram = Json.parse(programInResponse).as[TVContentLong]
-      tvprogram mustBe (TVProgramWithTimeZone(tvProgram3))
+      tvprogram mustBe (TVLongWithTimeZone(tvProgram3))
 
       //AND
       verify(tvContentRepository).findCurrentContentByChannel("CHANNEL1")
@@ -191,7 +192,7 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers {
       status(programResult) mustBe (OK)
       val programInResponse = contentAsString(programResult)
       val tvprogram = Json.parse(programInResponse).as[TVContentLong]
-      tvprogram mustBe (TVProgramWithTimeZone(tvProgram1))
+      tvprogram mustBe (TVLongWithTimeZone(tvProgram1))
 
       //AND
       verify(tvContentRepository).findContentByID(tvProgram1.id.get.stringify)
@@ -475,8 +476,11 @@ trait TVContentSetUpTest extends MockitoSugar {
 
   val tvContentRepository = mock[ContentRepository]
 
+  implicit val host: String = "http://beta.tvlive.io"
+
   class App extends TVContentController {
     override val contentRepository = tvContentRepository
+    override implicit val host: String = "http://beta.tvlive.io"
   }
 
   val controller = new App

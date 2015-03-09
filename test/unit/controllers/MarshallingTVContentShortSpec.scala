@@ -1,5 +1,6 @@
 package controllers
 
+import controllers.external._
 import org.joda.time.{DateTimeZone, DateTime}
 import org.joda.time.format.DateTimeFormat
 import org.scalatest.MustMatchers
@@ -23,6 +24,7 @@ class MarshallingTVContentShortSpec extends PlaySpec with MustMatchers {
     program = Some(ProgramShort("titleProgram")),
     onTimeNow = true,
     perCentTimeElapsed = Some(10),
+    uriTVContentDetails = "http://localhost:9000/tvcontent/445567777",
     id = Some(id))
 
   "Write and reads" should {
@@ -43,7 +45,7 @@ class MarshallingTVContentShortSpec extends PlaySpec with MustMatchers {
       (tvContentJson \ "film" \ "rating").as[Double] mustBe 8
       (tvContentJson \ "film" \ "poster").as[String] mustBe "poster2"
       (tvContentJson \ "program" \ "title").as[String] mustBe "titleProgram"
-      (tvContentJson \ "uriTVContentDetails").as[String] mustBe s"/tvcontent/$idString"
+      (tvContentJson \ "uriTVContentDetails").as[String] mustBe "http://localhost:9000/tvcontent/445567777"
       (tvContentJson \ "onTimeNow").as[Boolean] mustBe true
       (tvContentJson \ "perCentTimeElapsed").as[Int] mustBe 10
       (tvContentJson \ "id").as[String] mustBe s"$idString"
@@ -65,7 +67,7 @@ class MarshallingTVContentShortSpec extends PlaySpec with MustMatchers {
           | "rating":8,
           | "poster":"poster2"},
           |"program":{"title":"titleProgram"},
-          |"uriTVContentDetails":"/tvcontent/54cbe9810100000100af8be0",
+          |"uriTVContentDetails":"http://localhost:9000/tvcontent/445567777",
           |"onTimeNow":true,
           |"perCentTimeElapsed":10,
           |"id":"$idString"}""".stripMargin

@@ -1,4 +1,5 @@
-import models.{TVChannelProvider, TVChannelCategory, TVChannel}
+import controllers.external._
+import models.{TVChannelProvider, TVChannelCategory}
 import org.joda.time.{DateTime, DateTimeZone}
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
@@ -23,15 +24,19 @@ package object controllers {
     }
   }
 
-  implicit val reviewReads: Reads[TVChannel] = (
+  implicit val reviewReads: Reads[TVChannelLong] = (
     (__ \ "name").read[String] and
       (__ \ "provider").read[List[String]] and
       (__ \ "category").read[List[String]] and
+      (__ \ "uriToday").read[String] and
+      (__ \ "uriCurrent").read[String] and
+      (__ \ "uriLeft").read[String] and
+      (__ \ "image").read[String] and
       (__ \ "id").read[Option[BSONObjectID]]
-    )(TVChannel.apply _)
+    )(TVChannelLong.apply _)
 
-  implicit val tvChannelWrites = new Writes[TVChannel] {
-    override def writes(tvchannel: TVChannel): JsValue = Json.obj(
+  implicit val tvChannelWrites = new Writes[TVChannelLong] {
+    override def writes(tvchannel: TVChannelLong): JsValue = Json.obj(
       "name" -> tvchannel.name,
       "provider" -> tvchannel.provider,
       "category" -> tvchannel.category,
@@ -101,6 +106,7 @@ package object controllers {
       (__ \ "program").read[Option[ProgramShort]] and
       (__ \ "onTimeNow").read[Boolean] and
       (__ \ "perCentTimeElapsed").read[Option[Long]] and
+      (__ \ "uriTVContentDetails").read[String] and
       (__ \ "id").read[Option[BSONObjectID]]
     )(TVContentShort.apply _)
 
@@ -118,6 +124,7 @@ package object controllers {
       "uriTVContentDetails" -> tvContentShort.uriTVContentDetails,
       "onTimeNow" -> tvContentShort.onTimeNow,
       "perCentTimeElapsed" -> tvContentShort.perCentTimeElapsed,
+      "uriTVContentDetails" -> tvContentShort.uriTVContentDetails,
       "id" -> tvContentShort.id
     )
   }

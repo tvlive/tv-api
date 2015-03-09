@@ -2,7 +2,8 @@ package controllers
 
 import java.net.URLDecoder
 
-import configuration.ApplicationContext
+import configuration.{Environment, ApplicationContext}
+import controllers.external.{TVShort, TVContentShort, TVLong, TVContentLong}
 import models._
 import play.api.mvc.Action
 
@@ -10,10 +11,12 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 object TVContentController extends TVContentController {
   override val contentRepository = ApplicationContext.tvContentRepository
+  override implicit val host: String = Environment.host
 }
 
 trait TVContentController extends BaseController {
 
+  implicit val host: String
   val toTVShorts: Seq[TVContent] => Seq[TVContentShort] = _.map(TVShort(_))
   val toTVLong: TVContent => TVContentLong = TVLong(_)
 
