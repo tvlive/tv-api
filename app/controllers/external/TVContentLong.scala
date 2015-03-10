@@ -1,4 +1,4 @@
-package controllers
+package controllers.external
 
 import models._
 import org.joda.time.DateTime

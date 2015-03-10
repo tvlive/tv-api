@@ -1,5 +1,6 @@
 package controllers
 
+import controllers.external.{TVLong, TVContentLong}
 import models._
 import org.joda.time.{DateTimeZone, DateTime}
 import org.joda.time.format.DateTimeFormat

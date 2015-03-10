@@ -3,6 +3,7 @@ package controllers
 import java.net.URLDecoder
 
 import configuration.ApplicationContext
+import controllers.external.{TVShort, TVContentShort, TVLong, TVContentLong}
 import models._
 import play.api.mvc.Action
 

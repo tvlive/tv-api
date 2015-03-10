@@ -1,5 +1,6 @@
 package controllers
 
+import controllers.external.{TVLong, TVContentLong}
 import models._
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.{DateTime, DateTimeZone}
@@ -68,26 +69,26 @@ class MarshallingFilmSpec extends PlaySpec with MustMatchers {
                         |"channelImageURL":"/bbc1.png",
                         |"provider":["FREEVIEW","SKY"],
                         |"start":"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}",
-                                                                                                   |"end":"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}",
-                                                                                                                                                                                         |"series":null,
-                                                                                                                                                                                         |"film":{
-                                                                                                                                                                                         |"title":"film2",
-                                                                                                                                                                                         |"actors":["actor2"],
-                                                                                                                                                                                         |"writer":["writer2"],
-                                                                                                                                                                                         |"director":["director2"],
-                                                                                                                                                                                         |"genre":["cat2"],
-                                                                                                                                                                                         |"country":["count2"],
-                                                                                                                                                                                         |"language":"lang2",
-                                                                                                                                                                                         |"rating":8,
-                                                                                                                                                                                         |"awards":"awards2",
-                                                                                                                                                                                         |"poster":"poster2",
-                                                                                                                                                                                         |"plot":"plot2",
-                                                                                                                                                                                         |"year":"1977",
-                                                                                                                                                                                         |"imdbId":"imdbId1"},
-                                                                                                                                                                                         |"program":null,
-                                                                                                                                                                                         |"onTimeNow":false,
-                                                                                                                                                                                         |"perCentTimeElapsed":null,
-                                                                                                                                                                                         |"id":"$idString"}""".stripMargin
+                        |"end":"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}",
+                       |"series":null,
+                       |"film":{
+                       |"title":"film2",
+                       |"actors":["actor2"],
+                       |"writer":["writer2"],
+                       |"director":["director2"],
+                       |"genre":["cat2"],
+                       |"country":["count2"],
+                       |"language":"lang2",
+                       |"rating":8,
+                       |"awards":"awards2",
+                       |"poster":"poster2",
+                       |"plot":"plot2",
+                       |"year":"1977",
+                       |"imdbId":"imdbId1"},
+                       |"program":null,
+                       |"onTimeNow":false,
+                       |"perCentTimeElapsed":null,
+                       |"id":"$idString"}""".stripMargin
 
       Json.parse(filmJson).as[TVContentLong] mustBe film.copy(
         start = now.withZone(DateTimeZone.forID("Europe/London")),

@@ -1,7 +1,7 @@
-package controllers
+package controllers.external
 
 import models._
-import org.joda.time.{DateTime, Duration}
+import org.joda.time.DateTime
 import reactivemongo.bson.BSONObjectID
 import utils.{ModelUtils, TimeProvider}
 

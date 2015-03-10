@@ -1,5 +1,6 @@
 package models
 
+import controllers.external.ChannelLong
 import org.joda.time.{DateTime, DateTimeZone}
 import org.scalatest.MustMatchers
 import org.scalatestplus.play.PlaySpec
@@ -9,7 +10,7 @@ class TVChannelSpec extends PlaySpec with MustMatchers {
 
   "image" should {
     "be /CHANNEL_1_PLUS.png when tvChannel CHANNEL 1 PLUS" in {
-      val channel = TVChannel("CHANNEL 1 PLUS", List(), List(), None)
+      val channel = ChannelLong(TVChannel("CHANNEL 1 PLUS", List(), List(), None))
       channel.image mustBe "/CHANNEL_1_PLUS.png"
     }
   }

@@ -1,7 +1,5 @@
 package models
 
-import java.net.URLEncoder
-
 import play.api.libs.iteratee.Enumerator
 import reactivemongo.bson._
 
@@ -9,12 +7,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 
-case class TVChannel(name: String, provider: List[String], category: List[String], id: Option[BSONObjectID] = Some(BSONObjectID.generate)) extends ChannelImageURLBuilder {
-  val uriToday: String = controllers.routes.TVContentController.allContent(URLEncoder.encode(name, "UTF-8")).url
-  val uriCurrent: String = controllers.routes.TVContentController.currentContent(URLEncoder.encode(name, "UTF-8")).url
-  val uriLeft: String = controllers.routes.TVContentController.contentLeft(URLEncoder.encode(name,"UTF-8")).url
-  val image = buildUrl(name)
-}
+case class TVChannel(name: String, provider: List[String], category: List[String], id: Option[BSONObjectID] = Some(BSONObjectID.generate))
 
 trait ChannelRepository {
 

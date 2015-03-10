@@ -1,5 +1,6 @@
 package controllers
 
+import controllers.external.{ChannelLong, TVChannelLong}
 import models.{ChannelRepository, TVChannel}
 import org.mockito.Mockito._
 import org.scalatest.MustMatchers
@@ -26,8 +27,8 @@ class TVChannelControllerSpec extends PlaySpec with MustMatchers {
       //THEN
       status(channelResult) mustBe(OK)
       contentType(channelResult) mustBe(Some("application/json"))
-      val channelsInResponse = contentAsJson(channelResult).as[Seq[TVChannel]]
-      channelsInResponse mustEqual Seq(tvChannel1, tvChannel2, tvChannel3, tvChannel4)
+      val channelsInResponse = contentAsJson(channelResult).as[Seq[TVChannelLong]]
+      channelsInResponse mustEqual Seq(ChannelLong(tvChannel1), ChannelLong(tvChannel2), ChannelLong(tvChannel3), ChannelLong(tvChannel4))
 
       //AND
       verify(tvChannelRepository).listOfTVChannels()
@@ -43,8 +44,8 @@ class TVChannelControllerSpec extends PlaySpec with MustMatchers {
       //THEN
       status(channelResult) mustBe(OK)
       contentType(channelResult) mustBe(Some("application/json"))
-      val channelsInResponse = contentAsJson(channelResult).as[Seq[TVChannel]]
-      channelsInResponse mustEqual Seq(tvChannel2, tvChannel4)
+      val channelsInResponse = contentAsJson(channelResult).as[Seq[TVChannelLong]]
+      channelsInResponse mustEqual Seq(ChannelLong(tvChannel2), ChannelLong(tvChannel4))
 
       //AND
       verify(tvChannelRepository).listOfTVChannelsByCategory("ENTERTAINMENT")
@@ -60,8 +61,8 @@ class TVChannelControllerSpec extends PlaySpec with MustMatchers {
       //THEN
       status(channelResult) mustBe(OK)
       contentType(channelResult) mustBe(Some("application/json"))
-      val channelsInResponse = contentAsJson(channelResult).as[Seq[TVChannel]]
-      channelsInResponse mustEqual Seq(tvChannel1, tvChannel3)
+      val channelsInResponse = contentAsJson(channelResult).as[Seq[TVChannelLong]]
+      channelsInResponse mustEqual Seq(ChannelLong(tvChannel1), ChannelLong(tvChannel3))
 
       //AND
       verify(tvChannelRepository).listOfTVChannelsByCategory("DOCUMENTARY")
@@ -93,8 +94,8 @@ class TVChannelControllerSpec extends PlaySpec with MustMatchers {
       //THEN
       status(channelResult) mustBe(OK)
       contentType(channelResult) mustBe(Some("application/json"))
-      val channelsInResponse = contentAsJson(channelResult).as[Seq[TVChannel]]
-      channelsInResponse mustEqual Seq(tvChannel2, tvChannel4)
+      val channelsInResponse = contentAsJson(channelResult).as[Seq[TVChannelLong]]
+      channelsInResponse mustEqual Seq(ChannelLong(tvChannel2), ChannelLong(tvChannel4))
 
       //AND
       verify(tvChannelRepository).listOfTVChannelsByProvider("PROVIDER2")
@@ -110,8 +111,8 @@ class TVChannelControllerSpec extends PlaySpec with MustMatchers {
       //THEN
       status(channelResult) mustBe(OK)
       contentType(channelResult) mustBe(Some("application/json"))
-      val channelsInResponse = contentAsJson(channelResult).as[Seq[TVChannel]]
-      channelsInResponse mustEqual Seq(tvChannel1)
+      val channelsInResponse = contentAsJson(channelResult).as[Seq[TVChannelLong]]
+      channelsInResponse mustEqual Seq(ChannelLong(tvChannel1))
 
       //AND
       verify(tvChannelRepository).listOfTVChannelsByProvider("PROVIDER1")

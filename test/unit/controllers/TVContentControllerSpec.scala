@@ -2,6 +2,7 @@ package controllers
 
 import java.net.URLDecoder
 
+import controllers.external.{TVContentShort, TVContentLong}
 import models._
 import org.joda.time.{DateTime, DateTimeZone}
 import org.mockito.Mockito._

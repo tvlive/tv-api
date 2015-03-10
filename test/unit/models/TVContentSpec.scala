@@ -1,6 +1,6 @@
 package models
 
-import controllers.TVLong
+import controllers.external.TVLong
 import org.joda.time.{DateTime, DateTimeZone}
 import org.scalatest.MustMatchers
 import org.scalatestplus.play.PlaySpec

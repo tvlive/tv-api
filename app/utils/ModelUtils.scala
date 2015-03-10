@@ -1,7 +1,7 @@
 package utils
 
-import controllers.{ELong, EpisodeLong, EpisodeShort}
-import controllers.TVShort._
+import controllers.external.{EpisodeShort, TVShort}
+import TVShort._
 import models.TVContent
 import org.joda.time.Duration
 

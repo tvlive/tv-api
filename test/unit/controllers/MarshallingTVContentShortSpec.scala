@@ -1,5 +1,6 @@
 package controllers
 
+import controllers.external._
 import org.joda.time.{DateTimeZone, DateTime}
 import org.joda.time.format.DateTimeFormat
 import org.scalatest.MustMatchers
