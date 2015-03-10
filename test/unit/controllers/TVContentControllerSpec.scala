@@ -13,7 +13,7 @@ import play.api.mvc.SimpleResult
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import reactivemongo.bson.BSONObjectID
-import utils.DomainBuilder.{TVProgramWithTimeZone, TVShortWithTimeZone}
+import utils.DomainBuilder.{TVLongWithTimeZone, TVShortWithTimeZone}
 
 import scala.concurrent.Future
 
@@ -133,7 +133,7 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers {
       contentType(programsResult) mustBe (Some("application/json"))
       val programInResponse = contentAsString(programsResult)
       val tvprogram = Json.parse(programInResponse).as[TVContentLong]
-      tvprogram mustBe (TVProgramWithTimeZone(tvProgram3))
+      tvprogram mustBe (TVLongWithTimeZone(tvProgram3))
 
       //AND
       verify(tvContentRepository).findCurrentContentByChannel("CHANNEL1")
@@ -191,7 +191,7 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers {
       status(programResult) mustBe (OK)
       val programInResponse = contentAsString(programResult)
       val tvprogram = Json.parse(programInResponse).as[TVContentLong]
-      tvprogram mustBe (TVProgramWithTimeZone(tvProgram1))
+      tvprogram mustBe (TVLongWithTimeZone(tvProgram1))
 
       //AND
       verify(tvContentRepository).findContentByID(tvProgram1.id.get.stringify)

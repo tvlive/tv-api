@@ -3,7 +3,7 @@ package controllers
 import models._
 import org.joda.time.{DateTime, Duration}
 import reactivemongo.bson.BSONObjectID
-import utils.TimeProvider
+import utils.{ModelUtils, TimeProvider}
 
 
 
@@ -35,36 +35,20 @@ case class FilmShort(title: String, rating: Option[Double], poster: Option[Strin
 
 case class ProgramShort(title: String)
 
-object TVShort extends TimeProvider with ChannelImageURLBuilder {
+object TVShort extends TimeProvider with ChannelImageURLBuilder with ModelUtils {
   def apply(tvContent: TVContent): TVContentShort = {
-    val episode = for {
-      s <- tvContent.series
-      e <- s.episode
-    } yield (e.episodeTitle, e.seasonNumber, e.episodeNumber)
+    val es = epishoShort(tvContent)
 
-    val es = episode match {
-      case None => None
-      case Some((et, sn, en)) => Some(EpisodeShort(et, sn, en))
-    }
+    val onTimeNow = isNowShowing(tvContent)
 
-    val channelImageURL = buildUrl(tvContent.channel)
-
-    val onTimeNow = (tvContent.start.isBeforeNow || tvContent.start.isEqualNow) && (tvContent.end.isAfterNow || tvContent.end.isEqualNow)
-
-    val perCentTimeElapsed: Option[Long] = {
-      onTimeNow match {
-        case true => {
-          val initialDuration = new Duration(tvContent.start, tvContent.end).getStandardMinutes
-          val currentDuration = new Duration(tvContent.start, currentDate).getStandardMinutes
-          Some(currentDuration * 100 / initialDuration)
-        }
+    val perCentTimeElapsed = onTimeNow match {
+        case true => calculateElapsed(tvContent)
         case false => None
       }
-    }
 
     TVContentShort(
       tvContent.channel,
-      channelImageURL,
+      buildUrl(tvContent.channel),
       tvContent.provider,
       tvContent.start,
       tvContent.end,

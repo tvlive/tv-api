@@ -1,9 +1,9 @@
 package controllers
 
 import models._
-import org.joda.time.{DateTime, Duration}
+import org.joda.time.DateTime
 import reactivemongo.bson.BSONObjectID
-import utils.TimeProvider
+import utils.{ModelUtils, TimeProvider}
 
 
 case class TVContentLong(channel: String,
@@ -40,7 +40,6 @@ case class SeriesLong(serieTitle: String,
                       imdbId: Option[String])
 
 
-
 case class FilmLong(title: String,
                     actors: List[String],
                     writer: List[String],
@@ -59,37 +58,18 @@ case class FilmLong(title: String,
 case class ProgramLong(title: String, plot: Option[String])
 
 
-object TVLong extends TimeProvider with ChannelImageURLBuilder {
+object TVLong extends TimeProvider with ChannelImageURLBuilder with ModelUtils {
   def apply(tvContent: TVContent): TVContentLong = {
-    val episode = for {
-      s <- tvContent.series
-      e <- s.episode
-    } yield (e.episodeTitle, e.seasonNumber, e.episodeNumber)
+    val onTimeNow = isNowShowing(tvContent)
 
-    val es = episode match {
-      case None => None
-      case Some((et, sn, en)) => Some(EpisodeShort(et, sn, en))
+    val perCentTimeElapsed = onTimeNow match {
+      case true => calculateElapsed(tvContent)
+      case false => None
     }
-
-    val channelImageURL = buildUrl(tvContent.channel)
-
-    val onTimeNow = (tvContent.start.isBeforeNow || tvContent.start.isEqualNow) && (tvContent.end.isAfterNow || tvContent.end.isEqualNow)
-
-    val perCentTimeElapsed: Option[Long] = {
-      onTimeNow match {
-        case true => {
-          val initialDuration = new Duration(tvContent.start, tvContent.end).getStandardMinutes
-          val currentDuration = new Duration(tvContent.start, currentDate).getStandardMinutes
-          Some(currentDuration * 100 / initialDuration)
-        }
-        case false => None
-      }
-    }
-
 
     TVContentLong(
       tvContent.channel,
-      channelImageURL,
+      buildUrl(tvContent.channel),
       tvContent.provider,
       tvContent.start,
       tvContent.end,
@@ -122,5 +102,5 @@ object FLong {
 }
 
 object PLong {
-  def apply(p: Program):ProgramLong = ProgramLong(p.title, p.plot)
+  def apply(p: Program): ProgramLong = ProgramLong(p.title, p.plot)
 }
