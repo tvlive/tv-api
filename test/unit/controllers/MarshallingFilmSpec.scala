@@ -1,7 +1,6 @@
 package controllers
 
-import controllers.external.{TVLong, TVContentLong}
-import models._
+import controllers.external.{FilmLong, TVContentLong}
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.{DateTime, DateTimeZone}
 import org.scalatest.MustMatchers
@@ -14,28 +13,31 @@ class MarshallingFilmSpec extends PlaySpec with MustMatchers {
   val idString = id.stringify
   val now = new DateTime(2014, 10, 10, 10, 0, 0, DateTimeZone.forID("UTC"))
   val fmt = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
-  val film = TVLong(
-    TVContent(
-      channel = "bbc1",
-      provider = List("FREEVIEW", "SKY"),
-      start = now,
-      end = now.plusHours(2),
-      film = Some(Film("film2",
-        actors = List("actor2"),
-        writer = List("writer2"),
-        director = List("director2"),
-        genre = List("cat2"),
-        country = List("count2"),
-        language = Some("lang2"),
-        rating = Some(8),
-        awards = Some("awards2"),
-        poster = Some("poster2"),
-        plot = Some("plot2"),
-        year = Some("1977"),
-        imdbId = Some("imdbId1"))),
-      series = None,
-      program = None,
-      id = Some(id)))
+  val film = TVContentLong(
+    channel = "bbc1",
+    channelImageURL = "http://beta.tvlive.io/bbc1.png",
+    provider = List("FREEVIEW", "SKY"),
+    start = now,
+    end = now.plusHours(2),
+    film = Some(FilmLong("film2",
+      actors = List("actor2"),
+      writer = List("writer2"),
+      director = List("director2"),
+      genre = List("cat2"),
+      country = List("count2"),
+      language = Some("lang2"),
+      rating = Some(8),
+      awards = Some("awards2"),
+      poster = Some("poster2"),
+      plot = Some("plot2"),
+      year = Some("1977"),
+      imdbId = Some("imdbId1"))),
+    series = None,
+    program = None,
+    onTimeNow = false,
+    perCentTimeElapsed = Some(65),
+    id = Some(id))
+
 
   "Write and reads" should {
     "transform TVContentLong 'film' object to json" in {
@@ -43,7 +45,7 @@ class MarshallingFilmSpec extends PlaySpec with MustMatchers {
       val tvContentJson = Json.toJson(film)
 
       (tvContentJson \ "channel").as[String] mustBe "bbc1"
-      (tvContentJson \ "channelImageURL").as[String] mustBe "/bbc1.png"
+      (tvContentJson \ "channelImageURL").as[String] mustBe "http://beta.tvlive.io/bbc1.png"
       (tvContentJson \ "provider").as[List[String]] mustBe Seq("FREEVIEW", "SKY")
       (tvContentJson \ "start").as[String] mustBe s"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}"
       (tvContentJson \ "end").as[String] mustBe s"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}"
@@ -61,12 +63,13 @@ class MarshallingFilmSpec extends PlaySpec with MustMatchers {
       (tvContentJson \ "film" \ "year").as[String] mustBe "1977"
       (tvContentJson \ "film" \ "imdbId").as[String] mustBe "imdbId1"
       (tvContentJson \ "onTimeNow").as[Boolean] mustBe false
+      (tvContentJson \ "perCentTimeElapsed").as[Double] mustBe 65
       (tvContentJson \ "id").as[String] mustBe s"$idString"
     }
 
     "transform film json to TVContentLong 'film' object" in {
       val filmJson = s"""{"channel":"bbc1",
-                        |"channelImageURL":"/bbc1.png",
+                        |"channelImageURL":"http://beta.tvlive.io/bbc1.png",
                         |"provider":["FREEVIEW","SKY"],
                         |"start":"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}",
                         |"end":"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}",
@@ -87,7 +90,7 @@ class MarshallingFilmSpec extends PlaySpec with MustMatchers {
                        |"imdbId":"imdbId1"},
                        |"program":null,
                        |"onTimeNow":false,
-                       |"perCentTimeElapsed":null,
+                       |"perCentTimeElapsed":65,
                        |"id":"$idString"}""".stripMargin
 
       Json.parse(filmJson).as[TVContentLong] mustBe film.copy(

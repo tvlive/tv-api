@@ -2,8 +2,9 @@ package controllers.external
 
 import java.net.URLEncoder
 
-import models.{ChannelImageURLBuilder, TVChannel}
+import models.TVChannel
 import reactivemongo.bson.BSONObjectID
+import utils.ChannelImageURLBuilder
 
 case class TVChannelLong(name: String,
                          provider: List[String],

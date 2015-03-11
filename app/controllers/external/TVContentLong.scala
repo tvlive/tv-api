@@ -3,7 +3,7 @@ package controllers.external
 import models._
 import org.joda.time.DateTime
 import reactivemongo.bson.BSONObjectID
-import utils.{ModelUtils, TimeProvider}
+import utils.{ChannelImageURLBuilder, ModelUtils, TimeProvider}
 
 
 case class TVContentLong(channel: String,

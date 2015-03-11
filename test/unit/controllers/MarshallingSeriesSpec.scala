@@ -1,9 +1,8 @@
 package controllers
 
-import controllers.external.{TVLong, TVContentLong}
-import models._
-import org.joda.time.{DateTimeZone, DateTime}
+import controllers.external.{EpisodeLong, SeriesLong, TVContentLong}
 import org.joda.time.format.DateTimeFormat
+import org.joda.time.{DateTime, DateTimeZone}
 import org.scalatest.MustMatchers
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
@@ -14,34 +13,37 @@ class MarshallingSeriesSpec extends PlaySpec with MustMatchers {
   val idString = id.stringify
   val now = new DateTime(2014, 10, 10, 10, 0, 0, DateTimeZone.forID("UTC"))
   val fmt = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
-  val series = TVLong(
-    TVContent(
-    channel = "bbc1",
-    provider = List("FREEVIEW", "SKY"),
-    start = now,
-    end = now.plusHours(2),
-    series = Some(Series("serie1",
-      episode = Some(Episode(
-        episodeTitle = Some("et1"),
-        episodePlot = Some("ep1"),
-        seasonNumber = Some("12"),
-        episodeNumber = Some("2"),
-        totalNumber = Some("25"))),
-      actors = List("actor1"),
-      writer = List("writer1"),
-      director = List("director1"),
-      genre = List("cat1"),
-      country = List("count1"),
-      language = Some("lang1"),
-      rating = Some(7),
-      awards = Some("awards"),
-      poster = Some("poster1"),
-      plot = Some("plot1"),
-      year = Some("1976"),
-      imdbId = Some("imdbId1"))),
-    film = None,
-    program = None,
-    id = Some(id)))
+  val series =
+    TVContentLong(
+      channel = "bbc1",
+      channelImageURL = "http://beta.tvlive.io/bbc1.png",
+      provider = List("FREEVIEW", "SKY"),
+      start = now,
+      end = now.plusHours(2),
+      series = Some(SeriesLong("serie1",
+        episode = Some(EpisodeLong(
+          episodeTitle = Some("et1"),
+          episodePlot = Some("ep1"),
+          seasonNumber = Some("12"),
+          episodeNumber = Some("2"),
+          totalNumber = Some("25"))),
+        actors = List("actor1"),
+        writer = List("writer1"),
+        director = List("director1"),
+        genre = List("cat1"),
+        country = List("count1"),
+        language = Some("lang1"),
+        rating = Some(7),
+        awards = Some("awards"),
+        poster = Some("poster1"),
+        plot = Some("plot1"),
+        year = Some("1976"),
+        imdbId = Some("imdbId1"))),
+      film = None,
+      program = None,
+      onTimeNow = false,
+      perCentTimeElapsed = Some(65),
+      id = Some(id))
 
   "Write and reads" should {
     "transform TVContent Long 'series' object to json" in {
@@ -49,7 +51,7 @@ class MarshallingSeriesSpec extends PlaySpec with MustMatchers {
       val tvContentJson = Json.toJson(series)
 
       (tvContentJson \ "channel").as[String] mustBe "bbc1"
-      (tvContentJson \ "channelImageURL").as[String] mustBe "/bbc1.png"
+      (tvContentJson \ "channelImageURL").as[String] mustBe "http://beta.tvlive.io/bbc1.png"
       (tvContentJson \ "provider").as[List[String]] mustBe Seq("FREEVIEW", "SKY")
       (tvContentJson \ "start").as[String] mustBe s"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}"
       (tvContentJson \ "end").as[String] mustBe s"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}"
@@ -72,43 +74,44 @@ class MarshallingSeriesSpec extends PlaySpec with MustMatchers {
       (tvContentJson \ "series" \ "year").as[String] mustBe "1976"
       (tvContentJson \ "series" \ "imdbId").as[String] mustBe "imdbId1"
       (tvContentJson \ "onTimeNow").as[Boolean] mustBe false
+      (tvContentJson \ "perCentTimeElapsed").as[Double] mustBe 65
       (tvContentJson \ "id").as[String] mustBe s"$idString"
     }
 
     "transform series json to TVContent Long 'series' object" in {
       val seriesJson = s"""{"channel":"bbc1",
-       |"channelImageURL":"/bbc1.png",
-       |"provider":["FREEVIEW","SKY"],
-       |"start":"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}",
-       |"end":"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}",
-       |"series":{
-       |  "serieTitle":"serie1",
-       |  "episode":{
-       |    "episodeTitle":"et1",
-       |    "episodePlot":"ep1",
-       |    "seasonNumber":"12",
-       |    "episodeNumber":"2",
-       |    "totalNumber":"25"},
-       |    "actors":["actor1"],
-       |    "writer":["writer1"],
-       |    "director":["director1"],
-       |    "genre":["cat1"],
-       |    "country":["count1"],
-       |    "language":"lang1",
-       |    "rating":7,
-       |    "awards":"awards",
-       |    "poster":"poster1",
-       |    "plot":"plot1",
-       |    "year":"1976",
-       | "imdbId":"imdbId1"},
-       |"film":null,
-       |"program":null,
-       |"onTimeNow":false,
-       |"perCentTimeElapsed":null,
-       |"id":"$idString"}""".stripMargin
+                          |"channelImageURL":"http://beta.tvlive.io/bbc1.png",
+                          |"provider":["FREEVIEW","SKY"],
+                          |"start":"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}",
+                          |"end":"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}",
+                          |"series":{
+                         | "serieTitle":"serie1",
+                         | "episode":{
+                         |   "episodeTitle":"et1",
+                         |   "episodePlot":"ep1",
+                         |   "seasonNumber":"12",
+                         |   "episodeNumber":"2",
+                         |   "totalNumber":"25"},
+                         |   "actors":["actor1"],
+                         |   "writer":["writer1"],
+                         |   "director":["director1"],
+                         |   "genre":["cat1"],
+                         |   "country":["count1"],
+                         |   "language":"lang1",
+                         |   "rating":7,
+                         |   "awards":"awards",
+                         |   "poster":"poster1",
+                         |   "plot":"plot1",
+                         |   "year":"1976",
+                         |"imdbId":"imdbId1"},
+                         |"film":null,
+                         |"program":null,
+                         |"onTimeNow":false,
+                         |"perCentTimeElapsed":65,
+                         |"id":"$idString"}""".stripMargin
 
       Json.parse(seriesJson).as[TVContentLong] mustBe series.copy(
-        start =   now.withZone(DateTimeZone.forID("Europe/London")),
+        start = now.withZone(DateTimeZone.forID("Europe/London")),
         end = now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))
     }
   }
