@@ -17,9 +17,10 @@ case class TVContentShort(channel: String,
                           program: Option[ProgramShort],
                           onTimeNow: Boolean,
                           perCentTimeElapsed: Option[Long],
+                          uriTVContentDetails: String,
                           id: Option[BSONObjectID] = Some(BSONObjectID.generate)) {
 
-  val uriTVContentDetails = controllers.routes.TVContentController.tvContentDetails(id.get.stringify).toString()
+
 }
 
 case class SeriesShort(serieTitle: String,
@@ -46,6 +47,8 @@ object TVShort extends TimeProvider with URLBuilder with ModelUtils {
         case false => None
       }
 
+    val uriTVContentDetails = s"http://localhost:9000${controllers.routes.TVContentController.tvContentDetails(tvContent.id.get.stringify).url}"
+
     TVContentShort(
       tvContent.channel,
       buildImageUrl(tvContent.channel),
@@ -57,6 +60,7 @@ object TVShort extends TimeProvider with URLBuilder with ModelUtils {
       tvContent.program.map(p => ProgramShort(p.title)),
       onTimeNow,
       perCentTimeElapsed,
+      uriTVContentDetails,
       tvContent.id)
   }
 }

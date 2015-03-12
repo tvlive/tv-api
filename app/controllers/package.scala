@@ -106,6 +106,7 @@ package object controllers {
       (__ \ "program").read[Option[ProgramShort]] and
       (__ \ "onTimeNow").read[Boolean] and
       (__ \ "perCentTimeElapsed").read[Option[Long]] and
+      (__ \ "uriTVContentDetails").read[String] and
       (__ \ "id").read[Option[BSONObjectID]]
     )(TVContentShort.apply _)
 
@@ -123,6 +124,7 @@ package object controllers {
       "uriTVContentDetails" -> tvContentShort.uriTVContentDetails,
       "onTimeNow" -> tvContentShort.onTimeNow,
       "perCentTimeElapsed" -> tvContentShort.perCentTimeElapsed,
+      "uriTVContentDetails" -> tvContentShort.uriTVContentDetails,
       "id" -> tvContentShort.id
     )
   }

@@ -5,7 +5,7 @@ import org.joda.time.{DateTime, DateTimeZone}
 import org.scalatest.MustMatchers
 import org.scalatestplus.play.PlaySpec
 
-class TVContentSpec extends PlaySpec with MustMatchers {
+class TVContentLongSpec extends PlaySpec with MustMatchers {
   val now = new DateTime(DateTimeZone.forID("UTC"))
 
   "onTimeNow" should {
