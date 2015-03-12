@@ -3,7 +3,7 @@ package controllers.external
 import models._
 import org.joda.time.DateTime
 import reactivemongo.bson.BSONObjectID
-import utils.{ChannelImageURLBuilder, ModelUtils, TimeProvider}
+import utils.{URLBuilder, ModelUtils, TimeProvider}
 
 
 case class TVContentLong(channel: String,
@@ -58,7 +58,7 @@ case class FilmLong(title: String,
 case class ProgramLong(title: String, plot: Option[String])
 
 
-object TVLong extends TimeProvider with ChannelImageURLBuilder with ModelUtils {
+object TVLong extends TimeProvider with URLBuilder with ModelUtils {
   def apply(tvContent: TVContent): TVContentLong = {
     val onTimeNow = isNowShowing(tvContent)
 
@@ -69,7 +69,7 @@ object TVLong extends TimeProvider with ChannelImageURLBuilder with ModelUtils {
 
     TVContentLong(
       tvContent.channel,
-      buildUrl(tvContent.channel),
+      buildImageUrl(tvContent.channel),
       tvContent.provider,
       tvContent.start,
       tvContent.end,
