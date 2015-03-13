@@ -107,7 +107,7 @@ class MarshallingSeriesSpec extends PlaySpec with MustMatchers {
                          |"onTimeNow":false,
                          |"perCentTimeElapsed":65}""".stripMargin
 
-      Json.parse(seriesJson).as[TVContent] mustBe series.copy(
+      Json.parse(seriesJson).as[TVContentLong] mustBe series.copy(
         start =   now.withZone(DateTimeZone.forID("Europe/London")),
         end = now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))
     }
