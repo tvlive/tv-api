@@ -1,6 +1,7 @@
 package controllers
 
 import configuration.ApplicationContext._
+import configuration.Environment
 import models.{ChannelCategoryRepository, ChannelProviderRepository}
 import play.api.i18n.Messages
 import play.api.libs.json.Json
@@ -12,10 +13,11 @@ import scala.concurrent.Future
 object TVRootController extends TVRootController {
   override val providerRepository = tvChannelProviderReporitory
   override val categoryRepository = tvChannelCategoryRepository
+  override implicit val host: String = Environment.host
 }
 
 trait TVRootController extends BaseController with URLBuilder {
-  val host = "http://localhost:9000"
+  implicit val host: String
   val providerRepository: ChannelProviderRepository
   val categoryRepository: ChannelCategoryRepository
 
