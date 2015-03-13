@@ -31,8 +31,7 @@ package object controllers {
       (__ \ "uriToday").read[String] and
       (__ \ "uriCurrent").read[String] and
       (__ \ "uriLeft").read[String] and
-      (__ \ "image").read[String] and
-      (__ \ "id").read[Option[BSONObjectID]]
+      (__ \ "image").read[String]
     )(TVChannelLong.apply _)
 
   implicit val tvChannelWrites = new Writes[TVChannelLong] {
@@ -40,7 +39,6 @@ package object controllers {
       "name" -> tvchannel.name,
       "provider" -> tvchannel.provider,
       "category" -> tvchannel.category,
-      "id" -> tvchannel.id,
       "uriToday" -> tvchannel.uriToday,
       "uriCurrent" -> tvchannel.uriCurrent,
       "uriLeft" -> tvchannel.uriLeft,
@@ -75,8 +73,7 @@ package object controllers {
       (__ \ "film").read[Option[FilmLong]] and
       (__ \ "program").read[Option[ProgramLong]] and
       (__ \ "onTimeNow").read[Boolean] and
-      (__ \ "perCentTimeElapsed").read[Option[Long]] and
-      (__ \ "id").read[Option[BSONObjectID]]
+      (__ \ "perCentTimeElapsed").read[Option[Long]]
     )(TVContentLong.apply _)
 
   implicit val tvProgramWrites = new Writes[TVContentLong] {
@@ -90,8 +87,7 @@ package object controllers {
       "film" -> tvContentLong.film,
       "program" -> tvContentLong.program,
       "onTimeNow" -> tvContentLong.onTimeNow,
-      "perCentTimeElapsed" -> tvContentLong.perCentTimeElapsed,
-      "id" -> tvContentLong.id
+      "perCentTimeElapsed" -> tvContentLong.perCentTimeElapsed
     )
   }
 
@@ -106,8 +102,7 @@ package object controllers {
       (__ \ "program").read[Option[ProgramShort]] and
       (__ \ "onTimeNow").read[Boolean] and
       (__ \ "perCentTimeElapsed").read[Option[Long]] and
-      (__ \ "uriTVContentDetails").read[String] and
-      (__ \ "id").read[Option[BSONObjectID]]
+      (__ \ "uriTVContentDetails").read[String]
     )(TVContentShort.apply _)
 
 
@@ -124,14 +119,13 @@ package object controllers {
       "uriTVContentDetails" -> tvContentShort.uriTVContentDetails,
       "onTimeNow" -> tvContentShort.onTimeNow,
       "perCentTimeElapsed" -> tvContentShort.perCentTimeElapsed,
-      "uriTVContentDetails" -> tvContentShort.uriTVContentDetails,
-      "id" -> tvContentShort.id
+      "uriTVContentDetails" -> tvContentShort.uriTVContentDetails
     )
   }
 
 
-  implicit val tvChannelCategoryFmt = Json.format[TVChannelCategory]
-  implicit val tvChannelProviderFmt = Json.format[TVChannelProvider]
+  implicit val tvChannelCategoryExtFmt = Json.format[TVChannelCategoryExternal]
+  implicit val tvChannelProviderExtFmt = Json.format[TVChannelProviderExternal]
   implicit val linkFmt = Json.format[Link]
   implicit val notFoundResponseFmt = Json.format[NotFoundResponse]
   implicit val internalServerErrorResponseFmt = Json.format[InternalErrorServerResponse]

@@ -24,8 +24,7 @@ class MarshallingTVContentShortSpec extends PlaySpec with MustMatchers {
     program = Some(ProgramShort("titleProgram")),
     onTimeNow = true,
     perCentTimeElapsed = Some(10),
-    uriTVContentDetails = "http://localhost:9000/tvcontent/445567777",
-    id = Some(id))
+    uriTVContentDetails = "http://localhost:9000/tvcontent/445567777")
 
   "Write and reads" should {
     "transform TVContent short object to json" in {
@@ -48,7 +47,6 @@ class MarshallingTVContentShortSpec extends PlaySpec with MustMatchers {
       (tvContentJson \ "uriTVContentDetails").as[String] mustBe "http://localhost:9000/tvcontent/445567777"
       (tvContentJson \ "onTimeNow").as[Boolean] mustBe true
       (tvContentJson \ "perCentTimeElapsed").as[Int] mustBe 10
-      (tvContentJson \ "id").as[String] mustBe s"$idString"
     }
 
     "transform json to TVProgram short object" in {
@@ -69,8 +67,7 @@ class MarshallingTVContentShortSpec extends PlaySpec with MustMatchers {
           |"program":{"title":"titleProgram"},
           |"uriTVContentDetails":"http://localhost:9000/tvcontent/445567777",
           |"onTimeNow":true,
-          |"perCentTimeElapsed":10,
-          |"id":"$idString"}""".stripMargin
+          |"perCentTimeElapsed":10}""".stripMargin
 
       Json.parse(tvContentShortJson).as[TVContentShort] mustBe tvContentShort.copy(
         start = now.withZone(DateTimeZone.forID("Europe/London")),

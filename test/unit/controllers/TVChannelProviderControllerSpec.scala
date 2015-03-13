@@ -1,5 +1,6 @@
 package controllers
 
+import controllers.external.{TVChannelProviderExternal, ChannelProviderExternal}
 import models.{ChannelProviderRepository, TVChannelProvider}
 import org.scalatest.MustMatchers
 import org.scalatest.mock.MockitoSugar
@@ -27,8 +28,8 @@ class TVChannelProviderControllerSpec extends PlaySpec with MustMatchers {
       //THEN
       status(providersResult) mustBe(OK)
       contentType(providersResult) mustBe(Some("application/json"))
-      val genresInResponse = contentAsJson(providersResult).as[Seq[TVChannelProvider]]
-      genresInResponse mustEqual Seq(tvChannelProvider3, tvChannelProvider4, tvChannelProvider2, tvChannelProvider1)
+      val genresInResponse = contentAsJson(providersResult).as[Seq[TVChannelProviderExternal]]
+      genresInResponse mustEqual Seq(channelProvider3, channelProvider4, channelProvider2, channelProvider1)
     }
   }
 }
@@ -40,6 +41,11 @@ trait TVChannelProviderSetUpTest extends MockitoSugar {
   val tvChannelProvider2 = TVChannelProvider("SKY", Some(BSONObjectID.generate))
   val tvChannelProvider3 = TVChannelProvider("FREEVIEW", Some(BSONObjectID.generate))
   val tvChannelProvider4 = TVChannelProvider("PROVIDER", Some(BSONObjectID.generate))
+
+  val channelProvider1 = ChannelProviderExternal(tvChannelProvider1)
+  val channelProvider2 = ChannelProviderExternal(tvChannelProvider2)
+  val channelProvider3 = ChannelProviderExternal(tvChannelProvider3)
+  val channelProvider4 = ChannelProviderExternal(tvChannelProvider4)
 
   val tvChannelProviderRepository = mock[ChannelProviderRepository]
 

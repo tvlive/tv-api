@@ -15,8 +15,7 @@ case class TVContentLong(channel: String,
                          film: Option[FilmLong],
                          program: Option[ProgramLong],
                          onTimeNow: Boolean,
-                         perCentTimeElapsed: Option[Long],
-                         id: Option[BSONObjectID] = Some(BSONObjectID.generate))
+                         perCentTimeElapsed: Option[Long])
 
 case class EpisodeLong(episodeTitle: Option[String],
                        episodePlot: Option[String],
@@ -77,8 +76,7 @@ object TVLong extends TimeProvider with URLBuilder with ModelUtils {
       tvContent.film.map(f => FLong(f)),
       tvContent.program.map(p => PLong(p)),
       onTimeNow,
-      perCentTimeElapsed,
-      tvContent.id)
+      perCentTimeElapsed)
 
   }
 }

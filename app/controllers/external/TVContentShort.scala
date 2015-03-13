@@ -17,8 +17,7 @@ case class TVContentShort(channel: String,
                           program: Option[ProgramShort],
                           onTimeNow: Boolean,
                           perCentTimeElapsed: Option[Long],
-                          uriTVContentDetails: String,
-                          id: Option[BSONObjectID] = Some(BSONObjectID.generate)) {
+                          uriTVContentDetails: String) {
 
 
 }
@@ -60,7 +59,6 @@ object TVShort extends TimeProvider with URLBuilder with ModelUtils {
       tvContent.program.map(p => ProgramShort(p.title)),
       onTimeNow,
       perCentTimeElapsed,
-      uriTVContentDetails,
-      tvContent.id)
+      uriTVContentDetails)
   }
 }

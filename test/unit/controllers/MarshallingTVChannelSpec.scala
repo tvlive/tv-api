@@ -17,8 +17,7 @@ class MarshallingTVChannelSpec extends PlaySpec with MustMatchers {
     uriToday = "http://localhost:9000/channel/bbc1/today",
     uriCurrent = "http://localhost:9000/channel/bbc1/current",
     uriLeft = "http://localhost:9000/channel/bbc1/left",
-    image = "http://localhost:9000/bbc1.png",
-    Some(id))
+    image = "http://localhost:9000/bbc1.png")
 
   "Write and reads" should {
     "transform TVChannel object to json" in {
@@ -28,7 +27,6 @@ class MarshallingTVChannelSpec extends PlaySpec with MustMatchers {
       (channelJson \ "name").as[String] mustBe "bbc1"
       (channelJson \ "provider").as[List[String]] mustBe Seq("provider1")
       (channelJson \ "category").as[List[String]] mustBe Seq("cat1")
-      (channelJson \ "id").as[String] mustBe s"$idString"
       (channelJson \ "uriToday").as[String] mustBe "http://localhost:9000/channel/bbc1/today"
       (channelJson \ "uriCurrent").as[String] mustBe "http://localhost:9000/channel/bbc1/current"
       (channelJson \ "uriLeft").as[String] mustBe "http://localhost:9000/channel/bbc1/left"
@@ -43,8 +41,7 @@ class MarshallingTVChannelSpec extends PlaySpec with MustMatchers {
            |"uriToday":"http://localhost:9000/channel/bbc1/today",
            |"uriCurrent":"http://localhost:9000/channel/bbc1/current",
            |"uriLeft":"http://localhost:9000/channel/bbc1/left",
-           |"image":"http://localhost:9000/bbc1.png",
-           |"id":\"$idString\"}""".stripMargin)
+           |"image":"http://localhost:9000/bbc1.png"}""".stripMargin)
         .as[TVChannelLong] mustBe channel
     }
   }

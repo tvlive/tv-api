@@ -12,8 +12,7 @@ case class TVChannelLong(name: String,
                          uriToday: String,
                          uriCurrent: String,
                          uriLeft: String,
-                         image: String,
-                         id: Option[BSONObjectID] = Some(BSONObjectID.generate))
+                         image: String)
 
 
 object ChannelLong extends URLBuilder {
@@ -23,6 +22,6 @@ object ChannelLong extends URLBuilder {
       val uriLeft: String = buildUrl(host, controllers.routes.TVContentController.contentLeft(URLEncoder.encode(tvc.name,"UTF-8")).url)
       val image = buildImageUrl(host, "/", tvc.name)
 
-    TVChannelLong(tvc.name, tvc.provider, tvc.category, uriToday, uriCurrent, uriLeft, image, tvc.id)
+    TVChannelLong(tvc.name, tvc.provider, tvc.category, uriToday, uriCurrent, uriLeft, image)
   }
 }
