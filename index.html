@@ -74,6 +74,11 @@
               </a>
             </p>                                   
             <p class="lead">
+              <a id="mobile-proto" href="https://spaces.proto.io/project/5B25C215-DE69-DFE9-9FD1-16512E4D2E78/" class="btn btn-lg btn-default" target="_blank">
+                Prototype design
+              </a>
+            </p>
+            <p class="lead">
               <a id="mobile-app" href="http://mobile.tvlive.io/" class="btn btn-lg btn-default" target="_blank">
                 Use the mobile app prototype
               </a>
@@ -108,6 +113,10 @@
         send_event('api-beta');
       });
       
+      $('#mobile-proto').on('click', function() {
+        send_event('mobile-prototype');
+      });
+
       $('#mobile-app').on('click', function() {
         send_event('mobile-app');
       });
