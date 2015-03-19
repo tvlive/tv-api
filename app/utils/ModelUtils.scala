@@ -19,13 +19,13 @@ trait ModelUtils {
     }
   }
 
-  def isNowShowing(tvContent: TVContent): Boolean =
-    (tvContent.start.isBeforeNow || tvContent.start.isEqualNow) &&
-      (tvContent.end.isAfterNow || tvContent.end.isEqualNow)
+  def isNowShowing(tvContent: TVContent)(implicit time: TimeProvider): Boolean =
+    (tvContent.start.isBefore(time.currentDate())  || tvContent.start.isEqual(time.currentDate())) &&
+      (tvContent.end.isAfter(time.currentDate()) || tvContent.end.isEqual(time.currentDate()))
 
-  def calculateElapsed(tvContent: TVContent): Option[Long] = {
+  def calculateElapsed(tvContent: TVContent)(implicit time: TimeProvider): Option[Long] = {
     val initialDuration = new Duration(tvContent.start, tvContent.end).getStandardMinutes
-    val currentDuration = new Duration(tvContent.start, currentDate).getStandardMinutes
+    val currentDuration = new Duration(tvContent.start, time.currentDate).getStandardMinutes
     Some(currentDuration * 100 / initialDuration)
   }
 }

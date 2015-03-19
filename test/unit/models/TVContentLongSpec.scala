@@ -4,11 +4,14 @@ import controllers.external.TVLong
 import org.joda.time.{DateTime, DateTimeZone}
 import org.scalatest.MustMatchers
 import org.scalatestplus.play.PlaySpec
+import utils.TimeProvider
 
 class TVContentLongSpec extends PlaySpec with MustMatchers {
   val now = new DateTime(DateTimeZone.forID("UTC"))
   implicit val host: String = "http://localhost:9000"
-
+  implicit val time: TimeProvider = new TimeProvider {
+    override def currentDate() = now
+  }
   "onTimeNow" should {
     "be true when tvContent start time is before now and after time is after now" in {
       val content = TVLong(

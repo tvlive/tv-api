@@ -16,11 +16,11 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
 
   val current = new DateTime(2010, 10, 10, 10, 0, 0, DateTimeZone.forID("UTC"))
 
-  trait FakeTimeProvider extends TimeProvider {
+  implicit val time: TimeProvider = new TimeProvider {
     override def currentDate() = current
   }
 
-  val tvContentRepository = new TVContentRepository(this.getClass.getCanonicalName) with FakeTimeProvider
+  val tvContentRepository = new TVContentRepository(this.getClass.getCanonicalName)
   tvContentRepository.drop()
   Thread.sleep(5000)
 
@@ -77,21 +77,29 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
   }
 
   object Channel3 {
-    val film4 = TVContent("channel2", List("FREEVIEW", "SKY"), current, current.plusHours(3),
+    val film4 = TVContent("channel3", List("FREEVIEW", "SKY"), current, current.plusHours(3),
       None,
       Some(Film("film4", List("actor1"), List(), List(), List(), List(), None, Some(8), None, None, None, None, None)),
       None)
   }
 
 
+  object Channel4 {
+    val program4 = TVContent("channel4", List("FREEVIEW", "SKY"), current.minusHours(1), current.plusHours(1),
+      None,
+      None,
+      Some(Program("p6", Some("d6"))))
+  }
+
 
   before {
     import Channel1._
     import Channel2._
     import Channel3._
+    import Channel4._
     whenReady(tvContentRepository.insertBulk(
-      Enumerator(series1, series2, film1, film2, program1, program2, series3, film3, program3, film4))) {
-      response => response mustBe 10
+      Enumerator(series1, series2, film1, film2, program1, program2, series3, film3, program3, film4, program4))) {
+      response => response mustBe 11
     }
   }
 
@@ -159,7 +167,7 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
 
     "return all the TV content for a type program and provider FREEVIEW" in {
       whenReady(tvContentRepository.findDayContentByTypeAndProvider("program", "FREEVIEW")) {
-        _ mustBe Seq(Channel2.program3, Channel1.program1, Channel1.program2)
+        _ mustBe Seq(Channel4.program4, Channel2.program3, Channel1.program1, Channel1.program2)
       }
     }
 
@@ -192,7 +200,7 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
 
     "return all the TV content for a type program and provider FREEVIEW available now" in {
       whenReady(tvContentRepository.findCurrentContentByTypeAndProvider("program", "FREEVIEW")) {
-        _ mustBe Seq()
+        _ mustBe Seq(Channel4.program4)
       }
     }
 
@@ -218,13 +226,13 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
 
     "return all the TV content left for a type film and provider FREEVIEW" in {
       whenReady(tvContentRepository.findLeftContentByTypeAndProvider("film", "FREEVIEW")) {
-        _ mustBe Seq(Channel1.film1, Channel2.film3,Channel3.film4, Channel1.film2)
+        _ mustBe Seq(Channel1.film1, Channel2.film3, Channel3.film4, Channel1.film2)
       }
     }
 
     "return all the TV content left for a type program and provider FREEVIEW" in {
       whenReady(tvContentRepository.findLeftContentByTypeAndProvider("program", "FREEVIEW")) {
-        _ mustBe Seq(Channel2.program3, Channel1.program1, Channel1.program2)
+        _ mustBe Seq(Channel4.program4, Channel2.program3, Channel1.program1, Channel1.program2)
       }
     }
 
@@ -240,4 +248,19 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
       }
     }
   }
+
+  "findCurrentContentByProvider" should {
+    "return all the TV content for provider FREEVIEW available now" in {
+      whenReady(tvContentRepository.findCurrentContentByProvider("FREEVIEW")) {
+        _ mustBe Seq(Channel3.film4, Channel1.film1, Channel4.program4, Channel2.film3)
+      }
+    }
+
+    "return empty list of TV content for a provider SOME_PROVIDER does not exist available now" in {
+      whenReady(tvContentRepository.findCurrentContentByProvider("SOME_PROVIDER")) {
+        _ mustBe Seq()
+      }
+    }
+  }
 }
+

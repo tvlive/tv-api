@@ -57,8 +57,8 @@ case class FilmLong(title: String,
 case class ProgramLong(title: String, plot: Option[String])
 
 
-object TVLong extends TimeProvider with URLBuilder with ModelUtils {
-  def apply(tvContent: TVContent)(implicit host: String): TVContentLong = {
+object TVLong extends URLBuilder with ModelUtils {
+  def apply(tvContent: TVContent)(implicit host: String, time: TimeProvider): TVContentLong = {
     val onTimeNow = isNowShowing(tvContent)
 
     val perCentTimeElapsed = onTimeNow match {

@@ -15,6 +15,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import reactivemongo.bson.BSONObjectID
 import utils.DomainBuilder.{TVLongWithTimeZone, TVShortWithTimeZone}
+import utils.TimeProvider
 
 import scala.concurrent.Future
 
@@ -310,7 +311,7 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers {
     "return the TV content for type film and provider freeview available now" in new TVContentSetUpTest() {
       //GIVEN
       when(tvContentRepository.findCurrentContentByTypeAndProvider("film", "FREEVIEW")).thenReturn(
-        Future.successful(Seq(tvProgram8)))
+        Future.successful(Seq(tvProgram3, tvProgram8)))
 
       //WHEN
       val contentsResult: Future[SimpleResult] = controller.currentContentByTypeAndProvider("film", "freeview").apply(FakeRequest())
@@ -320,10 +321,31 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers {
       contentType(contentsResult) mustBe (Some("application/json"))
       val contentInResponse = contentAsString(contentsResult)
       val tvcontents = Json.parse(contentInResponse).as[Seq[TVContentShort]]
-      tvcontents mustEqual Seq(TVShortWithTimeZone(tvProgram8))
+      tvcontents mustEqual Seq(
+        TVShortWithTimeZone(tvProgram3),
+        TVShortWithTimeZone(tvProgram8))
 
       //AND
       verify(tvContentRepository).findCurrentContentByTypeAndProvider("film", "FREEVIEW")
+    }
+
+    "return the TV content for type program and provider freeview available now" in new TVContentSetUpTest() {
+      //GIVEN
+      when(tvContentRepository.findCurrentContentByTypeAndProvider("program", "FREEVIEW")).thenReturn(
+        Future.successful(Seq(tvProgram9)))
+
+      //WHEN
+      val contentsResult: Future[SimpleResult] = controller.currentContentByTypeAndProvider("program", "freeview").apply(FakeRequest())
+
+      //THEN
+      status(contentsResult) mustBe (OK)
+      contentType(contentsResult) mustBe (Some("application/json"))
+      val contentInResponse = contentAsString(contentsResult)
+      val tvcontents = Json.parse(contentInResponse).as[Seq[TVContentShort]]
+      tvcontents mustEqual Seq(TVShortWithTimeZone(tvProgram9))
+
+      //AND
+      verify(tvContentRepository).findCurrentContentByTypeAndProvider("program", "FREEVIEW")
     }
 
     "return NOT_FOUND by type notExist available now" in new TVContentSetUpTest() {
@@ -417,6 +439,46 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers {
       //AND
       verify(tvContentRepository).findLeftContentByTypeAndProvider("notexist", "FREEVIEW")
     }
+
+    "return the TV content for ALL types and provider freeview available now" in new TVContentSetUpTest() {
+      //GIVEN
+      when(tvContentRepository.findCurrentContentByProvider("FREEVIEW")).thenReturn(
+        Future.successful(Seq(tvProgram3, tvProgram7, tvProgram8, tvProgram9)))
+
+      //WHEN
+      val programsResult: Future[SimpleResult] = controller.currentContentByProvider("freeview").apply(FakeRequest())
+
+      //THEN
+      status(programsResult) mustBe (OK)
+      contentType(programsResult) mustBe (Some("application/json"))
+      val programInResponse = contentAsString(programsResult)
+      val tvprograms = Json.parse(programInResponse).as[Seq[TVContentShort]]
+      tvprograms mustEqual Seq(
+        TVShortWithTimeZone(tvProgram3),
+        TVShortWithTimeZone(tvProgram7),
+        TVShortWithTimeZone(tvProgram8),
+        TVShortWithTimeZone(tvProgram9))
+
+      //AND
+      verify(tvContentRepository).findCurrentContentByProvider("FREEVIEW")
+    }
+
+    "return NOT_FOUND by provider someProvider available now" in new TVContentSetUpTest() {
+      //GIVEN
+      when(tvContentRepository.findCurrentContentByProvider("SOMEPROVIDER")).thenReturn(
+        Future.successful(Seq()))
+
+      //WHEN
+      val contentsResult: Future[SimpleResult] = controller.currentContentByProvider("someProvider").apply(FakeRequest())
+
+      //THEN
+      status(contentsResult) mustBe (NOT_FOUND)
+      val contentsInResponse = contentAsJson(contentsResult).as[NotFoundResponse]
+      contentsInResponse mustEqual (NotFoundResponse("No TV content at this moment for provider: someProvider"))
+
+      //AND
+      verify(tvContentRepository).findCurrentContentByProvider("SOMEPROVIDER")
+    }
   }
 }
 
@@ -476,11 +538,15 @@ trait TVContentSetUpTest extends MockitoSugar {
 
   val tvContentRepository = mock[ContentRepository]
 
-  implicit val host: String = "http://beta.tvlive.io"
+  implicit val hostUnderTest: String = "http://beta.tvlive.io"
+  implicit val timeUnderTest: TimeProvider = new TimeProvider {
+    override def currentDate(): DateTime = new DateTime(DateTimeZone.forID("UTC"))
+  }
 
   class App extends TVContentController {
     override val contentRepository = tvContentRepository
-    override implicit val host: String = "http://beta.tvlive.io"
+    override implicit val host: String = hostUnderTest
+    override implicit val time: TimeProvider = timeUnderTest
   }
 
   val controller = new App

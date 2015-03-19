@@ -2,7 +2,6 @@ package controllers.external
 
 import models._
 import org.joda.time.DateTime
-import reactivemongo.bson.BSONObjectID
 import utils.{URLBuilder, ModelUtils, TimeProvider}
 
 
@@ -35,8 +34,8 @@ case class FilmShort(title: String, rating: Option[Double], poster: Option[Strin
 
 case class ProgramShort(title: String)
 
-object TVShort extends TimeProvider with URLBuilder with ModelUtils {
-  def apply(tvContent: TVContent)(implicit host: String): TVContentShort = {
+object TVShort extends URLBuilder with ModelUtils {
+  def apply(tvContent: TVContent)(implicit host: String, time: TimeProvider): TVContentShort = {
     val es = epishoShort(tvContent)
 
     val onTimeNow = isNowShowing(tvContent)

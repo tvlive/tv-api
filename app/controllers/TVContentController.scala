@@ -5,18 +5,24 @@ import java.net.URLDecoder
 import configuration.{Environment, ApplicationContext}
 import controllers.external.{TVShort, TVContentShort, TVLong, TVContentLong}
 import models._
+import org.joda.time.DateTime
+import play.api.libs.json.Json
 import play.api.mvc.Action
+import utils.TimeProvider
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 object TVContentController extends TVContentController {
   override val contentRepository = ApplicationContext.tvContentRepository
   override implicit val host: String = Environment.host
+  override implicit val time: TimeProvider = ApplicationContext.time
 }
 
 trait TVContentController extends BaseController {
 
   implicit val host: String
+  implicit val time: TimeProvider
   val toTVShorts: Seq[TVContent] => Seq[TVContentShort] = _.map(TVShort(_))
   val toTVLong: TVContent => TVContentLong = TVLong(_)
 
@@ -62,6 +68,12 @@ trait TVContentController extends BaseController {
   def contentLeftByTypeAndProvider(contentType: String, provider: String) = Action.async {
     contentRepository.findLeftContentByTypeAndProvider(contentType.toLowerCase(), provider.toUpperCase()).map {
       ltv => buildResponseSeq(toTVShorts(ltv), s"No TV content left for the type: $contentType and provider: $provider")
+    }
+  }
+
+  def currentContentByProvider(provider: String) = Action.async {
+    contentRepository.findCurrentContentByProvider(provider.toUpperCase()).map {
+      ltv => buildResponseSeq(toTVShorts(ltv), s"No TV content at this moment for provider: $provider")
     }
   }
 
