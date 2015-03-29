@@ -3,6 +3,7 @@ Feature: What is on TV now
   Background:
     Given the TV Provider "Freeview"
     And today is "15/03/2015"
+    And the time is "4:30 am"
 
   @31
   Scenario: Current content on TV is a film

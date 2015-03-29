@@ -22,6 +22,9 @@ class ContentSteps extends ScalaDsl with EN with Matchers with Http with Env {
     world += "today" -> now
   }
 
+  Given( """^the time is "(.+)"$""") { (now: String) =>
+  }
+
   Given( """^the TV guide now for channel "(.+)" is:$""") { (channel: String, requestData: DataTable) =>
     requestData.asLists(classOf[String]).asScala.tail.foreach {
       e => insertContent(e.asScala.toList, channel)
