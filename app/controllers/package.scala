@@ -1,5 +1,4 @@
 import controllers.external._
-import models.{TVChannelProvider, TVChannelCategory}
 import org.joda.time.{DateTime, DateTimeZone}
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
@@ -69,6 +68,7 @@ package object controllers {
       (__ \ "provider").read[List[String]] and
       (__ \ "start").read[DateTime].map[DateTime] { dt => dt.withZoneRetainFields(DateTimeZone.forID("Europe/London"))} and
       (__ \ "end").read[DateTime].map[DateTime](dt => dt.withZoneRetainFields(DateTimeZone.forID("Europe/London"))) and
+      (__ \ "rating").read[Option[Double]] and
       (__ \ "series").read[Option[SeriesLong]] and
       (__ \ "film").read[Option[FilmLong]] and
       (__ \ "program").read[Option[ProgramLong]] and
@@ -83,6 +83,7 @@ package object controllers {
       "provider" -> tvContentLong.provider,
       "start" -> tvContentLong.start.toDateTime(DateTimeZone.forID("Europe/London")),
       "end" -> tvContentLong.end.toDateTime(DateTimeZone.forID("Europe/London")),
+      "rating" -> tvContentLong.rating,
       "series" -> tvContentLong.series,
       "film" -> tvContentLong.film,
       "program" -> tvContentLong.program,
@@ -97,6 +98,7 @@ package object controllers {
       (__ \ "provider").read[List[String]] and
       (__ \ "start").read[DateTime].map[DateTime](dt => dt.withZoneRetainFields(DateTimeZone.forID("Europe/London"))) and
       (__ \ "end").read[DateTime].map[DateTime](dt => dt.withZoneRetainFields(DateTimeZone.forID("Europe/London"))) and
+      (__ \ "rating").read[Option[Double]] and
       (__ \ "series").read[Option[SeriesShort]] and
       (__ \ "film").read[Option[FilmShort]] and
       (__ \ "program").read[Option[ProgramShort]] and
@@ -113,6 +115,7 @@ package object controllers {
       "provider" -> tvContentShort.provider,
       "start" -> tvContentShort.start.toDateTime(DateTimeZone.forID("Europe/London")),
       "end" -> tvContentShort.end.toDateTime(DateTimeZone.forID("Europe/London")),
+      "rating" -> tvContentShort.rating,
       "series" -> tvContentShort.series,
       "film" -> tvContentShort.film,
       "program" -> tvContentShort.program,

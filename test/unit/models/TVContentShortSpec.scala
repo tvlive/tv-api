@@ -18,7 +18,7 @@ class TVContentShortSpec extends PlaySpec with MustMatchers {
 
   "uriTVContentDetails" should {
     "be true when tvContent start time is before now and after time is after now" in {
-      val tvc = TVContent("channel1", List("provider1"), now.minusHours(1), now.plusHours(1), None, None, None, Some(id))
+      val tvc = TVContent("channel1", List("provider1"), now.minusHours(1), now.plusHours(1), None, None, None, None, Some(id))
       val tvContent = TVShort(tvc)
       tvContent.uriTVContentDetails mustBe s"http://localhost:9000/tvcontent/$idString"
     }

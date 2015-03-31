@@ -31,13 +31,11 @@ object FilmBuilder {
       "provider" -> Seq(provider),
       "start" -> start.toDate,
       "end" -> end.toDate,
-      //      "series"   -> null,
+      "rating" -> rating,
       "film" -> MongoDBObject(
         "title" -> title,
-        "rating" -> rating,
         "poster" -> poster
       ),
-      //      "program"   -> tvc.program.map(p => toBson(p)),
       "_id" -> new ObjectId(id)
     )
 }
@@ -51,6 +49,7 @@ object SeriesBuilder {
       "provider" -> Seq(provider),
       "start" -> start.toDate,
       "end" -> end.toDate,
+      "rating" -> rating,
       "series"   -> MongoDBObject(
         "serieTitle" -> title,
         "episode" -> MongoDBObject(
@@ -58,7 +57,6 @@ object SeriesBuilder {
           "seasonNumber" -> season,
           "episodeNumber"-> episode
         ),
-        "rating" -> rating,
         "poster" -> poster
       ),
       "_id" -> new ObjectId(id)

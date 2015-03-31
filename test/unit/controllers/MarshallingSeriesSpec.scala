@@ -20,6 +20,7 @@ class MarshallingSeriesSpec extends PlaySpec with MustMatchers {
       provider = List("FREEVIEW", "SKY"),
       start = now,
       end = now.plusHours(2),
+      rating = Some(7),
       series = Some(SeriesLong("serie1",
         episode = Some(EpisodeLong(
           episodeTitle = Some("et1"),
@@ -33,7 +34,6 @@ class MarshallingSeriesSpec extends PlaySpec with MustMatchers {
         genre = List("cat1"),
         country = List("count1"),
         language = Some("lang1"),
-        rating = Some(7),
         awards = Some("awards"),
         poster = Some("poster1"),
         plot = Some("plot1"),
@@ -54,6 +54,7 @@ class MarshallingSeriesSpec extends PlaySpec with MustMatchers {
       (tvContentJson \ "provider").as[List[String]] mustBe Seq("FREEVIEW", "SKY")
       (tvContentJson \ "start").as[String] mustBe s"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}"
       (tvContentJson \ "end").as[String] mustBe s"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}"
+      (tvContentJson \ "rating").as[Double] mustBe 7
       (tvContentJson \ "series" \ "serieTitle").as[String] mustBe "serie1"
       (tvContentJson \ "series" \ "episode" \ "episodeTitle").as[String] mustBe "et1"
       (tvContentJson \ "series" \ "episode" \ "episodePlot").as[String] mustBe "ep1"
@@ -66,7 +67,6 @@ class MarshallingSeriesSpec extends PlaySpec with MustMatchers {
       (tvContentJson \ "series" \ "genre").as[List[String]] mustBe Seq("cat1")
       (tvContentJson \ "series" \ "country").as[List[String]] mustBe Seq("count1")
       (tvContentJson \ "series" \ "language").as[String] mustBe "lang1"
-      (tvContentJson \ "series" \ "rating").as[Double] mustBe 7
       (tvContentJson \ "series" \ "awards").as[String] mustBe "awards"
       (tvContentJson \ "series" \ "poster").as[String] mustBe "poster1"
       (tvContentJson \ "series" \ "plot").as[String] mustBe "plot1"
@@ -82,21 +82,21 @@ class MarshallingSeriesSpec extends PlaySpec with MustMatchers {
                           |"provider":["FREEVIEW","SKY"],
                           |"start":"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}",
                           |"end":"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}",
+                          |"rating":7,
                           |"series":{
-                         | "serieTitle":"serie1",
-                         | "episode":{
-                         |   "episodeTitle":"et1",
-                         |   "episodePlot":"ep1",
-                         |   "seasonNumber":"12",
-                         |   "episodeNumber":"2",
-                         |   "totalNumber":"25"},
-                         |   "actors":["actor1"],
-                         |   "writer":["writer1"],
-                         |   "director":["director1"],
-                         |   "genre":["cat1"],
-                         |   "country":["count1"],
-                         |   "language":"lang1",
-                         |   "rating":7,
+                          | "serieTitle":"serie1",
+                          | "episode":{
+                          |   "episodeTitle":"et1",
+                          |   "episodePlot":"ep1",
+                          |   "seasonNumber":"12",
+                          |   "episodeNumber":"2",
+                          |   "totalNumber":"25"},
+                          |   "actors":["actor1"],
+                          |   "writer":["writer1"],
+                          |   "director":["director1"],
+                          |   "genre":["cat1"],
+                          |   "country":["count1"],
+                          |   "language":"lang1",
                          |   "awards":"awards",
                          |   "poster":"poster1",
                          |   "plot":"plot1",

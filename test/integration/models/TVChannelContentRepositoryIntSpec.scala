@@ -25,67 +25,67 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
   Thread.sleep(5000)
 
   object Channel1 {
-    val series1 = TVContent("channel1", List("FREEVIEW", "SKY"), current.minusHours(4), current.minusHours(2),
+    val series1 = TVContent("channel1", List("FREEVIEW", "SKY"), current.minusHours(4), current.minusHours(2), None,
       Some(Series("serie1", Some(Episode(Some("ep1"), None, None, None, None)), List("actor1"),
-        List(), List(), List(), List(), None, None, None, None, None, None, None)),
+        List(), List(), List(), List(), None, None, None, None, None, None)),
       None,
       None)
 
-    val series2 = TVContent("channel1", List("FREEVIEW", "SKY"), current.minusHours(2), current,
+    val series2 = TVContent("channel1", List("FREEVIEW", "SKY"), current.minusHours(2), current, None,
       Some(Series("serie2", Some(Episode(Some("ep1"), None, None, None, None)), List("actor1"),
-        List(), List(), List(), List(), None, None, None, None, None, None, None)),
+        List(), List(), List(), List(), None, None, None, None, None, None)),
       None,
       None)
 
-    val film1 = TVContent("channel1", List("FREEVIEW", "SKY"), current, current.plusHours(1),
+    val film1 = TVContent("channel1", List("FREEVIEW", "SKY"), current, current.plusHours(1), Some(7),
       None,
-      Some(Film("film1", List("actor5"), List(), List(), List(), List(), None, Some(7), None, None, None, None, None)),
+      Some(Film("film1", List("actor5"), List(), List(), List(), List(), None, None, None, None, None, None)),
       None)
 
-    val film2 = TVContent("channel1", List("FREEVIEW", "SKY"), current.plusHours(1), current.plusHours(3),
+    val film2 = TVContent("channel1", List("FREEVIEW", "SKY"), current.plusHours(1), current.plusHours(3), None,
       None,
-      Some(Film("film2", List("actor1"), List(), List(), List(), List(), None, None, None, None, None, None, None)),
+      Some(Film("film2", List("actor1"), List(), List(), List(), List(), None, None, None, None, None, None)),
       None)
 
-    val program1 = TVContent("channel1", List("FREEVIEW", "SKY"), current.plusHours(3), current.plusHours(5),
+    val program1 = TVContent("channel1", List("FREEVIEW", "SKY"), current.plusHours(3), current.plusHours(5), None,
       None,
       None,
       Some(Program("p5", Some("d5"))))
 
-    val program2 = TVContent("channel1", List("FREEVIEW", "SKY"), current.plusHours(5), current.plusHours(7),
+    val program2 = TVContent("channel1", List("FREEVIEW", "SKY"), current.plusHours(5), current.plusHours(7), None,
       None,
       None,
       Some(Program("p6", Some("d6"))))
   }
 
   object Channel2 {
-    val series3 = TVContent("channel2", List("FREEVIEW", "SKY"), current.minusHours(5), current,
+    val series3 = TVContent("channel2", List("FREEVIEW", "SKY"), current.minusHours(5), current, None,
       Some(Series("serie2", Some(Episode(Some("ep1"), None, None, None, None)), List("actor1"),
-        List(), List(), List(), List(), None, None, None, None, None, None, None)),
+        List(), List(), List(), List(), None, None, None, None, None, None)),
       None,
       None)
 
-    val film3 = TVContent("channel2", List("FREEVIEW", "SKY"), current, current.plusHours(3),
+    val film3 = TVContent("channel2", List("FREEVIEW", "SKY"), current, current.plusHours(3), None,
       None,
-      Some(Film("film3", List("actor1"), List(), List(), List(), List(), None, None, None, None, None, None, None)),
+      Some(Film("film3", List("actor1"), List(), List(), List(), List(), None, None, None, None, None, None)),
       None)
 
-    val program3 = TVContent("channel2", List("FREEVIEW", "SKY"), current.plusHours(2), current.plusHours(7),
+    val program3 = TVContent("channel2", List("FREEVIEW", "SKY"), current.plusHours(2), current.plusHours(7), None,
       None,
       None,
       Some(Program("p6", Some("d6"))))
   }
 
   object Channel3 {
-    val film4 = TVContent("channel3", List("FREEVIEW", "SKY"), current, current.plusHours(3),
+    val film4 = TVContent("channel3", List("FREEVIEW", "SKY"), current, current.plusHours(3), Some(8),
       None,
-      Some(Film("film4", List("actor1"), List(), List(), List(), List(), None, Some(8), None, None, None, None, None)),
+      Some(Film("film4", List("actor1"), List(), List(), List(), List(), None, None, None, None, None, None)),
       None)
   }
 
 
   object Channel4 {
-    val program4 = TVContent("channel4", List("FREEVIEW", "SKY"), current.minusHours(1), current.plusHours(1),
+    val program4 = TVContent("channel4", List("FREEVIEW", "SKY"), current.minusHours(1), current.plusHours(1), None,
       None,
       None,
       Some(Program("p6", Some("d6"))))

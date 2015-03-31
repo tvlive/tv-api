@@ -11,6 +11,7 @@ case class TVContentShort(channel: String,
                           provider: List[String],
                           start: DateTime,
                           end: DateTime,
+                          rating: Option[Double],
                           series: Option[SeriesShort],
                           film: Option[FilmShort],
                           program: Option[ProgramShort],
@@ -23,14 +24,13 @@ case class TVContentShort(channel: String,
 
 case class SeriesShort(serieTitle: String,
                        episode: Option[EpisodeShort],
-                       rating: Option[Double],
                        poster: Option[String])
 
 case class EpisodeShort(episodeTitle: Option[String],
                         seasonNumber: Option[String],
                         episodeNumber: Option[String])
 
-case class FilmShort(title: String, rating: Option[Double], poster: Option[String])
+case class FilmShort(title: String, poster: Option[String])
 
 case class ProgramShort(title: String)
 
@@ -53,8 +53,9 @@ object TVShort extends URLBuilder with ModelUtils {
       tvContent.provider,
       tvContent.start,
       tvContent.end,
-      tvContent.series.map(s => SeriesShort(s.serieTitle, es, s.rating, s.poster)),
-      tvContent.film.map(f => FilmShort(f.title, f.rating, f.poster)),
+      tvContent.rating,
+      tvContent.series.map(s => SeriesShort(s.serieTitle, es, s.poster)),
+      tvContent.film.map(f => FilmShort(f.title, f.poster)),
       tvContent.program.map(p => ProgramShort(p.title)),
       onTimeNow,
       perCentTimeElapsed,

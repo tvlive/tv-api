@@ -13,6 +13,7 @@ case class TVContent(channel: String,
                      provider: List[String],
                      start: DateTime,
                      end: DateTime,
+                     rating: Option[Double],
                      series: Option[Series],
                      film: Option[Film],
                      program: Option[Program],
@@ -26,7 +27,6 @@ case class Series(serieTitle: String,
                   genre: List[String],
                   country: List[String],
                   language: Option[String],
-                  rating: Option[Double],
                   awards: Option[String],
                   poster: Option[String],
                   plot: Option[String],
@@ -46,7 +46,6 @@ case class Film(title: String,
                 genre: List[String],
                 country: List[String],
                 language: Option[String],
-                rating: Option[Double],
                 awards: Option[String],
                 poster: Option[String],
                 plot: Option[String],
@@ -151,7 +150,7 @@ class TVContentRepository(collectionName: String)(implicit val con: String => AP
       ct =>
         val now = time.currentDate()
         val query = BSONDocument(
-          "$orderby" -> BSONDocument("series.rating" -> -1, "film.rating" -> -1, "start" -> 1, "channel" -> 1),
+          "$orderby" -> BSONDocument("rating" -> -1, "start" -> 1, "channel" -> 1),
           "$query" -> BSONDocument(
             "start" -> BSONDocument("$lte" -> BSONDateTime(now.getMillis)),
             "end" -> BSONDocument("$gt" -> BSONDateTime(now.getMillis)),
@@ -184,7 +183,7 @@ class TVContentRepository(collectionName: String)(implicit val con: String => AP
   override def findCurrentContentByProvider(provider: String): Future[Seq[TVContent]] = {
         val now = time.currentDate()
         val query = BSONDocument(
-          "$orderby" -> BSONDocument("series.rating" -> -1, "film.rating" -> -1, "start" -> 1, "channel" -> 1),
+          "$orderby" -> BSONDocument("rating" -> -1, "start" -> 1, "channel" -> 1),
           "$query" -> BSONDocument("provider" -> provider,
           "start" -> BSONDocument("$lte" -> BSONDateTime(now.getMillis)),
           "end" -> BSONDocument("$gt" -> BSONDateTime(now.getMillis))))

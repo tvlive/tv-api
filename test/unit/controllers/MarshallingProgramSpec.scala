@@ -21,6 +21,7 @@ class MarshallingProgramSpec extends PlaySpec with MustMatchers {
     provider = List("FREEVIEW", "SKY"),
     start = now,
     end = now.plusHours(2),
+    rating = None,
     program = Some(ProgramLong(
       title = "program3",
       plot = Some("plot3"))),
@@ -51,6 +52,7 @@ class MarshallingProgramSpec extends PlaySpec with MustMatchers {
         |"provider":["FREEVIEW","SKY"],
         |"start":"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}",
         |"end":"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}",
+        |"rating": null,
         |"program":{
         | "title":"program3",
         | "plot":"plot3"},

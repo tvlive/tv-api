@@ -22,11 +22,11 @@ Feature: What is on TV now
     |      ],
     |      "start":"2015-03-15T03:00:00",
     |      "end":"2015-03-15T06:00:00",
+    |      "rating":7.8,
     |      "program": null,
     |      "series": null,
     |      "film":{
     |         "title":"Birdman",
-    |         "rating":7.8,
     |         "poster":"http://images/birdman.jpg"
     |      },
     |      "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab641",
@@ -52,6 +52,7 @@ Feature: What is on TV now
     |  ],
     |  "start":"2015-03-15T03:00:00",
     |  "end":"2015-03-15T05:30:00",
+    |  "rating":null,
     |  "program":{
     |     "title":"The Common Denominator"
     |  },
@@ -79,6 +80,7 @@ Feature: What is on TV now
     |  ],
     |  "start":"2015-03-15T04:00:00",
     |  "end":"2015-03-15T04:45:00",
+    |  "rating":9.3,
     |  "series":{
     |     "serieTitle":"Friends",
     |     "episode":{
@@ -86,7 +88,6 @@ Feature: What is on TV now
     |        "seasonNumber":"4",
     |        "episodeNumber":"1"
     |     },
-    |     "rating":9.3,
     |     "poster":"http://images/friends.jpg"
     |  },
     |  "program":null,
@@ -100,7 +101,7 @@ Feature: What is on TV now
   Scenario: Current content on TV
     Given the TV guide now is:
       | id                       | type    | title                  | start   | end     | rating | poster                    | episode title | season | episode | Channel   |
-      | 55133bc701000001006ab644 | film    | Birdman                | 3:00 am | 6:00 am | 7.8    | http://images/birdman.jpg |               |        |         | BBC ONE   |
+      | 55133bc701000001006ab644 | film    | Birdman                | 3:00 am | 6:00 am | 9.4    | http://images/birdman.jpg |               |        |         | BBC ONE   |
       | 55133bc701000001006ab645 | program | The Common Denominator | 3:00 am | 5:30 am |        |                           |               |        |         | CHANNEL 4 |
       | 55133bc701000001006ab646 | series  | Friends                | 4:00 am | 4:45 am | 9.3    | http://images/friends.jpg | Jellyfish     | 4      | 1       | FILM FOUR |
     When I GET the resource "/tvcontent/all/freeview/current"
@@ -108,6 +109,25 @@ Feature: What is on TV now
     And the response is:
     """
     |[{
+    |      "channel":"BBC ONE",
+    |      "channelImageURL":"http://localhost:9000/BBC_ONE.png",
+    |      "provider":[
+    |         "FREEVIEW"
+    |      ],
+    |      "start":"2015-03-15T03:00:00",
+    |      "end":"2015-03-15T06:00:00",
+    |      "rating":9.4,
+    |      "program": null,
+    |      "series": null,
+    |      "film":{
+    |         "title":"Birdman",
+    |         "poster":"http://images/birdman.jpg"
+    |      },
+    |      "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab644",
+    |      "onTimeNow":true,
+    |      "perCentTimeElapsed":50
+    |},
+    {
     |  "channel":"FILM FOUR",
     |  "channelImageURL":"http://localhost:9000/FILM_FOUR.png",
     |  "provider":[
@@ -115,6 +135,7 @@ Feature: What is on TV now
     |  ],
     |  "start":"2015-03-15T04:00:00",
     |  "end":"2015-03-15T04:45:00",
+    |  "rating":9.3,
     |  "series":{
     |     "serieTitle":"Friends",
     |     "episode":{
@@ -122,7 +143,6 @@ Feature: What is on TV now
     |        "seasonNumber":"4",
     |        "episodeNumber":"1"
     |     },
-    |     "rating":9.3,
     |     "poster":"http://images/friends.jpg"
     |  },
     |  "program":null,
@@ -132,25 +152,6 @@ Feature: What is on TV now
     |  "perCentTimeElapsed":66
     |},
     |{
-    |      "channel":"BBC ONE",
-    |      "channelImageURL":"http://localhost:9000/BBC_ONE.png",
-    |      "provider":[
-    |         "FREEVIEW"
-    |      ],
-    |      "start":"2015-03-15T03:00:00",
-    |      "end":"2015-03-15T06:00:00",
-    |      "program": null,
-    |      "series": null,
-    |      "film":{
-    |         "title":"Birdman",
-    |         "rating":7.8,
-    |         "poster":"http://images/birdman.jpg"
-    |      },
-    |      "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab644",
-    |      "onTimeNow":true,
-    |      "perCentTimeElapsed":50
-    |   },
-    |{
     |  "channel":"CHANNEL 4",
     |  "channelImageURL":"http://localhost:9000/CHANNEL_4.png",
     |  "provider":[
@@ -158,6 +159,7 @@ Feature: What is on TV now
     |  ],
     |  "start":"2015-03-15T03:00:00",
     |  "end":"2015-03-15T05:30:00",
+    |  "rating":null,
     |  "program":{
     |     "title":"The Common Denominator"
     |  },

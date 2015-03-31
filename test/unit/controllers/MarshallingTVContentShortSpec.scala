@@ -7,7 +7,7 @@ import org.scalatest.MustMatchers
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
 import reactivemongo.bson.BSONObjectID
-
+//TODO split in 3 tests, one for film, for series and for program
 class MarshallingTVContentShortSpec extends PlaySpec with MustMatchers {
   val id = BSONObjectID.generate
   val idString = id.stringify
@@ -19,8 +19,9 @@ class MarshallingTVContentShortSpec extends PlaySpec with MustMatchers {
     provider = List("FREEVIEW", "SKY"),
     start = now,
     end = now.plusHours(2),
-    series = Some(SeriesShort("titleSerie", Some(EpisodeShort(Some("episodeTitle1"), Some("1"), Some("2"))), Some(7), Some("poster1"))),
-    film = Some(FilmShort("titleFilm", Some(8), Some("poster2"))),
+    rating = Some(7),
+    series = Some(SeriesShort("titleSerie", Some(EpisodeShort(Some("episodeTitle1"), Some("1"), Some("2"))), Some("poster1"))),
+    film = Some(FilmShort("titleFilm", Some("poster2"))),
     program = Some(ProgramShort("titleProgram")),
     onTimeNow = true,
     perCentTimeElapsed = Some(10),
@@ -34,14 +35,13 @@ class MarshallingTVContentShortSpec extends PlaySpec with MustMatchers {
       (tvContentJson \ "provider").as[List[String]] mustBe Seq("FREEVIEW", "SKY")
       (tvContentJson \ "start").as[String] mustBe s"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}"
       (tvContentJson \ "end").as[String] mustBe s"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}"
+      (tvContentJson \ "rating").as[Double] mustBe 7
       (tvContentJson \ "series" \ "serieTitle").as[String] mustBe "titleSerie"
       (tvContentJson \ "series" \ "episode" \ "episodeTitle").as[String] mustBe "episodeTitle1"
       (tvContentJson \ "series" \ "episode" \ "seasonNumber").as[String] mustBe "1"
       (tvContentJson \ "series" \ "episode" \ "episodeNumber").as[String] mustBe "2"
-      (tvContentJson \ "series" \ "rating").as[Double] mustBe 7
       (tvContentJson \ "series" \ "poster").as[String] mustBe "poster1"
       (tvContentJson \ "film" \ "title").as[String] mustBe "titleFilm"
-      (tvContentJson \ "film" \ "rating").as[Double] mustBe 8
       (tvContentJson \ "film" \ "poster").as[String] mustBe "poster2"
       (tvContentJson \ "program" \ "title").as[String] mustBe "titleProgram"
       (tvContentJson \ "uriTVContentDetails").as[String] mustBe "http://localhost:9000/tvcontent/445567777"
@@ -56,13 +56,13 @@ class MarshallingTVContentShortSpec extends PlaySpec with MustMatchers {
           |"provider":["FREEVIEW","SKY"],
           |"start":"${fmt.print(now.withZone(DateTimeZone.forID("Europe/London")))}",
           |"end":"${fmt.print(now.plusHours(2).withZone(DateTimeZone.forID("Europe/London")))}",
+          |"rating":7,
           |"series":{
           | "serieTitle":"titleSerie",
           | "episode":{"episodeTitle":"episodeTitle1","seasonNumber":"1","episodeNumber":"2"},
-          | "poster":"poster1",
-          | "rating":7},
+          | "poster":"poster1"
+          | },
           |"film":{"title":"titleFilm",
-          | "rating":8,
           | "poster":"poster2"},
           |"program":{"title":"titleProgram"},
           |"uriTVContentDetails":"http://localhost:9000/tvcontent/445567777",
