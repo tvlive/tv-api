@@ -31,6 +31,12 @@ class ContentSteps extends ScalaDsl with EN with Matchers with Http with Env {
     }
   }
 
+  Given( """^the TV guide for the rest of the day is:$""") { (requestData: DataTable) =>
+    requestData.asLists(classOf[String]).asScala.tail.foreach {
+      e => insertContent(e.asScala.toList, e.get(10))
+    }
+  }
+
   When( """^I GET the resource "(.+)"$""") { (url: String) =>
     val (statusCode, content) = get(s"${host}$url")
 
@@ -48,11 +54,11 @@ class ContentSteps extends ScalaDsl with EN with Matchers with Http with Env {
       case "200" =>
         val contentsExpected = Json.parse(jsonExpected.stripMargin).as[Seq[TVContentShort]]
         val contents = Json.parse(world("content")).as[Seq[TVContentShort]]
-        contents shouldBe contentsExpected
+        contentsExpected shouldBe contents
       case "404" =>
         val contentsExpected = Json.parse(jsonExpected.stripMargin).as[NotFoundResponse]
         val contents = Json.parse(world("content")).as[NotFoundResponse]
-        contents shouldBe contentsExpected
+        contentsExpected shouldBe contents
     }
 
   }
@@ -64,7 +70,7 @@ class ContentSteps extends ScalaDsl with EN with Matchers with Http with Env {
   }
 
   private def insertContent(content: List[String], channel: String) = {
-    val d = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm a")
+    val d = DateTimeFormat.forPattern("dd/MM/yyyy hh:mm a")
     val start = d.parseDateTime(world("today") + " " + content(3))
     val end = d.parseDateTime(world("today") + " " + content(4))
     val id = content(0)
@@ -76,8 +82,9 @@ class ContentSteps extends ScalaDsl with EN with Matchers with Http with Env {
         FilmBuilder(channel, world("provider"), start, end, title, content(5).toDouble, content(6), id)
       case "program" =>
         ProgramBuilder(channel, world("provider"), start, end, title, id)
-      case "series" => SeriesBuilder(channel, world("provider"), start, end, title, content(7), content(8), content(9), content(5).toDouble,
-        content(6), id)
+      case "series" =>
+        SeriesBuilder(channel, world("provider"), start, end, title, content(7), content(8), content(9), content(5).toDouble,
+          content(6), id)
       case _ => throw new IllegalArgumentException(s"Type ")
     }
     println("inserting data for scenario")

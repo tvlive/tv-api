@@ -479,7 +479,44 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers {
       //AND
       verify(tvContentRepository).findCurrentContentByProvider("SOMEPROVIDER")
     }
+
+    "return the 2 top content for provider FREEVIEW available from now until the end of the day" in new TVContentSetUpTest() {
+      //GIVEN
+      when(tvContentRepository.findTopLeftContentByProvider(2, "FREEVIEW")).thenReturn(
+        Future.successful(Seq(tvProgram3,tvProgram7)))
+
+      //WHEN
+      val programsResult: Future[SimpleResult] = controller.topContentLeft("FREEVIEW", 2).apply(FakeRequest())
+
+      //THEN
+      status(programsResult) mustBe (OK)
+      contentType(programsResult) mustBe (Some("application/json"))
+      val programInResponse = contentAsString(programsResult)
+      val tvprograms = Json.parse(programInResponse).as[Seq[TVContentShort]]
+      tvprograms mustEqual Seq(TVShortWithTimeZone(tvProgram3), TVShortWithTimeZone(tvProgram7))
+
+      //AND
+      verify(tvContentRepository).findTopLeftContentByProvider(2, "FREEVIEW")
+    }
+
+    "return NOT_FOUND for provider someProvider available from now until the end of the day" in new TVContentSetUpTest() {
+      //GIVEN
+      when(tvContentRepository.findTopLeftContentByProvider(2, "SOMEPROVIDER")).thenReturn(
+        Future.successful(Seq()))
+
+      //WHEN
+      val programsResult: Future[SimpleResult] = controller.topContentLeft("someProvider", 2).apply(FakeRequest())
+
+      //THEN
+      status(programsResult) mustBe (NOT_FOUND)
+      val contentsInResponse = contentAsJson(programsResult).as[NotFoundResponse]
+      contentsInResponse mustEqual (NotFoundResponse("No top TV content left for provider: someProvider"))
+
+      //AND
+      verify(tvContentRepository).findTopLeftContentByProvider(2, "SOMEPROVIDER")
+    }
   }
+
 }
 
 trait TVContentSetUpTest extends MockitoSugar {

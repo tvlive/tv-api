@@ -262,5 +262,25 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
       }
     }
   }
+
+  "findTopLeftContentByProvider" should {
+    "return the 2 top TV content for provider FREEVIEW left" in {
+      whenReady(tvContentRepository.findTopLeftContentByProvider(2, "FREEVIEW")) {
+        _ mustBe Seq(Channel3.film4, Channel1.film1)
+      }
+    }
+    "return the 4 top TV content for provider FREEVIEW left" in {
+      whenReady(tvContentRepository.findTopLeftContentByProvider(4, "FREEVIEW")) {
+        _ mustBe Seq(Channel3.film4, Channel1.film1, Channel4.program4, Channel2.film3)
+      }
+    }
+
+
+    "return empty List of 4 top TV content for provider FREEVIEW_UKNOWN left" in {
+      whenReady(tvContentRepository.findTopLeftContentByProvider(4, "FREEVIEW_UKNOWN")) {
+        _ mustBe Seq()
+      }
+    }
+  }
 }
 

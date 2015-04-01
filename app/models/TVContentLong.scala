@@ -73,6 +73,8 @@ trait ContentRepository {
 
   def findLeftContentByTypeAndProvider(contentType: String, provider: String): Future[Seq[TVContent]] = ???
 
+  def findTopLeftContentByProvider(elements: Int, provider: String): Future[Seq[TVContent]] = ???
+
   def drop(): Future[Boolean] = ???
 
   def insertBulk(enumerator: Enumerator[TVContent]): Future[Int] = ???
@@ -190,6 +192,19 @@ class TVContentRepository(collectionName: String)(implicit val con: String => AP
 
         val found = collection.find(query).cursor[TVContent]
         found.collect[Seq]()
+  }
+
+  override def findTopLeftContentByProvider(elements: Int, provider: String): Future[Seq[TVContent]] = {
+    val now = time.currentDate()
+    val query = BSONDocument(
+      "$orderby" -> BSONDocument("rating" -> -1, "start" -> 1, "channel" -> 1),
+      "$query" -> BSONDocument(
+        "provider" -> provider,
+        "end" -> BSONDocument("$gt" -> BSONDateTime(now.getMillis))))
+
+    val found = collection.find(query).cursor[TVContent]
+    found.collect[Seq](elements)
+
   }
 
   private def findContentByType(contentType: String)(f: String => Future[Seq[TVContent]]) = {
