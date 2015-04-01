@@ -121,8 +121,7 @@ package object controllers {
       "program" -> tvContentShort.program,
       "uriTVContentDetails" -> tvContentShort.uriTVContentDetails,
       "onTimeNow" -> tvContentShort.onTimeNow,
-      "perCentTimeElapsed" -> tvContentShort.perCentTimeElapsed,
-      "uriTVContentDetails" -> tvContentShort.uriTVContentDetails
+      "perCentTimeElapsed" -> tvContentShort.perCentTimeElapsed
     )
   }
 
