@@ -486,7 +486,7 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers {
         Future.successful(Seq(tvProgram3,tvProgram7)))
 
       //WHEN
-      val programsResult: Future[SimpleResult] = controller.topContentLeft("FREEVIEW", 2).apply(FakeRequest())
+      val programsResult: Future[SimpleResult] = controller.topContentLeftByProvider("FREEVIEW", 2).apply(FakeRequest())
 
       //THEN
       status(programsResult) mustBe (OK)
@@ -505,7 +505,7 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers {
         Future.successful(Seq()))
 
       //WHEN
-      val programsResult: Future[SimpleResult] = controller.topContentLeft("someProvider", 2).apply(FakeRequest())
+      val programsResult: Future[SimpleResult] = controller.topContentLeftByProvider("someProvider", 2).apply(FakeRequest())
 
       //THEN
       status(programsResult) mustBe (NOT_FOUND)
@@ -514,6 +514,45 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers {
 
       //AND
       verify(tvContentRepository).findTopLeftContentByProvider(2, "SOMEPROVIDER")
+    }
+
+    "return the what is next content for provider FREEVIEW" in new TVContentSetUpTest() {
+      //GIVEN
+      when(tvContentRepository.findNextProgramByProvider("FREEVIEW")).thenReturn(
+        Future.successful(Seq(tvProgram3, tvProgram7, tvProgram1)))
+
+      //WHEN
+      val programsResult: Future[SimpleResult] = controller.contentNextByProvider("FREEVIEW").apply(FakeRequest())
+
+      //THEN
+      status(programsResult) mustBe (OK)
+      contentType(programsResult) mustBe (Some("application/json"))
+      val programInResponse = contentAsString(programsResult)
+      val tvprograms = Json.parse(programInResponse).as[Seq[TVContentShort]]
+      tvprograms mustEqual Seq(
+        TVShortWithTimeZone(tvProgram3),
+        TVShortWithTimeZone(tvProgram7),
+        TVShortWithTimeZone(tvProgram1))
+
+      //AND
+      verify(tvContentRepository).findNextProgramByProvider("FREEVIEW")
+    }
+
+    "return NOT_FOUND for provider someProvider for what is next" in new TVContentSetUpTest() {
+      //GIVEN
+      when(tvContentRepository.findNextProgramByProvider("SOMEPROVIDER")).thenReturn(
+        Future.successful(Seq()))
+
+      //WHEN
+      val programsResult: Future[SimpleResult] = controller.contentNextByProvider("someProvider").apply(FakeRequest())
+
+      //THEN
+      status(programsResult) mustBe (NOT_FOUND)
+      val contentsInResponse = contentAsJson(programsResult).as[NotFoundResponse]
+      contentsInResponse mustEqual (NotFoundResponse("No next TV content for provider: someProvider"))
+
+      //AND
+      verify(tvContentRepository).findNextProgramByProvider("SOMEPROVIDER")
     }
   }
 

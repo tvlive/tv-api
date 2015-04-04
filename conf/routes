@@ -19,7 +19,9 @@ GET     /tvcontent/channel/:channelName/left          	controllers.TVContentCont
 
 GET     /tvcontent/:id                      			controllers.TVContentController.tvContentDetails(id)
 
-GET     /tvcontent/top/:provider                        controllers.TVContentController.topContentLeft(provider: String, items: Int ?= 10)
+GET     /tvcontent/top/:provider                        controllers.TVContentController.topContentLeftByProvider(provider: String, items: Int ?= 10)
+
+GET     /tvcontent/next/:provider                        controllers.TVContentController.contentNextByProvider(provider: String)
 
 GET     /tvcontent/all/:provider/current                controllers.TVContentController.currentContentByProvider(provider)
 

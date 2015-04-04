@@ -2,8 +2,7 @@ package models
 
 import org.joda.time.DateTime
 import play.api.libs.iteratee.Enumerator
-import reactivemongo.core.commands.LastError
-import utils.TimeProvider
+import _root_.utils.{TVContentSorter, TimeProvider}
 import reactivemongo.bson._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -75,13 +74,15 @@ trait ContentRepository {
 
   def findTopLeftContentByProvider(elements: Int, provider: String): Future[Seq[TVContent]] = ???
 
+  def findNextProgramByProvider(provider: String): Future[Seq[TVContent]] = ???
+
   def drop(): Future[Boolean] = ???
 
   def insertBulk(enumerator: Enumerator[TVContent]): Future[Int] = ???
 
 }
 
-class TVContentRepository(collectionName: String)(implicit val con: String => APIMongoConnection, val time: TimeProvider) extends ContentRepository {
+class TVContentRepository(collectionName: String)(implicit val con: String => APIMongoConnection, val time: TimeProvider) extends ContentRepository with TVContentSorter {
 
   private val collection = con(collectionName).collection
 
@@ -183,15 +184,15 @@ class TVContentRepository(collectionName: String)(implicit val con: String => AP
   }
 
   override def findCurrentContentByProvider(provider: String): Future[Seq[TVContent]] = {
-        val now = time.currentDate()
-        val query = BSONDocument(
-          "$orderby" -> BSONDocument("rating" -> -1, "start" -> 1, "channel" -> 1),
-          "$query" -> BSONDocument("provider" -> provider,
-          "start" -> BSONDocument("$lte" -> BSONDateTime(now.getMillis)),
-          "end" -> BSONDocument("$gt" -> BSONDateTime(now.getMillis))))
+    val now = time.currentDate()
+    val query = BSONDocument(
+      "$orderby" -> BSONDocument("rating" -> -1, "start" -> 1, "channel" -> 1),
+      "$query" -> BSONDocument("provider" -> provider,
+        "start" -> BSONDocument("$lte" -> BSONDateTime(now.getMillis)),
+        "end" -> BSONDocument("$gt" -> BSONDateTime(now.getMillis))))
 
-        val found = collection.find(query).cursor[TVContent]
-        found.collect[Seq]()
+    val found = collection.find(query).cursor[TVContent]
+    found.collect[Seq]()
   }
 
   override def findTopLeftContentByProvider(elements: Int, provider: String): Future[Seq[TVContent]] = {
@@ -205,6 +206,21 @@ class TVContentRepository(collectionName: String)(implicit val con: String => AP
     val found = collection.find(query).cursor[TVContent]
     found.collect[Seq](elements)
 
+  }
+
+  override def findNextProgramByProvider(provider: String): Future[Seq[TVContent]] = {
+    val now = time.currentDate()
+    val query = BSONDocument(
+      "$orderby" -> BSONDocument("channel" -> 1, "start" -> 1),
+      "$query" -> BSONDocument(
+        "provider" -> provider,
+        "start" -> BSONDocument("$gt" -> BSONDateTime(now.getMillis))
+      ))
+
+    val found = collection.find(query).cursor[TVContent]
+    found.collect[Seq]().map {
+      l => l.groupBy(_.channel).map(e => e._2.head).toSeq.sortWith(sortedBy)
+    }
   }
 
   private def findContentByType(contentType: String)(f: String => Future[Seq[TVContent]]) = {

@@ -77,9 +77,16 @@ trait TVContentController extends BaseController {
     }
   }
 
-  def topContentLeft(provider: String, items: Int = 10) = Action.async {
+  def topContentLeftByProvider(provider: String, items: Int = 10) = Action.async {
     contentRepository.findTopLeftContentByProvider(items, provider.toUpperCase()).map {
       ltv => buildResponseSeq(toTVShorts(ltv), s"No top TV content left for provider: $provider")
     }
   }
+
+  def contentNextByProvider(provider: String) = Action.async {
+    contentRepository.findNextProgramByProvider(provider.toUpperCase()).map {
+      ltv => buildResponseSeq(toTVShorts(ltv), s"No next TV content for provider: $provider")
+    }
+  }
+
 }

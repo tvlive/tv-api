@@ -91,15 +91,68 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
       Some(Program("p6", Some("d6"))))
   }
 
+  object Channel5 {
+    val birdman = TVContent("channel5", List("WHATISNEWPROV", "SKY"), current.minusHours(3), current.plusHours(2), Some(7.8),
+      None,
+      Some(Film("birdman", List("actor1"), List(), List(), List(), List(), None, None, None, None, None, None)),
+      None)
+
+    val boyhood = TVContent("channel5", List("WHATISNEWPROV", "SKY"), current.plusHours(2), current.plusHours(3), Some(8.4),
+      None,
+      Some(Film("boyhood", List("actor1"), List(), List(), List(), List(), None, None, None, None, None, None)),
+      None)
+
+    val homeland = TVContent("channel5", List("WHATISNEWPROV", "SKY"), current.plusHours(3), current.plusHours(6), Some(9.4),
+      Some(Series("homeland", Some(Episode(Some("ep1"), None, None, None, None)), List("actor1"),
+        List(), List(), List(), List(), None, None, None, None, None, None)),
+      None,
+      None)
+  }
+
+  object Channel6 {
+    val friends = TVContent("channel6", List("WHATISNEWPROV", "SKY"), current.minusHours(3), current.plusHours(1), None,
+      Some(Series("friends", Some(Episode(Some("ep1"), None, None, None, None)), List("actor1"),
+        List(), List(), List(), List(), None, None, None, None, None, None)),
+      None,
+      None)
+
+    val dexter = TVContent("channel6", List("WHATISNEWPROV", "SKY"), current.plusHours(1), current.plusHours(2), Some(8.4),
+      Some(Series("dexter", Some(Episode(Some("ep1"), None, None, None, None)), List("actor1"),
+        List(), List(), List(), List(), None, None, None, None, None, None)),
+      None,
+      None)
+
+    val world = TVContent("channel6", List("WHATISNEWPROV", "SKY"), current.plusHours(2), current.plusHours(3), Some(8.4),
+      None,
+      Some(Film("world", List("actor1"), List(), List(), List(), List(), None, None, None, None, None, None)),
+      None)
+
+  }
+
+  object Channel7 {
+    val news = TVContent("channel7", List("WHATISNEWPROV", "SKY"), current.minusHours(2), current.plusHours(1), None,
+      None,
+      None,
+      Some(Program("news", Some("d6"))))
+
+    val weather = TVContent("channel7", List("WHATISNEWPROV", "SKY"), current.plusHours(1), current.plusHours(2), None,
+      None,
+      None,
+      Some(Program("weather", Some("d6"))))
+
+    val africa = TVContent("channel7", List("WHATISNEWPROV", "SKY"), current.plusHours(2), current.plusHours(3), None,
+      None,
+      None,
+      Some(Program("africa", Some("d6"))))
+  }
+
 
   before {
-    import Channel1._
-    import Channel2._
-    import Channel3._
-    import Channel4._
+    import Channel1._, Channel2._, Channel3._, Channel4._, Channel5._, Channel6._, Channel7._
     whenReady(tvContentRepository.insertBulk(
-      Enumerator(series1, series2, film1, film2, program1, program2, series3, film3, program3, film4, program4))) {
-      response => response mustBe 11
+      Enumerator(series1, series2, film1, film2, program1, program2, series3, film3, program3, film4, program4,
+      birdman, boyhood, homeland, friends, dexter, world, news, weather, africa))) {
+      response => response mustBe 20
     }
   }
 
@@ -278,6 +331,20 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
 
     "return empty List of 4 top TV content for provider FREEVIEW_UKNOWN left" in {
       whenReady(tvContentRepository.findTopLeftContentByProvider(4, "FREEVIEW_UKNOWN")) {
+        _ mustBe Seq()
+      }
+    }
+  }
+
+  "findNextProgramByProvider" should {
+    "return what is next for provider WHATISNEWPROV left" in {
+      whenReady(tvContentRepository.findNextProgramByProvider("WHATISNEWPROV")) {
+        _ mustBe Seq(Channel6.dexter, Channel5.boyhood, Channel7.weather)
+      }
+    }
+
+    "return empty List of next TV content for provider FREEVIEW_UKNOWN" in {
+      whenReady(tvContentRepository.findNextProgramByProvider("FREEVIEW_UKNOWN")) {
         _ mustBe Seq()
       }
     }
