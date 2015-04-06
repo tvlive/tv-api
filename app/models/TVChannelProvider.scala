@@ -12,7 +12,7 @@ trait ChannelProviderRepository {
 
   def findAll(): Future[Seq[TVChannelProvider]] = ???
 
-  def drop(): Future[Boolean] = ???
+  def removeAll(): Future[Boolean] = ???
 
   def insertBulk(enumerator: Enumerator[TVChannelProvider]): Future[Int] = ???
 
@@ -21,6 +21,8 @@ trait ChannelProviderRepository {
 
 class TVChannelProviderRepository(collectionName: String)(implicit val con: String => APIMongoConnection) extends ChannelProviderRepository {
   private val collection = con(collectionName).collection
+
+  override def removeAll(): Future[Boolean] = collection.remove(BSONDocument()).map(_.ok)
 
   override def findAll(): Future[Seq[TVChannelProvider]] = {
     val query = BSONDocument(
@@ -31,8 +33,6 @@ class TVChannelProviderRepository(collectionName: String)(implicit val con: Stri
     val found = collection.find(query).cursor[TVChannelProvider]
     found.collect[Seq]()
   }
-
-  override def drop(): Future[Boolean] = collection.drop()
 
   override def insertBulk(enumerator: Enumerator[TVChannelProvider]): Future[Int] =
     collection.bulkInsert(enumerator)

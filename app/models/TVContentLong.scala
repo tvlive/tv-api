@@ -76,9 +76,9 @@ trait ContentRepository {
 
   def findNextProgramByProvider(provider: String): Future[Seq[TVContent]] = ???
 
-  def drop(): Future[Boolean] = ???
-
   def insertBulk(enumerator: Enumerator[TVContent]): Future[Int] = ???
+
+  def removeAll(): Future[Boolean] = ???
 
 }
 
@@ -86,7 +86,7 @@ class TVContentRepository(collectionName: String)(implicit val con: String => AP
 
   private val collection = con(collectionName).collection
 
-  override def drop(): Future[Boolean] = collection.drop()
+  override def removeAll(): Future[Boolean] = collection.remove(BSONDocument()).map(_.ok)
 
   override def insertBulk(channels: Enumerator[TVContent]): Future[Int] = collection.bulkInsert(channels)
 

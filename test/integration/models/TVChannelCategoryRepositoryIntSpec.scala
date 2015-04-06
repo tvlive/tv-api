@@ -2,12 +2,12 @@ package models
 
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Millis, Seconds, Span}
-import org.scalatest.{BeforeAndAfter, MustMatchers}
+import org.scalatest.{BeforeAndAfterAll, MustMatchers}
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.iteratee.Enumerator
 import reactivemongo.bson.BSONObjectID
 
-class TVChannelCategoryRepositoryIntSpec extends PlaySpec with MustMatchers with BeforeAndAfter with ScalaFutures with MongoSugar {
+class TVChannelCategoryRepositoryIntSpec extends PlaySpec with MustMatchers with BeforeAndAfterAll with ScalaFutures with MongoSugar {
 
   val tvChannelCategory1 = TVChannelCategory("SPORTS", Some(BSONObjectID.generate))
   val tvChannelCategory2 = TVChannelCategory("ENTERTAINMENT", Some(BSONObjectID.generate))
@@ -16,13 +16,14 @@ class TVChannelCategoryRepositoryIntSpec extends PlaySpec with MustMatchers with
 
 
   implicit val defaultPatience =
-    PatienceConfig(timeout = Span(1, Seconds), interval = Span(5, Millis))
+    PatienceConfig(timeout = Span(3, Seconds), interval = Span(5, Millis))
 
   val tvChannelCategoryRepository: TVChannelCategoryRepository = new TVChannelCategoryRepository(this.getClass.getCanonicalName)
-  tvChannelCategoryRepository.drop()
-  Thread.sleep(5000)
 
-  before {
+  override def beforeAll {
+    whenReady(tvChannelCategoryRepository.removeAll()){
+      ok => println(s"Before - collection ${this.getClass.getCanonicalName} removed: $ok")
+    }
     whenReady(tvChannelCategoryRepository.insertBulk(
       Enumerator(
         tvChannelCategory1,
@@ -33,9 +34,9 @@ class TVChannelCategoryRepositoryIntSpec extends PlaySpec with MustMatchers with
     }
   }
 
-  after {
-    whenReady(tvChannelCategoryRepository.drop()) {
-      response => println(s"Collection ${this.getClass.getCanonicalName} has been drop: $response")
+  override def afterAll {
+    whenReady(tvChannelCategoryRepository.removeAll()){
+      ok => println(s"Before - collection ${this.getClass.getCanonicalName} removed: $ok")
     }
   }
 

@@ -3,12 +3,12 @@ package integration.models
 import models.{MongoSugar, TVChannelProviderRepository, TVChannelProvider}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Millis, Span, Seconds}
-import org.scalatest.{BeforeAndAfter, MustMatchers}
+import org.scalatest.{BeforeAndAfterAll, MustMatchers}
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.iteratee.Enumerator
 import reactivemongo.bson.BSONObjectID
 
-class TVChannelProviderRepositoryIntSpec extends PlaySpec with MustMatchers with BeforeAndAfter with ScalaFutures with MongoSugar {
+class TVChannelProviderRepositoryIntSpec extends PlaySpec with MustMatchers with BeforeAndAfterAll with ScalaFutures with MongoSugar {
 
   val tvChannelProvider1 = TVChannelProvider("FREEVIEW", Some(BSONObjectID.generate))
   val tvChannelProvider2 = TVChannelProvider("SKY", Some(BSONObjectID.generate))
@@ -17,13 +17,15 @@ class TVChannelProviderRepositoryIntSpec extends PlaySpec with MustMatchers with
 
 
   implicit val defaultPatience =
-    PatienceConfig(timeout = Span(1, Seconds), interval = Span(5, Millis))
+    PatienceConfig(timeout = Span(3, Seconds), interval = Span(5, Millis))
 
   val tvChannelProviderRepository: TVChannelProviderRepository = new TVChannelProviderRepository(this.getClass.getCanonicalName)
-  tvChannelProviderRepository.drop()
-  Thread.sleep(5000)
 
-  before {
+  override def beforeAll {
+    whenReady(tvChannelProviderRepository.removeAll()){
+      ok => println(s"Before - collection ${this.getClass.getCanonicalName} removed: $ok")
+    }
+
     whenReady(tvChannelProviderRepository.insertBulk(
       Enumerator(
         tvChannelProvider1,
@@ -34,9 +36,9 @@ class TVChannelProviderRepositoryIntSpec extends PlaySpec with MustMatchers with
     }
   }
 
-  after {
-    whenReady(tvChannelProviderRepository.drop()) {
-      response => println(s"Collection ${this.getClass.getCanonicalName} has been drop: $response")
+  override def afterAll {
+    whenReady(tvChannelProviderRepository.removeAll()){
+      ok => println(s"Before - collection ${this.getClass.getCanonicalName} removed: $ok")
     }
   }
 

@@ -12,9 +12,13 @@ case class TVChannel(name: String, provider: List[String], category: List[String
 trait ChannelRepository {
 
   def listOfTVChannels(): Future[Seq[TVChannel]] = ???
+
   def listOfTVChannelsByCategory(category: String): Future[Seq[TVChannel]] = ???
+
   def listOfTVChannelsByProvider(provider: String): Future[Seq[TVChannel]] = ???
-  def drop(): Future[Boolean] = ???
+
+  def removeAll(): Future[Boolean] = ???
+
   def insertBulk(enumerator: Enumerator[TVChannel]): Future[Int] = ???
 }
 
@@ -22,7 +26,7 @@ class TVChannelRepository(collectionName: String)(implicit val con: String => AP
 
   private val collection = con(collectionName).collection
 
-  override def drop(): Future[Boolean] = collection.drop()
+  override def removeAll(): Future[Boolean] = collection.remove(BSONDocument()).map(_.ok)
 
   override def insertBulk(channels: Enumerator[TVChannel]): Future[Int] = collection.bulkInsert(channels)
 

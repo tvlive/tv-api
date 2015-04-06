@@ -3,16 +3,16 @@ package models
 import org.joda.time.{DateTime, DateTimeZone}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Millis, Seconds, Span}
-import org.scalatest.{BeforeAndAfter, MustMatchers}
+import org.scalatest.{BeforeAndAfterAll, MustMatchers}
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.iteratee.Enumerator
 import reactivemongo.bson.BSONObjectID
 import utils.TimeProvider
 
-class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with BeforeAndAfter with ScalaFutures with MongoSugar {
+class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with BeforeAndAfterAll with ScalaFutures with MongoSugar {
 
   implicit val defaultPatience =
-    PatienceConfig(timeout = Span(1, Seconds), interval = Span(5, Millis))
+    PatienceConfig(timeout = Span(3, Seconds), interval = Span(5, Millis))
 
   val current = new DateTime(2010, 10, 10, 10, 0, 0, DateTimeZone.forID("UTC"))
 
@@ -21,8 +21,6 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
   }
 
   val tvContentRepository = new TVContentRepository(this.getClass.getCanonicalName)
-  tvContentRepository.drop()
-  Thread.sleep(5000)
 
   object Channel1 {
     val series1 = TVContent("channel1", List("FREEVIEW", "SKY"), current.minusHours(4), current.minusHours(2), None,
@@ -147,8 +145,11 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
   }
 
 
-  before {
+  override def beforeAll {
     import Channel1._, Channel2._, Channel3._, Channel4._, Channel5._, Channel6._, Channel7._
+    whenReady(tvContentRepository.removeAll()){
+      ok => println(s"Before - collection ${this.getClass.getCanonicalName} removed: $ok")
+    }
     whenReady(tvContentRepository.insertBulk(
       Enumerator(series1, series2, film1, film2, program1, program2, series3, film3, program3, film4, program4,
       birdman, boyhood, homeland, friends, dexter, world, news, weather, africa))) {
@@ -156,9 +157,12 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
     }
   }
 
-  after {
-    whenReady(tvContentRepository.drop()) {
-      response => println(s"Collection ${this.getClass.getCanonicalName} has been drop: $response")
+  override def afterAll {
+//    whenReady(tvContentRepository.drop()) {
+//      response => println(s"Collection ${this.getClass.getCanonicalName} has been drop: $response")
+//    }
+    whenReady(tvContentRepository.removeAll()){
+      ok => println(s"After - collection ${this.getClass.getCanonicalName} removed: $ok")
     }
   }
 
