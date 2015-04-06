@@ -6,3 +6,6 @@ category.uri=List of channels by category: {0}
 tvcontent.today.type.provider.uri={0} today on TV by provider: {1}
 tvcontent.current.type.provider.uri={0} now on TV by provider: {1}
 tvcontent.left.type.provider.uri={0} left on TV by provider: {1}
+tvcontent.top.type.provider.uri=Top content left on TV by provider: {0}
+tvcontent.next.type.provider.uri=What is next on TV by provider: {0}
+tvcontent.all.now.type.provider.uri=What is on TV now by provider: {0}

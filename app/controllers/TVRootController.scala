@@ -39,8 +39,17 @@ trait TVRootController extends BaseController with URLBuilder {
         val linksFilmByProvider = providers.map {
           p =>
             Link(
-              buildUrl(host, controllers.routes.TVContentController.allContentByTypeAndProvider("film", p.provider).url),
-              Messages("tvcontent.today.type.provider.uri", "FILMS", p.provider)) ::
+              buildUrl(host, controllers.routes.TVContentController.topContentLeftByProvider(p.provider).url),
+              Messages("tvcontent.top.type.provider.uri", p.provider)) ::
+              Link(
+                buildUrl(host, controllers.routes.TVContentController.contentNextByProvider(p.provider).url),
+                Messages("tvcontent.next.type.provider.uri", p.provider)) ::
+              Link(
+                buildUrl(host, controllers.routes.TVContentController.currentContentByProvider(p.provider).url),
+                Messages("tvcontent.all.now.type.provider.uri", p.provider)) ::
+              Link(
+                buildUrl(host, controllers.routes.TVContentController.allContentByTypeAndProvider("film", p.provider).url),
+                Messages("tvcontent.today.type.provider.uri", "FILMS", p.provider)) ::
               Link(
                 buildUrl(host, controllers.routes.TVContentController.currentContentByTypeAndProvider("film", p.provider).url),
                 Messages("tvcontent.current.type.provider.uri", "FILMS", p.provider)) ::
