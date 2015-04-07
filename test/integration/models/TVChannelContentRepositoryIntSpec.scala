@@ -21,6 +21,10 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
   }
 
   val tvContentRepository = new TVContentRepository(this.getClass.getCanonicalName)
+  whenReady(tvContentRepository.createIndex()) {
+    ok => println(s"index created correctly collection ${this.getClass.getCanonicalName} $ok")
+  }
+
 
   object Channel1 {
     val series1 = TVContent("channel1", List("FREEVIEW", "SKY"), current.minusHours(4), current.minusHours(2), None,
@@ -144,24 +148,35 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
       Some(Program("africa", Some("d6"))))
   }
 
+  object Channel8 {
+    val sky = TVContent("channel8", List("SEARCHPROVIDER", "SKY"), current.plusHours(1), current.plusHours(2), Some(8.4),
+      Some(Series("sky", Some(Episode(Some("sky"), None, None, None, None)), List("actor1"),
+        List(), List(), List(), List(), None, None, None, None, None, None)),
+      None,
+      None)
+
+    val europe = TVContent("channel8", List("SEARCHPROVIDER", "SKY"), current, current.plusHours(3), None,
+      None,
+      None,
+      Some(Program("sky", Some("d6"))))
+  }
+
 
   override def beforeAll {
-    import Channel1._, Channel2._, Channel3._, Channel4._, Channel5._, Channel6._, Channel7._
-    whenReady(tvContentRepository.removeAll()){
+    import Channel1._, Channel2._, Channel3._, Channel4._, Channel5._, Channel6._, Channel7._, Channel8._
+    whenReady(tvContentRepository.removeAll()) {
       ok => println(s"Before - collection ${this.getClass.getCanonicalName} removed: $ok")
     }
     whenReady(tvContentRepository.insertBulk(
       Enumerator(series1, series2, film1, film2, program1, program2, series3, film3, program3, film4, program4,
-      birdman, boyhood, homeland, friends, dexter, world, news, weather, africa))) {
-      response => response mustBe 20
+        birdman, boyhood, homeland, friends, dexter, world, news, weather, africa, sky,
+      europe))) {
+      response => response mustBe 22
     }
   }
 
   override def afterAll {
-//    whenReady(tvContentRepository.drop()) {
-//      response => println(s"Collection ${this.getClass.getCanonicalName} has been drop: $response")
-//    }
-    whenReady(tvContentRepository.removeAll()){
+    whenReady(tvContentRepository.removeAll()) {
       ok => println(s"After - collection ${this.getClass.getCanonicalName} removed: $ok")
     }
   }
@@ -350,6 +365,14 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
     "return empty List of next TV content for provider FREEVIEW_UKNOWN" in {
       whenReady(tvContentRepository.findNextProgramByProvider("FREEVIEW_UKNOWN")) {
         _ mustBe Seq()
+      }
+    }
+  }
+
+  "searchTitleByProvider" should {
+    "return series when search by 'sky'" in {
+      whenReady(tvContentRepository.searchTitleByProvider("SKY", "SEARCHPROVIDER")) {
+        _ mustBe Seq(Channel8.sky, Channel8.europe)
       }
     }
   }

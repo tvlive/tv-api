@@ -1,8 +1,10 @@
 package models
 
 import org.joda.time.DateTime
+import play.api.Logger
 import play.api.libs.iteratee.Enumerator
 import _root_.utils.{TVContentSorter, TimeProvider}
+import reactivemongo.api.indexes.{IndexType, Index}
 import reactivemongo.bson._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -80,11 +82,22 @@ trait ContentRepository {
 
   def removeAll(): Future[Boolean] = ???
 
+  def searchTitleByProvider(searchBy: String, provider: String): Future[Seq[TVContent]] = ???
+
 }
 
 class TVContentRepository(collectionName: String)(implicit val con: String => APIMongoConnection, val time: TimeProvider) extends ContentRepository with TVContentSorter {
 
   private val collection = con(collectionName).collection
+
+  def createIndex(): Future[Boolean] = {
+    collection.indexesManager.ensure(
+      Index(
+        key = Seq("series.serieTitle" -> IndexType.Text, "film.title" -> IndexType.Text, "program.title" -> IndexType.Text),
+        name = Some("search_name"),
+        unique = false)
+    )
+  }
 
   override def removeAll(): Future[Boolean] = collection.remove(BSONDocument()).map(_.ok)
 
@@ -223,11 +236,36 @@ class TVContentRepository(collectionName: String)(implicit val con: String => AP
     }
   }
 
+  override def searchTitleByProvider(searchBy: String, provider: String) = {
+    val now = time.currentDate()
+    val query = BSONDocument(
+      "$orderby" -> BSONDocument("rating" -> -1, "start" -> 1, "channel" -> 1),
+      "$query" -> BSONDocument(
+        "provider" -> provider,
+        "$text" -> BSONDocument("$search" -> searchBy)))
+
+    val found = collection.find(query).cursor[TVContent]
+    found.collect[Seq]()
+  }
+
+
   private def findContentByType(contentType: String)(f: String => Future[Seq[TVContent]]) = {
     contentType match {
       case ct if (ct == "program" || ct == "series" || ct == "film") => f(ct)
       case _ => Future.successful(Seq())
     }
+  }
+}
+
+
+object TVContentRepository {
+  def apply(collectionName: String)(implicit con: String => APIMongoConnection, time: TimeProvider) = {
+    val repo = new TVContentRepository(collectionName)
+    repo.createIndex().map(
+        if (_) Logger.info(s"Index created for ${TVContentRepository.getClass.getName}")
+        else Logger.error(s"Error creating index created for ${TVContentRepository.getClass.getName}")
+    )
+    repo
   }
 }
 
