@@ -554,6 +554,45 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers {
       //AND
       verify(tvContentRepository).findNextProgramByProvider("SOMEPROVIDER")
     }
+
+    "return the search by 'sky' for provider FREEVIEW" in new TVContentSetUpTest() {
+      //GIVEN
+      when(tvContentRepository.searchTitleByProvider("sky", "FREEVIEW")).thenReturn(
+        Future.successful(Seq(tvProgram1, tvProgram7)))
+
+      //WHEN
+      val programsResult: Future[SimpleResult] = controller.searchBy("FREEVIEW", "sky").apply(FakeRequest())
+
+      //THEN
+      status(programsResult) mustBe (OK)
+      contentType(programsResult) mustBe (Some("application/json"))
+      val programInResponse = contentAsString(programsResult)
+      val tvprograms = Json.parse(programInResponse).as[Seq[TVContentShort]]
+      tvprograms mustEqual Seq(
+        TVShortWithTimeZone(tvProgram1),
+        TVShortWithTimeZone(tvProgram7))
+
+      //AND
+      verify(tvContentRepository).searchTitleByProvider("sky", "FREEVIEW")
+    }
+
+    "return NOT_FOUND for provider someProvider for search by 'sky" in new TVContentSetUpTest() {
+      //GIVEN
+      when(tvContentRepository.searchTitleByProvider("sky", "SOMEPROVIDER")).thenReturn(
+        Future.successful(Seq()))
+
+      //WHEN
+      val programsResult: Future[SimpleResult] = controller.searchBy("someProvider", "sky").apply(FakeRequest())
+
+      //THEN
+      status(programsResult) mustBe (NOT_FOUND)
+      val contentsInResponse = contentAsJson(programsResult).as[NotFoundResponse]
+      contentsInResponse mustEqual (NotFoundResponse("No TV content found in search by: 'sky' and for provider: someProvider"))
+
+      //AND
+      verify(tvContentRepository).searchTitleByProvider("sky", "SOMEPROVIDER")
+    }
+
   }
 
 }

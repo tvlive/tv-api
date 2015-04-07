@@ -11,14 +11,14 @@ trait Env extends ScalaDsl {
 
   Before {
     s =>
-      db.dropCollection(tvCollection)
+      db.removeCollection(tvCollection)
       println("data reset")
       Context.world.empty
   }
 
   After {
     s =>
-      db.dropCollection(tvCollection)
+      db.removeCollection(tvCollection)
       println("data reset")
   }
 

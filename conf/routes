@@ -21,9 +21,11 @@ GET     /tvcontent/:id                      			controllers.TVContentController.t
 
 GET     /tvcontent/top/:provider                        controllers.TVContentController.topContentLeftByProvider(provider: String, items: Int ?= 10)
 
-GET     /tvcontent/next/:provider                        controllers.TVContentController.contentNextByProvider(provider: String)
+GET     /tvcontent/next/:provider                       controllers.TVContentController.contentNextByProvider(provider: String)
 
 GET     /tvcontent/all/:provider/current                controllers.TVContentController.currentContentByProvider(provider)
+
+GET     /tvcontent/search/:provider                      controllers.TVContentController.searchBy(provider, title: String)
 
 GET     /tvcontent/:type/:provider/today             	controllers.TVContentController.allContentByTypeAndProvider(type, provider)
 

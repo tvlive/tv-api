@@ -149,13 +149,25 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
   }
 
   object Channel8 {
+    val forrest = TVContent("channel8", List("SEARCHPROVIDER", "SKY"), current, current.plusHours(1), Some(8.4),
+      None,
+      Some(Film("forrest in sky", List("actor1"), List(), List(), List(), List(), None, None, None, None, None, None)),
+      None)
+
     val sky = TVContent("channel8", List("SEARCHPROVIDER", "SKY"), current.plusHours(1), current.plusHours(2), Some(8.4),
-      Some(Series("sky", Some(Episode(Some("sky"), None, None, None, None)), List("actor1"),
+      Some(Series("sky", Some(Episode(Some("some day"), None, None, None, None)), List("actor1"),
         List(), List(), List(), List(), None, None, None, None, None, None)),
       None,
       None)
 
-    val europe = TVContent("channel8", List("SEARCHPROVIDER", "SKY"), current, current.plusHours(3), None,
+    val fargo = TVContent("channel8", List("SEARCHPROVIDER", "SKY"), current.plusHours(2), current.plusHours(3), Some(8.5),
+      Some(Series("Fargo", Some(Episode(Some("SKY in NYC"), None, None, None, None)), List("actor1"),
+        List(), List(), List(), List(), None, None, None, None, None, None)),
+      None,
+      None)
+
+
+    val europe = TVContent("channel8", List("SEARCHPROVIDER", "SKY"), current.plusHours(3), current.plusHours(4), None,
       None,
       None,
       Some(Program("sky", Some("d6"))))
@@ -170,8 +182,8 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
     whenReady(tvContentRepository.insertBulk(
       Enumerator(series1, series2, film1, film2, program1, program2, series3, film3, program3, film4, program4,
         birdman, boyhood, homeland, friends, dexter, world, news, weather, africa, sky,
-      europe))) {
-      response => response mustBe 22
+        forrest, europe, fargo))) {
+      response => response mustBe 24
     }
   }
 
@@ -372,7 +384,7 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
   "searchTitleByProvider" should {
     "return series when search by 'sky'" in {
       whenReady(tvContentRepository.searchTitleByProvider("SKY", "SEARCHPROVIDER")) {
-        _ mustBe Seq(Channel8.sky, Channel8.europe)
+        _ mustBe Seq(Channel8.fargo, Channel8.forrest, Channel8.sky, Channel8.europe)
       }
     }
   }

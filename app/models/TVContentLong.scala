@@ -93,7 +93,7 @@ class TVContentRepository(collectionName: String)(implicit val con: String => AP
   def createIndex(): Future[Boolean] = {
     collection.indexesManager.ensure(
       Index(
-        key = Seq("series.serieTitle" -> IndexType.Text, "film.title" -> IndexType.Text, "program.title" -> IndexType.Text),
+        key = Seq("series.episode.episodeTitle" -> IndexType.Text, "series.serieTitle" -> IndexType.Text, "film.title" -> IndexType.Text, "program.title" -> IndexType.Text),
         name = Some("search_name"),
         unique = false)
     )
@@ -238,11 +238,12 @@ class TVContentRepository(collectionName: String)(implicit val con: String => AP
 
   override def searchTitleByProvider(searchBy: String, provider: String) = {
     val now = time.currentDate()
+    val qs = "\"" + searchBy + "\""
     val query = BSONDocument(
       "$orderby" -> BSONDocument("rating" -> -1, "start" -> 1, "channel" -> 1),
       "$query" -> BSONDocument(
         "provider" -> provider,
-        "$text" -> BSONDocument("$search" -> searchBy)))
+        "$text" -> BSONDocument("$search" -> qs)))
 
     val found = collection.find(query).cursor[TVContent]
     found.collect[Seq]()
@@ -259,11 +260,11 @@ class TVContentRepository(collectionName: String)(implicit val con: String => AP
 
 
 object TVContentRepository {
-  def apply(collectionName: String)(implicit con: String => APIMongoConnection, time: TimeProvider) = {
+  def apply(collectionName: String)(implicit con: String => APIMongoConnection, time: TimeProvider): TVContentRepository = {
     val repo = new TVContentRepository(collectionName)
     repo.createIndex().map(
-        if (_) Logger.info(s"Index created for ${TVContentRepository.getClass.getName}")
-        else Logger.error(s"Error creating index created for ${TVContentRepository.getClass.getName}")
+        if (_) Logger.info(s"Index created for collection ${collectionName}")
+        else Logger.info(s"Index already existed for collection ${collectionName}")
     )
     repo
   }

@@ -26,7 +26,7 @@ object ApplicationContext {
   val tvChannelCategoryRepository = new TVChannelCategoryRepository("tvChannelCategory")
   val tvChannelRepository = new TVChannelRepository("tvChannel")
   val tvChannelProviderReporitory = new TVChannelProviderRepository("tvChannelProvider")
-  val tvContentRepository = new TVContentRepository("tvContent")
+  val tvContentRepository = TVContentRepository("tvContent")
   val providerRepository = new TVChannelProviderRepository("tvChannelProvider")
   val categoryRepository = new TVChannelCategoryRepository("tvChannelCategory")
 }
