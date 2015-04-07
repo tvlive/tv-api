@@ -2,7 +2,7 @@ package models
 
 import play.api.libs.iteratee.Enumerator
 import reactivemongo.bson.{BSONDocument, BSONObjectID}
-
+import utils.mongoBuilder._
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -16,6 +16,8 @@ trait ChannelProviderRepository {
 
   def insertBulk(enumerator: Enumerator[TVChannelProvider]): Future[Int] = ???
 
+  def drop(): Future[Boolean] = ???
+
 }
 
 
@@ -25,15 +27,15 @@ class TVChannelProviderRepository(collectionName: String)(implicit val con: Stri
   override def removeAll(): Future[Boolean] = collection.remove(BSONDocument()).map(_.ok)
 
   override def findAll(): Future[Seq[TVChannelProvider]] = {
-    val query = BSONDocument(
-      "$orderby" -> BSONDocument("provider" -> 1),
-      "$query" -> BSONDocument()
-    )
-
-    val found = collection.find(query).cursor[TVChannelProvider]
-    found.collect[Seq]()
+    collection
+      .find(BSONDocument())
+      .sort(BSONDocument().providerAsc())
+      .cursor[TVChannelProvider].collect[Seq]()
   }
 
   override def insertBulk(enumerator: Enumerator[TVChannelProvider]): Future[Int] =
     collection.bulkInsert(enumerator)
+
+  override def drop(): Future[Boolean] = collection.drop()
+
 }

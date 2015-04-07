@@ -289,6 +289,18 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers {
       verify(tvContentRepository).findDayContentByTypeAndProvider("program", "NOTEXIST")
     }
 
+    "return NOT_FOUND by type notExist available today" in new TVContentSetUpTest() {
+      //WHEN
+      val contentsResult: Future[SimpleResult] = controller.allContentByTypeAndProvider("notExist", "freeview").apply(FakeRequest())
+
+      //THEN
+      status(contentsResult) mustBe (BAD_REQUEST)
+      val contentsInResponse = contentAsJson(contentsResult).as[BadRequestResponse]
+      contentsInResponse mustEqual (BadRequestResponse("TV content notExist does not exist"))
+    }
+
+
+
     "return the TV content for type SERIES and provider FREEVIEW in upper case available now" in new TVContentSetUpTest() {
       //GIVEN
       when(tvContentRepository.findCurrentContentByTypeAndProvider("series", "FREEVIEW")).thenReturn(
@@ -349,20 +361,13 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers {
     }
 
     "return NOT_FOUND by type notExist available now" in new TVContentSetUpTest() {
-      //GIVEN
-      when(tvContentRepository.findCurrentContentByTypeAndProvider("notexist", "FREEVIEW")).thenReturn(
-        Future.successful(Seq()))
-
       //WHEN
       val contentsResult: Future[SimpleResult] = controller.currentContentByTypeAndProvider("notExist", "FREEVIEW").apply(FakeRequest())
 
       //THEN
-      status(contentsResult) mustBe (NOT_FOUND)
-      val contentsInResponse = contentAsJson(contentsResult).as[NotFoundResponse]
-      contentsInResponse mustEqual (NotFoundResponse(s"No TV content at this moment for the type: notExist and provider: FREEVIEW"))
-
-      //AND
-      verify(tvContentRepository).findCurrentContentByTypeAndProvider("notexist", "FREEVIEW")
+      status(contentsResult) mustBe (BAD_REQUEST)
+      val contentsInResponse = contentAsJson(contentsResult).as[BadRequestResponse]
+      contentsInResponse mustEqual (BadRequestResponse("TV content notExist does not exist"))
     }
 
     "return the TV content for type PROGRAM and provider FREEVIEW available from now until the end of the day" in new TVContentSetUpTest() {
@@ -424,135 +429,13 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers {
 
 
     "return NOT_FOUND by type notExist from now until the end of the day" in new TVContentSetUpTest() {
-      //GIVEN
-      when(tvContentRepository.findLeftContentByTypeAndProvider("notexist", "FREEVIEW")).thenReturn(
-        Future.successful(Seq()))
-
       //WHEN
       val contentsResult: Future[SimpleResult] = controller.contentLeftByTypeAndProvider("notExist", "FREEVIEW").apply(FakeRequest())
 
       //THEN
-      status(contentsResult) mustBe (NOT_FOUND)
-      val contentsInResponse = contentAsJson(contentsResult).as[NotFoundResponse]
-      contentsInResponse mustEqual (NotFoundResponse(s"No TV content left for the type: notExist and provider: FREEVIEW"))
-
-      //AND
-      verify(tvContentRepository).findLeftContentByTypeAndProvider("notexist", "FREEVIEW")
-    }
-
-    "return the TV content for ALL types and provider freeview available now" in new TVContentSetUpTest() {
-      //GIVEN
-      when(tvContentRepository.findCurrentContentByProvider("FREEVIEW")).thenReturn(
-        Future.successful(Seq(tvProgram3, tvProgram7, tvProgram8, tvProgram9)))
-
-      //WHEN
-      val programsResult: Future[SimpleResult] = controller.currentContentByProvider("freeview").apply(FakeRequest())
-
-      //THEN
-      status(programsResult) mustBe (OK)
-      contentType(programsResult) mustBe (Some("application/json"))
-      val programInResponse = contentAsString(programsResult)
-      val tvprograms = Json.parse(programInResponse).as[Seq[TVContentShort]]
-      tvprograms mustEqual Seq(
-        TVShortWithTimeZone(tvProgram3),
-        TVShortWithTimeZone(tvProgram7),
-        TVShortWithTimeZone(tvProgram8),
-        TVShortWithTimeZone(tvProgram9))
-
-      //AND
-      verify(tvContentRepository).findCurrentContentByProvider("FREEVIEW")
-    }
-
-    "return NOT_FOUND by provider someProvider available now" in new TVContentSetUpTest() {
-      //GIVEN
-      when(tvContentRepository.findCurrentContentByProvider("SOMEPROVIDER")).thenReturn(
-        Future.successful(Seq()))
-
-      //WHEN
-      val contentsResult: Future[SimpleResult] = controller.currentContentByProvider("someProvider").apply(FakeRequest())
-
-      //THEN
-      status(contentsResult) mustBe (NOT_FOUND)
-      val contentsInResponse = contentAsJson(contentsResult).as[NotFoundResponse]
-      contentsInResponse mustEqual (NotFoundResponse("No TV content at this moment for provider: someProvider"))
-
-      //AND
-      verify(tvContentRepository).findCurrentContentByProvider("SOMEPROVIDER")
-    }
-
-    "return the 2 top content for provider FREEVIEW available from now until the end of the day" in new TVContentSetUpTest() {
-      //GIVEN
-      when(tvContentRepository.findTopLeftContentByProvider(2, "FREEVIEW")).thenReturn(
-        Future.successful(Seq(tvProgram3,tvProgram7)))
-
-      //WHEN
-      val programsResult: Future[SimpleResult] = controller.topContentLeftByProvider("FREEVIEW", 2).apply(FakeRequest())
-
-      //THEN
-      status(programsResult) mustBe (OK)
-      contentType(programsResult) mustBe (Some("application/json"))
-      val programInResponse = contentAsString(programsResult)
-      val tvprograms = Json.parse(programInResponse).as[Seq[TVContentShort]]
-      tvprograms mustEqual Seq(TVShortWithTimeZone(tvProgram3), TVShortWithTimeZone(tvProgram7))
-
-      //AND
-      verify(tvContentRepository).findTopLeftContentByProvider(2, "FREEVIEW")
-    }
-
-    "return NOT_FOUND for provider someProvider available from now until the end of the day" in new TVContentSetUpTest() {
-      //GIVEN
-      when(tvContentRepository.findTopLeftContentByProvider(2, "SOMEPROVIDER")).thenReturn(
-        Future.successful(Seq()))
-
-      //WHEN
-      val programsResult: Future[SimpleResult] = controller.topContentLeftByProvider("someProvider", 2).apply(FakeRequest())
-
-      //THEN
-      status(programsResult) mustBe (NOT_FOUND)
-      val contentsInResponse = contentAsJson(programsResult).as[NotFoundResponse]
-      contentsInResponse mustEqual (NotFoundResponse("No top TV content left for provider: someProvider"))
-
-      //AND
-      verify(tvContentRepository).findTopLeftContentByProvider(2, "SOMEPROVIDER")
-    }
-
-    "return the what is next content for provider FREEVIEW" in new TVContentSetUpTest() {
-      //GIVEN
-      when(tvContentRepository.findNextProgramByProvider("FREEVIEW")).thenReturn(
-        Future.successful(Seq(tvProgram3, tvProgram7, tvProgram1)))
-
-      //WHEN
-      val programsResult: Future[SimpleResult] = controller.contentNextByProvider("FREEVIEW").apply(FakeRequest())
-
-      //THEN
-      status(programsResult) mustBe (OK)
-      contentType(programsResult) mustBe (Some("application/json"))
-      val programInResponse = contentAsString(programsResult)
-      val tvprograms = Json.parse(programInResponse).as[Seq[TVContentShort]]
-      tvprograms mustEqual Seq(
-        TVShortWithTimeZone(tvProgram3),
-        TVShortWithTimeZone(tvProgram7),
-        TVShortWithTimeZone(tvProgram1))
-
-      //AND
-      verify(tvContentRepository).findNextProgramByProvider("FREEVIEW")
-    }
-
-    "return NOT_FOUND for provider someProvider for what is next" in new TVContentSetUpTest() {
-      //GIVEN
-      when(tvContentRepository.findNextProgramByProvider("SOMEPROVIDER")).thenReturn(
-        Future.successful(Seq()))
-
-      //WHEN
-      val programsResult: Future[SimpleResult] = controller.contentNextByProvider("someProvider").apply(FakeRequest())
-
-      //THEN
-      status(programsResult) mustBe (NOT_FOUND)
-      val contentsInResponse = contentAsJson(programsResult).as[NotFoundResponse]
-      contentsInResponse mustEqual (NotFoundResponse("No next TV content for provider: someProvider"))
-
-      //AND
-      verify(tvContentRepository).findNextProgramByProvider("SOMEPROVIDER")
+      status(contentsResult) mustBe (BAD_REQUEST)
+      val contentsInResponse = contentAsJson(contentsResult).as[BadRequestResponse]
+      contentsInResponse mustEqual (BadRequestResponse("TV content notExist does not exist"))
     }
   }
 

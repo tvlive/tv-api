@@ -2,12 +2,10 @@ package controllers
 
 import java.net.URLDecoder
 
-import configuration.{Environment, ApplicationContext}
-import controllers.external.{TVShort, TVContentShort, TVLong, TVContentLong}
+import configuration.{ApplicationContext, Environment}
+import controllers.external.{TVContentLong, TVContentShort, TVLong, TVShort}
 import models._
-import org.joda.time.DateTime
-import play.api.libs.json.Json
-import play.api.mvc.Action
+import play.api.mvc._
 import utils.TimeProvider
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -19,7 +17,7 @@ object TVContentController extends TVContentController {
   override implicit val time: TimeProvider = ApplicationContext.time
 }
 
-trait TVContentController extends BaseController {
+trait TVContentController extends BaseController with Validation {
 
   implicit val host: String
   implicit val time: TimeProvider
@@ -47,26 +45,28 @@ trait TVContentController extends BaseController {
   }
 
   def allContent(channelName: String) = Action.async {
-
     contentRepository.findDayContentByChannel(URLDecoder.decode(channelName, "UTF-8").toUpperCase).map {
       ltv => buildResponseSeq(toTVShorts(ltv), s"No TV content for the channel: $channelName")
     }
   }
 
-  def allContentByTypeAndProvider(contentType: String, provider: String) = Action.async {
-    contentRepository.findDayContentByTypeAndProvider(contentType.toLowerCase, provider.toUpperCase).map {
+  def allContentByTypeAndProvider(contentType: String, provider: String) = tvcontentValidation(contentType).async {
+    cr: ContentRequest[_] => 
+      contentRepository.findDayContentByTypeAndProvider(cr.content.toLowerCase, provider.toUpperCase).map {
       ltv => buildResponseSeq(toTVShorts(ltv), s"No TV content for type: $contentType and provider: $provider")
     }
   }
 
-  def currentContentByTypeAndProvider(contentType: String, provider: String) = Action.async {
-    contentRepository.findCurrentContentByTypeAndProvider(contentType.toLowerCase, provider.toUpperCase).map {
+  def currentContentByTypeAndProvider(contentType: String, provider: String) = tvcontentValidation(contentType).async {
+    cr: ContentRequest[_] =>
+    contentRepository.findCurrentContentByTypeAndProvider(cr.content.toLowerCase, provider.toUpperCase).map {
       ltv => buildResponseSeq(toTVShorts(ltv), s"No TV content at this moment for the type: $contentType and provider: $provider")
     }
   }
 
-  def contentLeftByTypeAndProvider(contentType: String, provider: String) = Action.async {
-    contentRepository.findLeftContentByTypeAndProvider(contentType.toLowerCase(), provider.toUpperCase()).map {
+  def contentLeftByTypeAndProvider(contentType: String, provider: String) = tvcontentValidation(contentType).async {
+    cr: ContentRequest[_] =>
+    contentRepository.findLeftContentByTypeAndProvider(cr.content.toLowerCase(), provider.toUpperCase()).map {
       ltv => buildResponseSeq(toTVShorts(ltv), s"No TV content left for the type: $contentType and provider: $provider")
     }
   }
@@ -87,6 +87,13 @@ trait TVContentController extends BaseController {
     contentRepository.findNextProgramByProvider(provider.toUpperCase()).map {
       ltv => buildResponseSeq(toTVShorts(ltv), s"No next TV content for provider: $provider")
     }
+  }
+
+  def searchBy(provider: String, t: Option[String], c: Option[String], r: Option[Double]) = searchValidation(t, r, c).async {
+    sr: SearchRequest[_] =>
+      contentRepository.searchBy(provider.toUpperCase, sr.title, sr.content.map(_.toLowerCase), sr.rating).map {
+        ltv => buildResponseSeq(toTVShorts(ltv), s"No TV content found in search for provider: $provider")
+      }
   }
 
 }

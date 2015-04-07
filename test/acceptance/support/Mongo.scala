@@ -12,6 +12,8 @@ trait Mongo {
 
   def dropCollection(coll: MongoCollection) = coll.drop()
 
+  def removeCollection(coll: MongoCollection) = coll.remove(MongoDBObject())
+
   def insert(coll: MongoCollection, c: DBObject) = coll.insert(c)
 }
 

@@ -28,8 +28,8 @@ class TVChannelRepositoryIntSpec extends PlaySpec with MustMatchers with BeforeA
   }
 
   override def afterAll {
-    whenReady(tvChannelRepository.removeAll()){
-      ok => println(s"Before - collection ${this.getClass.getCanonicalName} removed: $ok")
+    whenReady(tvChannelRepository.drop){
+      ok => println(s"After - collection ${this.getClass.getCanonicalName} dropped: $ok")
     }
   }
 
