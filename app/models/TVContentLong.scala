@@ -82,7 +82,7 @@ trait ContentRepository {
 
   def removeAll(): Future[Boolean] = ???
 
-  def searchBy(title: String, provider: String, content: Option[String] = None, rating: Option[Double] = None): Future[Seq[TVContent]] = ???
+  def searchBy(provider: String, title: Option[String], content: Option[String], rating: Option[Double]): Future[Seq[TVContent]] = ???
 
 }
 
@@ -236,14 +236,12 @@ class TVContentRepository(collectionName: String)(implicit val con: String => AP
     }
   }
 
-  override def searchBy(title: String, provider: String, content: Option[String] = None, rating: Option[Double]): Future[Seq[TVContent]] = {
+  override def searchBy(provider: String, title: Option[String], content: Option[String], rating: Option[Double]): Future[Seq[TVContent]] = {
     val now = time.currentDate()
-    val t = "\"" + title + "\""
     val qs = BSONDocument("provider" -> provider) ++
-      BSONDocument("$text" -> BSONDocument("$search" -> t)) ++
+      title.map("\"" + _ + "\"").map(t => BSONDocument("$text" -> BSONDocument("$search" -> t))).getOrElse(BSONDocument()) ++
       content.map(c => BSONDocument(c -> BSONDocument("$exists" -> true))).getOrElse(BSONDocument()) ++
       rating.map(r => BSONDocument("rating" -> r)).getOrElse(BSONDocument())
-
 
     val query = BSONDocument(
       "$orderby" -> BSONDocument("rating" -> -1, "start" -> 1, "channel" -> 1),

@@ -25,7 +25,7 @@ GET     /tvcontent/next/:provider                       controllers.TVContentCon
 
 GET     /tvcontent/all/:provider/current                controllers.TVContentController.currentContentByProvider(provider)
 
-GET     /tvcontent/search/:provider                      controllers.TVContentController.searchBy(provider, title: String)
+GET     /tvcontent/search/:provider                      controllers.TVContentController.searchBy(provider, title: Option[String], t: Option[String], r: Option[Double])
 
 GET     /tvcontent/:type/:provider/today             	controllers.TVContentController.allContentByTypeAndProvider(type, provider)
 

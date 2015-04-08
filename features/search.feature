@@ -136,6 +136,71 @@ Feature: Search TV content by title
     |      "perCentTimeElapsed":50
     |}]"""
 
+
+  @86
+  Scenario: Search by title 'moon' and content type 'program'
+    Given the TV guide now for channel "BBC ONE" is:
+      | id                       | type    | title           | start   | end     | rating | poster                            |
+      | 55133bc701000001006ab665 | film    | Sky in the moon | 3:00 am | 4:20 am | 9.4    | http://images/sky_in_the_moon.jpg |
+      | 55133bc701000001006ab666 | program | Moon walker     | 4:20 am | 5:45 am |        |                                   |
+
+    When I GET the resource "/tvcontent/search/freeview?title=moon&t=program"
+    Then the HTTP response is "OK"
+    And the response is:
+    """
+    | [{
+    |  "channel":"BBC ONE",
+    |  "channelImageURL":"http://localhost:9000/BBC_ONE.png",
+    |  "provider":[
+    |     "FREEVIEW"
+    |  ],
+    |  "start":"2015-03-15T04:20:00",
+    |  "end":"2015-03-15T05:45:00",
+    |  "rating":null,
+    |  "program":{
+    |     "title":"Moon walker"
+    |  },
+    |  "series":null,
+    |  "film":null,
+    |  "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab666",
+    |  "onTimeNow":true,
+    |  "perCentTimeElapsed":11
+    |}]"""
+
+  @86
+  Scenario: Search by title 'bridge' and rating '9.4'
+    Given the TV guide now for channel "BBC ONE" is:
+      | id                       | type    | title                 | start   | end     | rating | poster                                  |
+      | 55133bc701000001006ab667 | film    | Bridges over the city | 3:00 am | 4:20 am | 9.4    | http://images/bridges_over_the_city.jpg |
+      | 55133bc701000001006ab668 | program | Jeff Bridges bio      | 4:20 am | 5:45 am |        |                                         |
+
+    When I GET the resource "/tvcontent/search/freeview?title=bridge&r=9.4"
+    Then the HTTP response is "OK"
+    And the response is:
+    """
+    |[{
+    |      "channel":"BBC ONE",
+    |      "channelImageURL":"http://localhost:9000/BBC_ONE.png",
+    |      "provider":[
+    |         "FREEVIEW"
+    |      ],
+    |      "start":"2015-03-15T03:00:00",
+    |      "end":"2015-03-15T04:20:00",
+    |      "rating":9.4,
+    |      "program": null,
+    |      "series": null,
+    |      "film":{
+    |         "title":"Bridges over the city",
+    |         "poster":"http://images/bridges_over_the_city.jpg"
+    |      },
+    |      "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab667",
+    |      "onTimeNow":false,
+    |      "perCentTimeElapsed":null
+    |}]"""
+
+
+
+
   @86
   Scenario: Search TV Content by 'no content exist'
     When I GET the resource "/tvcontent/search/freeview?title=no+content+exist"

@@ -383,31 +383,31 @@ class TVChannelContentRepositoryIntSpec extends PlaySpec with MustMatchers with 
 
   "searchTitleByProvider" should {
     "return when search by 'sky'" in {
-      whenReady(tvContentRepository.searchBy("SKY", "SEARCHPROVIDER")) {
+      whenReady(tvContentRepository.searchBy("SEARCHPROVIDER", Some("SKY"), None, None)) {
         _ mustBe Seq(Channel8.fargo, Channel8.forrest, Channel8.sky, Channel8.europe)
       }
     }
 
     "return series when search by 'sky'" in {
-      whenReady(tvContentRepository.searchBy("SKY", "SEARCHPROVIDER", Some("series"))) {
+      whenReady(tvContentRepository.searchBy("SEARCHPROVIDER", Some("SKY"), Some("series"), None)) {
         _ mustBe Seq(Channel8.fargo, Channel8.sky)
       }
     }
 
     "return program when search by 'sky'" in {
-      whenReady(tvContentRepository.searchBy("SKY", "SEARCHPROVIDER", Some("program"))) {
+      whenReady(tvContentRepository.searchBy("SEARCHPROVIDER", Some("SKY"), Some("program"), None)) {
         _ mustBe Seq(Channel8.europe)
       }
     }
 
     "return film when search by 'sky'" in {
-      whenReady(tvContentRepository.searchBy("SKY", "SEARCHPROVIDER", Some("film"))) {
+      whenReady(tvContentRepository.searchBy("SEARCHPROVIDER", Some("SKY"), Some("film"), None)) {
         _ mustBe Seq(Channel8.forrest)
       }
     }
 
     "return content with rating when search by 'sky'" in {
-      whenReady(tvContentRepository.searchBy("SKY", "SEARCHPROVIDER", None, Some(8.4))) {
+      whenReady(tvContentRepository.searchBy("SEARCHPROVIDER", Some("SKY"), None, Some(8.4))) {
         _ mustBe Seq(Channel8.forrest, Channel8.sky)      }
     }
   }

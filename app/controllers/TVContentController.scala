@@ -47,7 +47,6 @@ trait TVContentController extends BaseController {
   }
 
   def allContent(channelName: String) = Action.async {
-
     contentRepository.findDayContentByChannel(URLDecoder.decode(channelName, "UTF-8").toUpperCase).map {
       ltv => buildResponseSeq(toTVShorts(ltv), s"No TV content for the channel: $channelName")
     }
@@ -89,9 +88,9 @@ trait TVContentController extends BaseController {
     }
   }
 
-  def searchBy(provider: String, title: String) = Action.async {
-    contentRepository.searchBy(title, provider.toUpperCase(), None, None).map {
-      ltv => buildResponseSeq(toTVShorts(ltv), s"No TV content found in search by: '$title' and for provider: $provider")
+  def searchBy(provider: String, title: Option[String], t: Option[String], r: Option[Double]) = Action.async {
+    contentRepository.searchBy(provider.toUpperCase(), title, t, r).map {
+      ltv => buildResponseSeq(toTVShorts(ltv), s"No TV content found in search by: '${title.get}' and for provider: $provider")
     }
   }
 
