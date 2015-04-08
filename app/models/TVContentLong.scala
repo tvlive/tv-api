@@ -82,7 +82,7 @@ trait ContentRepository {
 
   def removeAll(): Future[Boolean] = ???
 
-  def searchTitleByProvider(searchBy: String, provider: String): Future[Seq[TVContent]] = ???
+  def searchBy(title: String, provider: String, content: Option[String] = None, rating: Option[Double] = None): Future[Seq[TVContent]] = ???
 
 }
 
@@ -236,14 +236,18 @@ class TVContentRepository(collectionName: String)(implicit val con: String => AP
     }
   }
 
-  override def searchTitleByProvider(searchBy: String, provider: String) = {
+  override def searchBy(title: String, provider: String, content: Option[String] = None, rating: Option[Double]): Future[Seq[TVContent]] = {
     val now = time.currentDate()
-    val qs = "\"" + searchBy + "\""
+    val t = "\"" + title + "\""
+    val qs = BSONDocument("provider" -> provider) ++
+      BSONDocument("$text" -> BSONDocument("$search" -> t)) ++
+      content.map(c => BSONDocument(c -> BSONDocument("$exists" -> true))).getOrElse(BSONDocument()) ++
+      rating.map(r => BSONDocument("rating" -> r)).getOrElse(BSONDocument())
+
+
     val query = BSONDocument(
       "$orderby" -> BSONDocument("rating" -> -1, "start" -> 1, "channel" -> 1),
-      "$query" -> BSONDocument(
-        "provider" -> provider,
-        "$text" -> BSONDocument("$search" -> qs)))
+      "$query" -> qs)
 
     val found = collection.find(query).cursor[TVContent]
     found.collect[Seq]()
@@ -263,8 +267,8 @@ object TVContentRepository {
   def apply(collectionName: String)(implicit con: String => APIMongoConnection, time: TimeProvider): TVContentRepository = {
     val repo = new TVContentRepository(collectionName)
     repo.createIndex().map(
-        if (_) Logger.info(s"Index created for collection ${collectionName}")
-        else Logger.info(s"Index already existed for collection ${collectionName}")
+      if (_) Logger.info(s"Index created for collection ${collectionName}")
+      else Logger.info(s"Index already existed for collection ${collectionName}")
     )
     repo
   }

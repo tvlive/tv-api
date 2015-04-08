@@ -557,7 +557,7 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers {
 
     "return the search by 'sky' for provider FREEVIEW" in new TVContentSetUpTest() {
       //GIVEN
-      when(tvContentRepository.searchTitleByProvider("sky", "FREEVIEW")).thenReturn(
+      when(tvContentRepository.searchBy("sky", "FREEVIEW", None, None)).thenReturn(
         Future.successful(Seq(tvProgram1, tvProgram7)))
 
       //WHEN
@@ -573,12 +573,12 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers {
         TVShortWithTimeZone(tvProgram7))
 
       //AND
-      verify(tvContentRepository).searchTitleByProvider("sky", "FREEVIEW")
+      verify(tvContentRepository).searchBy("sky", "FREEVIEW", None, None)
     }
 
     "return NOT_FOUND for provider someProvider for search by 'sky" in new TVContentSetUpTest() {
       //GIVEN
-      when(tvContentRepository.searchTitleByProvider("sky", "SOMEPROVIDER")).thenReturn(
+      when(tvContentRepository.searchBy("sky", "SOMEPROVIDER", None, None)).thenReturn(
         Future.successful(Seq()))
 
       //WHEN
@@ -590,7 +590,7 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers {
       contentsInResponse mustEqual (NotFoundResponse("No TV content found in search by: 'sky' and for provider: someProvider"))
 
       //AND
-      verify(tvContentRepository).searchTitleByProvider("sky", "SOMEPROVIDER")
+      verify(tvContentRepository).searchBy("sky", "SOMEPROVIDER", None, None)
     }
 
   }
