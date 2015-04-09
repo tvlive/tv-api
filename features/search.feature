@@ -198,6 +198,35 @@ Feature: Search TV content by title
     |      "perCentTimeElapsed":null
     |}]"""
 
+  @86
+  Scenario: Search by rating '7.4'
+    Given the TV guide now for channel "BBC ONE" is:
+      | id                       | type | title   | start   | end     | rating | poster                                  |
+      | 55133bc701000001006ab668 | film | X and Y | 4:20 am | 5:45 am | 7.4    | http://images/x_and_y.jpg |
+
+    When I GET the resource "/tvcontent/search/freeview?r=7.4"
+    Then the HTTP response is "OK"
+    And the response is:
+    """
+    |[{
+    |      "channel":"BBC ONE",
+    |      "channelImageURL":"http://localhost:9000/BBC_ONE.png",
+    |      "provider":[
+    |         "FREEVIEW"
+    |      ],
+    |      "start":"2015-03-15T04:20:00",
+    |      "end":"2015-03-15T05:45:00",
+    |      "rating":7.4,
+    |      "program": null,
+    |      "series": null,
+    |      "film":{
+    |         "title":"X and Y",
+    |         "poster":"http://images/x_and_y.jpg"
+    |      },
+    |      "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab668",
+    |      "onTimeNow":true,
+    |      "perCentTimeElapsed":11
+    |}]"""
 
 
 
@@ -208,6 +237,6 @@ Feature: Search TV content by title
     And the response is:
     """
     |{
-    | "reason": "No TV content found in search by: 'no content exist' and for provider: freeview",
+    | "reason": "No TV content found in search for provider: freeview",
     | "status": 404
     |}"""

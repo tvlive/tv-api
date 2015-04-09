@@ -90,7 +90,7 @@ trait TVContentController extends BaseController {
 
   def searchBy(provider: String, title: Option[String], t: Option[String], r: Option[Double]) = Action.async {
     contentRepository.searchBy(provider.toUpperCase(), title, t, r).map {
-      ltv => buildResponseSeq(toTVShorts(ltv), s"No TV content found in search by: '${title.get}' and for provider: $provider")
+      ltv => buildResponseSeq(toTVShorts(ltv), s"No TV content found in search for provider: $provider")
     }
   }
 
