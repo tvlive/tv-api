@@ -46,7 +46,6 @@ object TVShort extends URLBuilder with ModelUtils {
       }
 
     val uriTVContentDetails = buildUrl(host, controllers.routes.TVContentController.tvContentDetails(tvContent.id.get.stringify).url)
-
     TVContentShort(
       tvContent.channel,
       buildImageUrl(host, "/", tvContent.channel),
@@ -54,8 +53,8 @@ object TVShort extends URLBuilder with ModelUtils {
       tvContent.start,
       tvContent.end,
       tvContent.rating,
-      tvContent.series.map(s => SeriesShort(s.serieTitle, es, s.poster)),
-      tvContent.film.map(f => FilmShort(f.title, f.poster)),
+      tvContent.series.map(s => SeriesShort(s.serieTitle, es, s.imdbId.map(buildUrl(host,"/images/",_)))),
+      tvContent.film.map(f => FilmShort(f.title, f.imdbId.map(buildUrl(host,"/images/",_)))),
       tvContent.program.map(p => ProgramShort(p.title)),
       onTimeNow,
       perCentTimeElapsed,

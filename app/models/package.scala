@@ -70,7 +70,7 @@ package object models {
         doc.getAs[List[String]]("country").toList.flatten,
         doc.getAs[BSONString]("language").map(_.value),
         doc.getAs[BSONString]("awards").map(_.value),
-        doc.getAs[BSONString]("poster").map(_.value),
+        doc.getAs[BSONString]("posterImdb").map(_.value),
         doc.getAs[BSONString]("plot").map(_.value),
         doc.getAs[BSONString]("year").map(_.value),
         doc.getAs[BSONString]("imdbId").map(_.value))
@@ -90,7 +90,7 @@ package object models {
         "country" -> t.country,
         "language" -> t.language,
         "awards" -> t.awards,
-        "poster" -> t.poster,
+        "posterImdb" -> t.posterImdb,
         "plot" -> t.plot,
         "year" -> t.year
       )
@@ -132,7 +132,7 @@ package object models {
         doc.getAs[List[String]]("country").toList.flatten,
         doc.getAs[BSONString]("language").map(_.value),
         doc.getAs[BSONString]("awards").map(_.value),
-        doc.getAs[BSONString]("poster").map(_.value),
+        doc.getAs[BSONString]("posterImdb").map(_.value),
         doc.getAs[BSONString]("plot").map(_.value),
         doc.getAs[BSONString]("year").map(_.value),
         doc.getAs[BSONString]("imdbId").map(_.value))
@@ -152,7 +152,7 @@ package object models {
         "country" -> t.country,
         "language" -> t.language,
         "awards" -> t.awards,
-        "poster" -> t.poster,
+        "posterImdb" -> t.posterImdb,
         "plot" -> t.plot,
         "year" -> t.year)
     }

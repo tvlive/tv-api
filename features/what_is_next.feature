@@ -8,13 +8,13 @@ Feature: What is next on TV
   @85
   Scenario: Next content on TV
     Given the TV guide now is:
-      | id                       | type    | title                  | start   | end     | rating | poster                    | episode title | season | episode | Channel   |
-      | 55133bc701000001006ab741 | film    | Birdman                | 3:00 am | 6:00 am | 9.4    | http://images/birdman.jpg |               |        |         | BBC ONE   |
-      | 55133bc701000001006ab742 | film    | Boyhood                | 6:00 am | 8:00 am | 8.4    | http://images/boyhood.jpg |               |        |         | BBC ONE   |
-      | 55133bc701000001006ab743 | program | The Common Denominator | 3:00 am | 5:30 am |        |                           |               |        |         | CHANNEL 4 |
-      | 55133bc701000001006ab744 | program | Wolrd news             | 5:30 am | 7:30 am |        |                           |               |        |         | CHANNEL 4 |
-      | 55133bc701000001006ab745 | series  | Friends                | 4:00 am | 4:45 am | 9.3    | http://images/friends.jpg | Jellyfish     | 4      | 1       | FILM FOUR |
-      | 55133bc701000001006ab746 | series  | Dexter                 | 4:45 am | 6:00 am | 8.4    | http://images/dexter.jpg  | Day out       | 6      | 1       | FILM FOUR |
+      | id                       | type    | title                  | start   | end     | rating | imdbId    | episode title | season | episode | Channel   |
+      | 55133bc701000001006ab741 | film    | Birdman                | 3:00 am | 6:00 am | 9.4    | 345678941 |               |        |         | BBC ONE   |
+      | 55133bc701000001006ab742 | film    | Boyhood                | 6:00 am | 8:00 am | 8.4    | 345678942 |               |        |         | BBC ONE   |
+      | 55133bc701000001006ab743 | program | The Common Denominator | 3:00 am | 5:30 am |        |           |               |        |         | CHANNEL 4 |
+      | 55133bc701000001006ab744 | program | Wolrd news             | 5:30 am | 7:30 am |        |           |               |        |         | CHANNEL 4 |
+      | 55133bc701000001006ab745 | series  | Friends                | 4:00 am | 4:45 am | 9.3    | 345678943 | Jellyfish     | 4      | 1       | FILM FOUR |
+      | 55133bc701000001006ab746 | series  | Dexter                 | 4:45 am | 6:00 am | 8.4    | 345678944 | Day out       | 6      | 1       | FILM FOUR |
 
     When I GET the resource "/tvcontent/next/freeview"
     Then the HTTP response is "OK"
@@ -37,7 +37,7 @@ Feature: What is next on TV
     |        "seasonNumber":"6",
     |        "episodeNumber":"1"
     |     },
-    |     "poster":"http://images/dexter.jpg"
+    |     "poster":"http://localhost:9000/images/345678944"
     |  },
     |  "program":null,
     |  "film":null,
@@ -58,7 +58,7 @@ Feature: What is next on TV
     |      "series": null,
     |      "film":{
     |         "title":"Boyhood",
-    |         "poster":"http://images/boyhood.jpg"
+    |         "poster":"http://localhost:9000/images/345678942"
     |      },
     |      "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab742",
     |      "onTimeNow":false,

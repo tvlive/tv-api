@@ -8,8 +8,8 @@ Feature: What is on TV now
   @31
   Scenario: Current content on TV is a film
     Given the TV guide now for channel "BBC ONE" is:
-      | id                       | type  | title   | start   | end     | rating | poster                    |
-      | 55133bc701000001006ab641 | film  | Birdman | 3:00 am | 6:00 am | 7.8    | http://images/birdman.jpg |
+      | id                       | type | title   | start   | end     | rating | imdbId      |
+      | 55133bc701000001006ab641 | film | Birdman | 3:00 am | 6:00 am | 7.8    | 01234567890 |
     When I GET the resource "/tvcontent/all/freeview/current"
     Then the HTTP response is "OK"
     And the response is:
@@ -27,7 +27,7 @@ Feature: What is on TV now
     |      "series": null,
     |      "film":{
     |         "title":"Birdman",
-    |         "poster":"http://images/birdman.jpg"
+    |         "poster":"http://localhost:9000/images/01234567890"
     |      },
     |      "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab641",
     |      "onTimeNow":true,
@@ -66,8 +66,8 @@ Feature: What is on TV now
   @31
   Scenario: Current content on TV is a series
     And the TV guide now for channel "FILM FOUR" is:
-      | id                       | type   | title   | start   | end     | rating | poster                    | episode title | season | episode |
-      | 55133bc701000001006ab643 | series | Friends | 4:00 am | 4:45 am | 9.3    | http://images/friends.jpg | Jellyfish     | 4      | 1       |
+      | id                       | type   | title   | start   | end     | rating | imdbId     | episode title | season | episode |
+      | 55133bc701000001006ab643 | series | Friends | 4:00 am | 4:45 am | 9.3    | 1098765432 | Jellyfish     | 4      | 1       |
     When I GET the resource "/tvcontent/all/freeview/current"
     Then the HTTP response is "OK"
     And the response is:
@@ -88,7 +88,7 @@ Feature: What is on TV now
     |        "seasonNumber":"4",
     |        "episodeNumber":"1"
     |     },
-    |     "poster":"http://images/friends.jpg"
+    |     "poster":"http://localhost:9000/images/1098765432"
     |  },
     |  "program":null,
     |  "film":null,
@@ -100,10 +100,10 @@ Feature: What is on TV now
   @31
   Scenario: Current content on TV
     Given the TV guide now is:
-      | id                       | type    | title                  | start   | end     | rating | poster                    | episode title | season | episode | Channel   |
-      | 55133bc701000001006ab644 | film    | Birdman                | 3:00 am | 6:00 am | 9.4    | http://images/birdman.jpg |               |        |         | BBC ONE   |
-      | 55133bc701000001006ab645 | program | The Common Denominator | 3:00 am | 5:30 am |        |                           |               |        |         | CHANNEL 4 |
-      | 55133bc701000001006ab646 | series  | Friends                | 4:00 am | 4:45 am | 9.3    | http://images/friends.jpg | Jellyfish     | 4      | 1       | FILM FOUR |
+      | id                       | type    | title                  | start   | end     | rating | imdbId    | episode title | season | episode | Channel   |
+      | 55133bc701000001006ab644 | film    | Birdman                | 3:00 am | 6:00 am | 9.4    | 234567891 |               |        |         | BBC ONE   |
+      | 55133bc701000001006ab645 | program | The Common Denominator | 3:00 am | 5:30 am |        |           |               |        |         | CHANNEL 4 |
+      | 55133bc701000001006ab646 | series  | Friends                | 4:00 am | 4:45 am | 9.3    | 456789012 | Jellyfish     | 4      | 1       | FILM FOUR |
     When I GET the resource "/tvcontent/all/freeview/current"
     Then the HTTP response is "OK"
     And the response is:
@@ -121,7 +121,7 @@ Feature: What is on TV now
     |      "series": null,
     |      "film":{
     |         "title":"Birdman",
-    |         "poster":"http://images/birdman.jpg"
+    |         "poster":"http://localhost:9000/images/234567891"
     |      },
     |      "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab644",
     |      "onTimeNow":true,
@@ -143,7 +143,7 @@ Feature: What is on TV now
     |        "seasonNumber":"4",
     |        "episodeNumber":"1"
     |     },
-    |     "poster":"http://images/friends.jpg"
+    |     "poster":"http://localhost:9000/images/456789012"
     |  },
     |  "program":null,
     |  "film":null,

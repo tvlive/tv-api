@@ -71,4 +71,25 @@ class TVContentLongSpec extends PlaySpec with MustMatchers {
       content.channelImageURL mustBe "http://localhost:9000/channel_example.png"
     }
   }
+
+  "poster in a film" should {
+    "be http://localhost:9000/images/123456789" in {
+      val content = TVLong(
+        TVContent("channel1", List("provider1"), now.plusHours(2), now.plusHours(3), None, None,
+          Some(Film(title = "some title", List(), List(), List(), List(), List(), None, None, None, None, None, imdbId = Some("123456789"))),
+          None))
+      content.film.get.poster mustBe Some("http://localhost:9000/images/123456789")
+    }
+  }
+
+  "poster in a series" should {
+    "be http://localhost:9000/images/987654321" in {
+      val content = TVLong(
+        TVContent("channel1", List("provider1"), now.plusHours(2), now.plusHours(3), None,
+          Some(Series(serieTitle = "some title", None, List(), List(), List(), List(), List(), None, None, None, None, None, imdbId = Some("987654321"))),
+          None, None))
+      content.series.get.poster mustBe Some("http://localhost:9000/images/987654321")
+    }
+  }
+
 }

@@ -36,6 +36,7 @@ class MarshallingSeriesSpec extends PlaySpec with MustMatchers {
         language = Some("lang1"),
         awards = Some("awards"),
         poster = Some("poster1"),
+        posterImdb = Some("posterImdb1"),
         plot = Some("plot1"),
         year = Some("1976"),
         imdbId = Some("imdbId1"))),
@@ -69,6 +70,7 @@ class MarshallingSeriesSpec extends PlaySpec with MustMatchers {
       (tvContentJson \ "series" \ "language").as[String] mustBe "lang1"
       (tvContentJson \ "series" \ "awards").as[String] mustBe "awards"
       (tvContentJson \ "series" \ "poster").as[String] mustBe "poster1"
+      (tvContentJson \ "series" \ "posterImdb").as[String] mustBe "posterImdb1"
       (tvContentJson \ "series" \ "plot").as[String] mustBe "plot1"
       (tvContentJson \ "series" \ "year").as[String] mustBe "1976"
       (tvContentJson \ "series" \ "imdbId").as[String] mustBe "imdbId1"
@@ -99,6 +101,7 @@ class MarshallingSeriesSpec extends PlaySpec with MustMatchers {
                           |   "language":"lang1",
                          |   "awards":"awards",
                          |   "poster":"poster1",
+                         |   "posterImdb":"posterImdb1",
                          |   "plot":"plot1",
                          |   "year":"1976",
                          |"imdbId":"imdbId1"},

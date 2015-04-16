@@ -29,6 +29,7 @@ class MarshallingFilmSpec extends PlaySpec with MustMatchers {
       language = Some("lang2"),
       awards = Some("awards2"),
       poster = Some("poster2"),
+      posterImdb = Some("posterImdb2"),
       plot = Some("plot2"),
       year = Some("1977"),
       imdbId = Some("imdbId1"))),
@@ -58,6 +59,7 @@ class MarshallingFilmSpec extends PlaySpec with MustMatchers {
       (tvContentJson \ "film" \ "language").as[String] mustBe "lang2"
       (tvContentJson \ "film" \ "awards").as[String] mustBe "awards2"
       (tvContentJson \ "film" \ "poster").as[String] mustBe "poster2"
+      (tvContentJson \ "film" \ "posterImdb").as[String] mustBe "posterImdb2"
       (tvContentJson \ "film" \ "plot").as[String] mustBe "plot2"
       (tvContentJson \ "film" \ "year").as[String] mustBe "1977"
       (tvContentJson \ "film" \ "imdbId").as[String] mustBe "imdbId1"
@@ -83,6 +85,7 @@ class MarshallingFilmSpec extends PlaySpec with MustMatchers {
                        |"language":"lang2",
                        |"awards":"awards2",
                        |"poster":"poster2",
+                       |"posterImdb":"posterImdb2",
                        |"plot":"plot2",
                        |"year":"1977",
                        |"imdbId":"imdbId1"},
