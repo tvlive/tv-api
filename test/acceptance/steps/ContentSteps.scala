@@ -13,6 +13,7 @@ import org.scalatest.Matchers
 import play.api.libs.json.Json
 
 import scala.collection.JavaConverters._
+import scala.util.{Failure, Success, Try}
 
 class ContentSteps extends ScalaDsl with EN with Matchers with Http with Env {
 
@@ -82,21 +83,21 @@ class ContentSteps extends ScalaDsl with EN with Matchers with Http with Env {
     val contentExpected = ce.asLists(classOf[String]).asScala.tail
     contentExpected.size shouldBe contents.size
     val z = contentExpected.zip(contents)
-    z.map{
+    z.map {
       case (ce, c) =>
-      val title = ce.get(1)
-      ce.get(0) match {
-        case "film" => c.film.get.title shouldBe title
-        case "program" => c.program.get.title shouldBe title
-        case "series" =>
-          val st = c.series.map(_.serieTitle == title)
-          val et = for {
-            s <- c.series
-            e <- s.episode
-            et <- e.episodeTitle
-          } yield et == title
-        st.getOrElse(false) || et.getOrElse(false) shouldBe true
-      }
+        val title = ce.get(1)
+        ce.get(0) match {
+          case "film" => c.film.get.title shouldBe title
+          case "program" => c.program.get.title shouldBe title
+          case "series" =>
+            val st = c.series.map(_.serieTitle == title)
+            val et = for {
+              s <- c.series
+              e <- s.episode
+              et <- e.episodeTitle
+            } yield et == title
+            st.getOrElse(false) || et.getOrElse(false) shouldBe true
+        }
     }
 
   }
@@ -119,7 +120,10 @@ class ContentSteps extends ScalaDsl with EN with Matchers with Http with Env {
           content(6), id)
       case _ => throw new IllegalArgumentException(s"Type ")
     }
-    println("inserting data for scenario")
-    db.insert(tvCollection, tvc)
+    Try(db.insert(tvCollection, tvc)) match {
+      case Success(i) => println(s"Inserting $tvc correctlry")
+      case Failure(e) => println(s"Error inserting $tvc: ${e.getMessage}"); e
+    }
+
   }
 }

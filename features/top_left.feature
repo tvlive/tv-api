@@ -70,7 +70,7 @@ Feature: Top content on TV from now to the end of the day
       | 55133bc701000001006ab636 | film    | Boyhood                | 6:45 am | 8:00 am | 8.3    | 345678941 |               |        |         | BBC ONE   |
       | 55133bc701000001006ab637 | series  | Friends                | 5:00 am | 5:45 am | 8.3    | 345678942 | Jellyfish     | 4      | 1       | FILM FOUR |
       | 55133bc701000001006ab638 | program | Weather                | 5:45 am | 6:45 am |        |           |               |        |         | FILM FOUR |
-      | 55133bc701000001006ab639 | program | Party Election         | 3:00 am | 5:30 am |        |           |               |        |         | CHANNEL 4 |
+      | 55133bc701000001006ab639 | program | Party Election         | 2:50 am | 5:30 am |        |           |               |        |         | CHANNEL 4 |
       | 55133bc701000001006ab640 | program | The Common Denominator | 3:00 am | 5:30 am |        |           |               |        |         | CHANNEL 4 |
 
     When I GET the resource "/tvcontent/top/freeview?items=3"
@@ -126,7 +126,7 @@ Feature: Top content on TV from now to the end of the day
     |      "provider":[
     |         "FREEVIEW"
     |      ],
-    |      "start":"2015-03-15T03:00:00",
+    |      "start":"2015-03-15T02:50:00",
     |      "end":"2015-03-15T05:30:00",
     |      "rating": null,
     |      "program":{
@@ -136,7 +136,7 @@ Feature: Top content on TV from now to the end of the day
     |      "film": null,
     |      "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab639",
     |      "onTimeNow":true,
-    |      "perCentTimeElapsed":60
+    |      "perCentTimeElapsed":62
     |   }]"""
 
   @77

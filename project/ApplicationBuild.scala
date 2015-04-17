@@ -39,8 +39,8 @@ object ApplicationBuild extends Build {
     .settings(inConfig(AccTest)(Defaults.testSettings): _*)
     .settings(scalaSource in AccTest <<= baseDirectory(_ / "test/acceptance"))
     .settings(libraryDependencies ++= Seq("org.scalatestplus" % "play_2.10" % "1.0.0" % "test",
-    "info.cukes" %% "cucumber-scala" % "1.1.8" % "test",
-    "info.cukes" % "cucumber-junit" % "1.1.8" % "test",
+    "info.cukes" %% "cucumber-scala" % "1.2.2" % "test",
+    "info.cukes" % "cucumber-junit" % "1.2.2" % "test",
     "junit" % "junit" % "4.11" % "test",
     "org.mongodb" %% "casbah" % "2.7.3" % "test",
     "org.scalaj" %% "scalaj-http" % "1.1.4" % "test"))

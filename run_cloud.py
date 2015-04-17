@@ -23,5 +23,4 @@ while code != 200:
 acceptance_pid = subprocess.Popen(["sbt", "acceptance:test"])
 code_acceptance = acceptance_pid.wait()
 app_pid.terminate()
-print("aaaaaaaa "+ str(code_acceptance))
 
