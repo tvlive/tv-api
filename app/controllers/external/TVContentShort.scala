@@ -5,7 +5,6 @@ import org.joda.time.DateTime
 import utils.{URLBuilder, ModelUtils, TimeProvider}
 
 
-
 case class TVContentShort(channel: String,
                           channelImageURL: String,
                           provider: List[String],
@@ -41,11 +40,18 @@ object TVShort extends URLBuilder with ModelUtils {
     val onTimeNow = isNowShowing(tvContent)
 
     val perCentTimeElapsed = onTimeNow match {
-        case true => calculateElapsed(tvContent)
-        case false => None
-      }
+      case true => calculateElapsed(tvContent)
+      case false => None
+    }
 
     val uriTVContentDetails = buildUrl(host, controllers.routes.TVContentController.tvContentDetails(tvContent.id.get.stringify).url)
+
+    def createPoster(id: Option[String], poster: Option[String]) =
+      for {
+        imdbId <- id
+        pImdb <- poster
+      } yield buildUrl(host, "/images/", imdbId)
+
     TVContentShort(
       tvContent.channel,
       buildImageUrl(host, "/", tvContent.channel),
@@ -53,8 +59,14 @@ object TVShort extends URLBuilder with ModelUtils {
       tvContent.start,
       tvContent.end,
       tvContent.rating,
-      tvContent.series.map(s => SeriesShort(s.serieTitle, es, s.imdbId.map(buildUrl(host,"/images/",_)))),
-      tvContent.film.map(f => FilmShort(f.title, f.imdbId.map(buildUrl(host,"/images/",_)))),
+      tvContent.series.map(s => SeriesShort(
+        serieTitle = s.serieTitle,
+        episode = es,
+        poster = createPoster(s.imdbId, s.posterImdb)
+      )),
+      tvContent.film.map(f => FilmShort(
+        title = f.title,
+        poster = createPoster(f.imdbId, f.posterImdb))),
       tvContent.program.map(p => ProgramShort(p.title)),
       onTimeNow,
       perCentTimeElapsed,

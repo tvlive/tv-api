@@ -36,7 +36,7 @@ class ContentSteps extends ScalaDsl with EN with Matchers with Http with Env {
 
   Given( """^the TV guide for the rest of the day is:$""") { (requestData: DataTable) =>
     requestData.asLists(classOf[String]).asScala.tail.foreach {
-      e => insertContent(e.asScala.toList, e.get(10))
+      e => insertContent(e.asScala.toList, e.get(11))
     }
   }
 
@@ -72,7 +72,7 @@ class ContentSteps extends ScalaDsl with EN with Matchers with Http with Env {
 
   Given( """^the TV guide now is:$""") { (requestData: DataTable) =>
     requestData.asLists(classOf[String]).asScala.tail.foreach {
-      e => insertContent(e.asScala.toList, e.get(10))
+      e => insertContent(e.asScala.toList, e.get(11))
     }
   }
 
@@ -112,12 +112,12 @@ class ContentSteps extends ScalaDsl with EN with Matchers with Http with Env {
 
     val tvc = typeContent match {
       case "film" =>
-        FilmBuilder(channel, world("provider"), start, end, title, content(5).toDouble, content(6), id)
+        FilmBuilder(channel, world("provider"), start, end, title, content(5).toDouble, content(6), content(7), id)
       case "program" =>
         ProgramBuilder(channel, world("provider"), start, end, title, id)
       case "series" =>
-        SeriesBuilder(channel, world("provider"), start, end, title, content(7), content(8), content(9), content(5).toDouble,
-          content(6), id)
+        SeriesBuilder(channel, world("provider"), start, end, title, content(8), content(9), content(10), content(5).toDouble,
+          content(6), content(7), id)
       case _ => throw new IllegalArgumentException(s"Type ")
     }
     Try(db.insert(tvCollection, tvc)) match {

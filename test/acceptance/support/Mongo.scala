@@ -26,7 +26,7 @@ object Mongo {
 object FilmBuilder {
 
   def apply(channel: String, provider: String, start: DateTime, end: DateTime,
-            title: String, rating: Double, imdbId: String, id: String) =
+            title: String, rating: Double, imdbId: String, posterImdb: String, id: String) =
 
     MongoDBObject(
       "channel" -> channel,
@@ -36,7 +36,8 @@ object FilmBuilder {
       "rating" -> rating,
       "film" -> MongoDBObject(
         "title" -> title,
-        "imdbId" -> imdbId
+        "imdbId" -> imdbId,
+        "posterImdb" -> posterImdb
       ),
       "_id" -> new ObjectId(id)
     )
@@ -44,7 +45,7 @@ object FilmBuilder {
 
 object SeriesBuilder {
   def apply(channel: String, provider: String, start: DateTime, end: DateTime, title: String, epiosdeTitle: String,
-            season: String, episode: String, rating: Double, imdbId: String, id: String) =
+            season: String, episode: String, rating: Double, imdbId: String, posterImdb: String, id: String) =
 
     MongoDBObject(
       "channel" -> channel,
@@ -59,7 +60,8 @@ object SeriesBuilder {
           "seasonNumber" -> season,
           "episodeNumber"-> episode
         ),
-        "imdbId" -> imdbId
+        "imdbId" -> imdbId,
+        "posterImdb" -> posterImdb
       ),
       "_id" -> new ObjectId(id)
     )

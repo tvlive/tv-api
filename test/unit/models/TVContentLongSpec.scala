@@ -73,22 +73,42 @@ class TVContentLongSpec extends PlaySpec with MustMatchers {
   }
 
   "poster in a film" should {
-    "be http://localhost:9000/images/123456789" in {
+    "be http://localhost:9000/images/123456789 when there is poster imdb" in {
       val content = TVLong(
         TVContent("channel1", List("provider1"), now.plusHours(2), now.plusHours(3), None, None,
-          Some(Film(title = "some title", List(), List(), List(), List(), List(), None, None, None, None, None, imdbId = Some("123456789"))),
+          Some(Film(title = "some title", List(), List(), List(), List(), List(), None, None, Some("http://some/poster"), None, None, imdbId = Some("123456789"))),
           None))
       content.film.get.poster mustBe Some("http://localhost:9000/images/123456789")
     }
   }
 
   "poster in a series" should {
-    "be http://localhost:9000/images/987654321" in {
+    "be http://localhost:9000/images/987654321  when there is poster imdb" in {
       val content = TVLong(
         TVContent("channel1", List("provider1"), now.plusHours(2), now.plusHours(3), None,
-          Some(Series(serieTitle = "some title", None, List(), List(), List(), List(), List(), None, None, None, None, None, imdbId = Some("987654321"))),
+          Some(Series(serieTitle = "some title", None, List(), List(), List(), List(), List(), None, None, Some("http://some/poster"), None, None, imdbId = Some("987654321"))),
           None, None))
       content.series.get.poster mustBe Some("http://localhost:9000/images/987654321")
+    }
+
+    "poster in a film" should {
+      "be None when there is no poster imdb" in {
+        val content = TVLong(
+          TVContent("channel1", List("provider1"), now.plusHours(2), now.plusHours(3), None, None,
+            Some(Film(title = "some title", List(), List(), List(), List(), List(), None, None, None, None, None, imdbId = Some("123456789"))),
+            None))
+        content.film.get.poster mustBe None
+      }
+    }
+
+    "poster in a series" should {
+      "be None when there is no poster imdb" in {
+        val content = TVLong(
+          TVContent("channel1", List("provider1"), now.plusHours(2), now.plusHours(3), None,
+            Some(Series(serieTitle = "some title", None, List(), List(), List(), List(), List(), None, None, None, None, None, imdbId = Some("987654321"))),
+            None, None))
+        content.series.get.poster mustBe None
+      }
     }
   }
 

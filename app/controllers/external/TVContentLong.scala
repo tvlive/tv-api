@@ -84,11 +84,16 @@ object TVLong extends URLBuilder with ModelUtils {
 
 object SLong extends URLBuilder {
   def apply(s: Series)(implicit host: String): SeriesLong = {
-    val poster = s.imdbId.map(buildUrl(host,"/images/",_))
+    def createPoster(id: Option[String], poster: Option[String]) =
+      for {
+        imdbId <- id
+        pImdb <- poster
+      } yield buildUrl(host, "/images/", imdbId)
+
     SeriesLong(s.serieTitle,
       s.episode.map(e => ELong(e)),
       s.actors, s.writer, s.director, s.genre, s.country, s.language,
-      s.awards, poster, s.posterImdb, s.plot, s.year, s.imdbId)
+      s.awards, createPoster(s.imdbId, s.posterImdb), s.posterImdb, s.plot, s.year, s.imdbId)
   }
 }
 
@@ -97,10 +102,18 @@ object ELong {
 }
 
 object FLong extends URLBuilder {
+
   def apply(f: Film)(implicit host: String): FilmLong = {
-    val poster = f.imdbId.map(buildUrl(host,"/images/",_))
+
+    def createPoster(id: Option[String], poster: Option[String]) =
+      for {
+        imdbId <- id
+        pImdb <- poster
+      } yield buildUrl(host, "/images/", imdbId)
+
+
     FilmLong(f.title, f.actors, f.writer, f.director, f.genre, f.country, f.language,
-      f.awards, poster, f.posterImdb, f.plot, f.year, f.imdbId)
+      f.awards, createPoster(f.imdbId, f.posterImdb), f.posterImdb, f.plot, f.year, f.imdbId)
   }
 }
 

@@ -8,11 +8,11 @@ Feature: Top content on TV from now to the end of the day
   @77
   Scenario: 2 top contents left
     Given the TV guide for the rest of the day is:
-      | id                       | type   | title   | start   | end     | rating | imdbId     | episode title | season | episode | Channel   |
-      | 55133bc701000001006ab631 | film   | Birdman | 5:00 am | 6:45 am | 7.8    | 1023456781 |               |        |         | BBC ONE   |
-      | 55133bc701000001006ab632 | film   | Boyhood | 4:55 am | 6:00 am | 8.3    | 1023456782 |               |        |         | BBC ONE   |
-      | 55133bc701000001006ab633 | series | Friends | 5:00 am | 5:45 am | 8.3    | 1023456784 | Jellyfish     | 4      | 1       | FILM FOUR |
-      | 55133bc701000001006ab634 | series | Dexter  | 5:45 am | 6:45 am | 9.0    | 1023456783 | My bad        | 5      | 1       | FILM FOUR |
+      | id                       | type   | title   | start   | end     | rating | imdbId     | posterImdb            | episode title | season | episode | Channel   |
+      | 55133bc701000001006ab631 | film   | Birdman | 5:00 am | 6:45 am | 7.8    | 1023456781 | http://imdb/678900980 |               |        |         | BBC ONE   |
+      | 55133bc701000001006ab632 | film   | Boyhood | 4:55 am | 6:00 am | 8.3    | 1023456782 | http://imdb/678900981 |               |        |         | BBC ONE   |
+      | 55133bc701000001006ab633 | series | Friends | 5:00 am | 5:45 am | 8.3    | 1023456784 | http://imdb/678900982 | Jellyfish     | 4      | 1       | FILM FOUR |
+      | 55133bc701000001006ab634 | series | Dexter  | 5:45 am | 6:45 am | 9.0    | 1023456783 | http://imdb/678900983 | My bad        | 5      | 1       | FILM FOUR |
     When I GET the resource "/tvcontent/top/freeview?items=2"
     Then the HTTP response is "OK"
     And the response is:
@@ -65,13 +65,13 @@ Feature: Top content on TV from now to the end of the day
   @77
   Scenario: 3 top contents left
     Given the TV guide for the rest of the day is:
-      | id                       | type    | title                  | start   | end     | rating | imdbId    | episode title | season | episode | Channel   |
-      | 55133bc701000001006ab635 | program | BBC News               | 5:00 am | 6:45 am |        |           |               |        |         | BBC ONE   |
-      | 55133bc701000001006ab636 | film    | Boyhood                | 6:45 am | 8:00 am | 8.3    | 345678941 |               |        |         | BBC ONE   |
-      | 55133bc701000001006ab637 | series  | Friends                | 5:00 am | 5:45 am | 8.3    | 345678942 | Jellyfish     | 4      | 1       | FILM FOUR |
-      | 55133bc701000001006ab638 | program | Weather                | 5:45 am | 6:45 am |        |           |               |        |         | FILM FOUR |
-      | 55133bc701000001006ab639 | program | Party Election         | 2:50 am | 5:30 am |        |           |               |        |         | CHANNEL 4 |
-      | 55133bc701000001006ab640 | program | The Common Denominator | 3:00 am | 5:30 am |        |           |               |        |         | CHANNEL 4 |
+      | id                       | type    | title                  | start   | end     | rating | imdbId    | posterImdb            | episode title | season | episode | Channel   |
+      | 55133bc701000001006ab635 | program | BBC News               | 5:00 am | 6:45 am |        |           |                       |               |        |         | BBC ONE   |
+      | 55133bc701000001006ab636 | film    | Boyhood                | 6:45 am | 8:00 am | 8.3    | 345678941 | http://imdb/678900987 |               |        |         | BBC ONE   |
+      | 55133bc701000001006ab637 | series  | Friends                | 5:00 am | 5:45 am | 8.3    | 345678942 | http://imdb/678900988 | Jellyfish     | 4      | 1       | FILM FOUR |
+      | 55133bc701000001006ab638 | program | Weather                | 5:45 am | 6:45 am |        |           |                       |               |        |         | FILM FOUR |
+      | 55133bc701000001006ab639 | program | Party Election         | 2:50 am | 5:30 am |        |           |                       |               |        |         | CHANNEL 4 |
+      | 55133bc701000001006ab640 | program | The Common Denominator | 3:00 am | 5:30 am |        |           |                       |               |        |         | CHANNEL 4 |
 
     When I GET the resource "/tvcontent/top/freeview?items=3"
     Then the HTTP response is "OK"
