@@ -70,7 +70,11 @@
             </p>                 
             <p class="lead">
               <a id="api-beta" href="http://beta.tvlive.io/" class="btn btn-lg btn-default" target="_blank">
-                Start using beta.tvlive.io
+                Use beta.tvlive.io
+              </a>
+            </p><p class="lead">
+              <a id="api-prod" href="http://api.tvlive.io/" class="btn btn-lg btn-default" target="_blank">
+                Start using LIVE api.tvlive.io
               </a>
             </p>                                   
             <p class="lead">
@@ -113,6 +117,10 @@
         send_event('api-beta');
       });
       
+      $('#api-prod').on('click', function() {
+        send_event('api-prod');
+      });
+
       $('#mobile-proto').on('click', function() {
         send_event('mobile-prototype');
       });
