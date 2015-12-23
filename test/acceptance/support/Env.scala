@@ -1,18 +1,24 @@
 package acceptance.support
 
-import cucumber.api.scala.ScalaDsl
+import acceptance.FeatureSuite
+import com.github.tomakehurst.wiremock.client.WireMock
+import cucumber.api.scala.{EN, ScalaDsl}
 
-trait Env extends ScalaDsl {
+object Env extends ScalaDsl with EN {
 
   val db = Mongo("acceptance-tests")
   val tvCollection = db.createCollection("tvContent")
 
-  val host = "http://localhost:9000"
+  val stubHost = "localhost"
+  val stubPort = 1111
+  val componentPost = 9000
+  val host = s"http://$stubHost:$componentPost"
 
   Before {
     s =>
       db.removeCollection(tvCollection)
       println("data reset")
+      FeatureSuite.ensureSetup
       Context.world.empty
   }
 
@@ -20,6 +26,7 @@ trait Env extends ScalaDsl {
     s =>
       db.removeCollection(tvCollection)
       println("data reset")
+      WireMock.reset()
   }
 
 }

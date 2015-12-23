@@ -11,7 +11,7 @@ Feature: What is on TV now
       | id                       | type | title   | start   | end     | rating | imdbId      | posterImdb           |
       | 55133bc701000001006ab641 | film | Birdman | 3:00 am | 6:00 am | 7.8    | 01234567890 | http://imdb/12345678 |
     When I GET the resource "/tvcontent/all/freeview/current"
-    Then the HTTP response is "OK"
+    Then the HTTP status is "OK"
     And the response is:
     """
     | [{
@@ -41,7 +41,7 @@ Feature: What is on TV now
       | id                       | type    | title                  | start   | end     |
       | 55133bc701000001006ab642 | program | The Common Denominator | 3:00 am | 5:30 am |
     When I GET the resource "/tvcontent/all/freeview/current"
-    Then the HTTP response is "OK"
+    Then the HTTP status is "OK"
     And the response is:
     """
     |[{
@@ -69,7 +69,7 @@ Feature: What is on TV now
       | id                       | type   | title   | start   | end     | rating | imdbId     | posterImdb           | episode title | season | episode |
       | 55133bc701000001006ab643 | series | Friends | 4:00 am | 4:45 am | 9.3    | 1098765432 | http://imdb/98765432 | Jellyfish     | 4      | 1       |
     When I GET the resource "/tvcontent/all/freeview/current"
-    Then the HTTP response is "OK"
+    Then the HTTP status is "OK"
     And the response is:
     """
     | [{
@@ -105,7 +105,7 @@ Feature: What is on TV now
       | 55133bc701000001006ab645 | program | The Common Denominator | 3:00 am | 5:30 am |        |           |                      |               |        |         | CHANNEL 4 |
       | 55133bc701000001006ab646 | series  | Friends                | 4:00 am | 4:45 am | 9.3    | 456789012 | http://imdb/34568765 | Jellyfish     | 4      | 1       | FILM FOUR |
     When I GET the resource "/tvcontent/all/freeview/current"
-    Then the HTTP response is "OK"
+    Then the HTTP status is "OK"
     And the response is:
     """
     |[{
@@ -173,7 +173,7 @@ Feature: What is on TV now
   @31
   Scenario: No content now on TV
     When I GET the resource "/tvcontent/all/freeview/current"
-    Then the HTTP response is "NOT FOUND"
+    Then the HTTP status is "NOT FOUND"
     And the response is:
     """
     |{

@@ -16,24 +16,28 @@ class EnvironmentSpec extends PlaySpec {
         Map("Test.mongodbURI" -> "someURI",
           "Test.mongodbDatabaseName" -> "someDatabaseName",
           "Test.host" -> "http://localhost:9000",
-          "Test.time" -> "30/05/2010 22:15:52"
+          "Test.time" -> "30/05/2010 22:15:52",
+          "Test.auth" -> "http://localhost:9001"
         ))) {
         val env = new Environment(){}
         env.mongodbURI mustBe("someURI")
         env.mongodbDatabaseName mustBe("someDatabaseName")
         env.host mustBe("http://localhost:9000")
         env.time mustBe(Some(new DateTime(2010,5,30,22,15,52)))
+        env.auth mustBe("http://localhost:9001")
     }
 
     "be configured with all the values but time is None" in
       new WithApplication(FakeApplication(additionalConfiguration =
         Map("Test.mongodbURI" -> "someURI",
           "Test.mongodbDatabaseName" -> "someDatabaseName",
-          "Test.host" -> "http://localhost:9000"))) {
+          "Test.host" -> "http://localhost:9000",
+          "Test.auth" -> "http://localhost:9001"))) {
         val env = new Environment(){}
         env.mongodbURI mustBe("someURI")
         env.mongodbDatabaseName mustBe("someDatabaseName")
         env.host mustBe("http://localhost:9000")
+        env.auth mustBe("http://localhost:9001")
         env.time mustBe(None)
       }
 
@@ -73,6 +77,19 @@ class EnvironmentSpec extends PlaySpec {
           val env = new Environment(){}
         }
         ex.getMessage must include("someBadFormattedTime")
+      }
+
+    "throw an IllegalArgumentException when no property auth is defined" in
+      new WithApplication(FakeApplication(additionalConfiguration =
+        Map("Test.mongodbURI" -> "someURI",
+          "Test.mongodbDatabaseName" -> "someDatabaseName",
+          "Test.host" -> "http://localhost:9000",
+          "Test.time" -> "30/05/2010 22:15:52"
+        ))) {
+        val ex = intercept[IllegalArgumentException] {
+          val env = new Environment(){}
+        }
+        ex.getMessage mustBe("auth service is not defined")
       }
   }
 }

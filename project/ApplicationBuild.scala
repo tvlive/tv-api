@@ -43,6 +43,8 @@ object ApplicationBuild extends Build {
     "info.cukes" % "cucumber-junit" % "1.2.2" % "test",
     "junit" % "junit" % "4.11" % "test",
     "org.mongodb" %% "casbah" % "2.7.3" % "test",
-    "org.scalaj" %% "scalaj-http" % "1.1.4" % "test"))
+    "org.scalaj" %% "scalaj-http" % "1.1.4" % "test",
+    "com.github.tomakehurst" % "wiremock" % "2.0.8-beta" % "test"
+  ))
 
 }

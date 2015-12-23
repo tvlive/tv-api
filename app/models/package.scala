@@ -1,4 +1,5 @@
 import org.joda.time.{DateTime, DateTimeZone}
+import play.api.libs.json.{Json, Format, Writes, Reads}
 import reactivemongo.bson._
 
 package object models {
@@ -214,4 +215,14 @@ package object models {
       )
     }
   }
+
+  val pattern = "dd/MM/yyyy hh:mm:ss"
+
+  implicit val dateFormat = Format[DateTime](
+    Reads.jodaDateReads(pattern),
+    Writes.jodaDateWrites(pattern))
+
+  implicit val authFmt = Json.format[Authorization]
+  implicit val tokenFmt = Json.format[Token]
+
 }

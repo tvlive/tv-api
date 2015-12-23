@@ -1,11 +1,10 @@
 package acceptance.steps
 
-import java.util
-
 import acceptance.support.Context._
-import acceptance.support.{FilmBuilder, Http, ProgramBuilder, SeriesBuilder, _}
-import controllers.{BadRequestResponse, NotFoundResponse}
+import acceptance.support.Env._
+import acceptance.support.{FilmBuilder, Http, ProgramBuilder, SeriesBuilder}
 import controllers.external.TVContentShort
+import controllers.{BadRequestResponse, NotFoundResponse}
 import cucumber.api.DataTable
 import cucumber.api.scala.{EN, ScalaDsl}
 import org.joda.time.format.DateTimeFormat
@@ -15,7 +14,7 @@ import play.api.libs.json.Json
 import scala.collection.JavaConverters._
 import scala.util.{Failure, Success, Try}
 
-class ContentSteps extends ScalaDsl with EN with Matchers with Http with Env {
+class ContentSteps extends ScalaDsl with EN with Matchers with Http {
 
   Given( """^the TV Provider "(.+)"$""") { (provider: String) =>
     world += "provider" -> provider.toUpperCase
@@ -41,19 +40,19 @@ class ContentSteps extends ScalaDsl with EN with Matchers with Http with Env {
   }
 
   When( """^I GET the resource "(.+)"$""") { (url: String) =>
-    val (statusCode, content) = get(s"${host}$url")
+    val (statusCode, content) = GET(s"${host}$url")
 
-    world += "statusCode" -> statusCode
+    world += "httpStatus" -> statusCode
     world += "content" -> content
   }
 
-  Then( """^the HTTP response is "(.+)"$""") { (sc: String) =>
-    world("statusCode") shouldBe statusCode(sc)
+  Then( """^the HTTP status is "(.+)"$""") { (sc: String) =>
+    world("httpStatus") shouldBe statusCode(sc)
   }
 
 
   Then( """^the response is:$""") { (jsonExpected: String) =>
-    world("statusCode") match {
+    world("httpStatus") match {
       case "200" =>
         val contentsExpected = Json.parse(jsonExpected.stripMargin).as[Seq[TVContentShort]]
         val contents = Json.parse(world("content")).as[Seq[TVContentShort]]
@@ -66,6 +65,9 @@ class ContentSteps extends ScalaDsl with EN with Matchers with Http with Env {
         val contentsExpected = Json.parse(jsonExpected.stripMargin).as[BadRequestResponse]
         val contents = Json.parse(world("content")).as[BadRequestResponse]
         contentsExpected shouldBe contents
+      case "201" =>
+        val contents = world("content")
+        jsonExpected shouldBe contents
     }
 
   }
@@ -77,7 +79,7 @@ class ContentSteps extends ScalaDsl with EN with Matchers with Http with Env {
   }
 
   Then( """^the search contains the next content:$""") { (ce: DataTable) =>
-    world("statusCode") shouldBe "200"
+    world("httpStatus") shouldBe "200"
 
     val contents = Json.parse(world("content")).as[Seq[TVContentShort]]
     val contentExpected = ce.asLists(classOf[String]).asScala.tail
@@ -126,4 +128,5 @@ class ContentSteps extends ScalaDsl with EN with Matchers with Http with Env {
     }
 
   }
+
 }

@@ -11,6 +11,7 @@ trait Environment extends RunMode{
   val mongodbDatabaseName : String = configuration.getString(s"$env.mongodbDatabaseName").getOrElse(throw new IllegalArgumentException("mongodbDatabaseName is not defined"))
   val host : String = configuration.getString(s"$env.host").getOrElse(throw new IllegalArgumentException("host is not defined"))
   val time: Option[DateTime] =  configuration.getString(s"$env.time").map(DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss").parseDateTime(_))
+  val auth: String = configuration.getString(s"$env.auth").getOrElse(throw new IllegalArgumentException("auth service is not defined"))
 }
 
 object Environment extends Environment

@@ -17,7 +17,7 @@ Feature: What is next on TV
       | 55133bc701000001006ab746 | series  | Dexter                 | 4:45 am | 6:00 am | 8.4    | 345678944 | http://imdb/678900940 | Day out       | 6      | 1       | FILM FOUR |
 
     When I GET the resource "/tvcontent/next/freeview"
-    Then the HTTP response is "OK"
+    Then the HTTP status is "OK"
     And the response is:
     """
     |[
@@ -86,7 +86,7 @@ Feature: What is next on TV
   @85
   Scenario: No content now on TV
     When I GET the resource "/tvcontent/next/freeview"
-    Then the HTTP response is "NOT FOUND"
+    Then the HTTP status is "NOT FOUND"
     And the response is:
     """
     |{
