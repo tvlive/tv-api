@@ -32,22 +32,26 @@ trait AuthFilter extends Filter with Results {
   override def apply(nextFilter: (RequestHeader) => Future[SimpleResult])(requestHeader: RequestHeader): Future[SimpleResult] = {
     nextFilter(requestHeader).flatMap {
       result =>
-        (requestHeader.method, requestHeader.headers.get("Authorization")) match {
-          case ("POST", _) => Future.successful(result)
-          case ("GET", Some(authEncoded)) => decoder.decodeToken(authEncoded) match {
-            case Success(a) => authGateway.findToken(a.username, a.token).map {
-              case true => result
-              case false =>
-                Logger.error(s"Credentials with username:${a.username} and token:${a.token} do no exist")
-                Unauthorized
+        if (requestHeader.uri.contains("/ping"))
+          Future.successful(result)
+        else {
+          (requestHeader.method, requestHeader.headers.get("Authorization")) match {
+            case ("POST", _) => Future.successful(result)
+            case ("GET", Some(authEncoded)) => decoder.decodeToken(authEncoded) match {
+              case Success(a) => authGateway.findToken(a.username, a.token).map {
+                case true => result
+                case false =>
+                  Logger.error(s"Credentials with username:${a.username} and token:${a.token} do no exist")
+                  Unauthorized
+              }
+              case Failure(e) =>
+                Logger.error(s"Credentials encoded:$authEncoded do no have the correct format")
+                Future.successful(Unauthorized)
             }
-            case Failure(e) =>
-              Logger.error(s"Credentials encoded:$authEncoded do no have the correct format")
+            case (_, _) =>
+              Logger.error(s"No Authorization header in request")
               Future.successful(Unauthorized)
           }
-          case (_, _) =>
-            Logger.error(s"No Authorization header in request")
-            Future.successful(Unauthorized)
         }
     }
   }

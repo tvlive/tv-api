@@ -3,15 +3,15 @@ import subprocess
 
 def request_to_app():
     import urllib
-    resp = urllib.urlopen('http://localhost:9000')
-    print("request to http://localhost:9000 is " + str(resp.getcode()))
+    resp = urllib.urlopen('http://localhost:9000/ping')
+    print("request to http://localhost:9000/ping is " + str(resp.getcode()))
     return resp.getcode()
 
 app_pid = subprocess.Popen(["sbt", "-Drun.mode=Stub", "run"])
 import time
 
 code = 0
-while code != 401:
+while code != 200:
     try:
         code = request_to_app()
     except:
