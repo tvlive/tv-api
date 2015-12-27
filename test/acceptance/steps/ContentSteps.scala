@@ -1,5 +1,6 @@
 package acceptance.steps
 
+import acceptance.stubs.AuthStub._
 import acceptance.support.Context._
 import acceptance.support.Env._
 import acceptance.support.{FilmBuilder, Http, ProgramBuilder, SeriesBuilder}
@@ -15,6 +16,23 @@ import scala.collection.JavaConverters._
 import scala.util.{Failure, Success, Try}
 
 class ContentSteps extends ScalaDsl with EN with Matchers with Http {
+
+
+  When( """^the encoded token '(.*)'$""") { (tokenEncoded: String) =>
+    world += "authToken" -> tokenEncoded
+  }
+
+  When( """^the user '(.*)' with token '(.*)' does not exist$""") { (username: String, token: String) =>
+    val tokenEncoded = new sun.misc.BASE64Encoder().encode(s"${username}:${token}".getBytes)
+    world += "authToken" -> tokenEncoded
+    findToken(username, token, 404)
+  }
+
+  When( """^the user '(.*)' with token '(.*)'$""") { (username: String, token: String) =>
+    val tokenEncoded = new sun.misc.BASE64Encoder().encode(s"${username}:${token}".getBytes)
+    world += "authToken" -> tokenEncoded
+    findToken(username, token)
+  }
 
   Given( """^the TV Provider "(.+)"$""") { (provider: String) =>
     world += "provider" -> provider.toUpperCase
@@ -40,8 +58,11 @@ class ContentSteps extends ScalaDsl with EN with Matchers with Http {
   }
 
   When( """^I GET the resource "(.+)"$""") { (url: String) =>
-    val (statusCode, content) = GET(s"${host}$url")
-
+    val (statusCode, content) = world.get("authToken") match {
+      case Some(auth) => GET(s"${host}$url", ("Authorization" -> auth))
+      case None => GET(s"${host}$url")
+    }
+    println(s"the content coming from " + content)
     world += "httpStatus" -> statusCode
     world += "content" -> content
   }
@@ -55,6 +76,7 @@ class ContentSteps extends ScalaDsl with EN with Matchers with Http {
     world("httpStatus") match {
       case "200" =>
         val contentsExpected = Json.parse(jsonExpected.stripMargin).as[Seq[TVContentShort]]
+        println("json: " + world("content"))
         val contents = Json.parse(world("content")).as[Seq[TVContentShort]]
         contentsExpected shouldBe contents
       case "404" =>

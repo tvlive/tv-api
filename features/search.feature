@@ -4,8 +4,9 @@ Feature: Search TV content by title
     Given the TV Provider "Freeview"
     And today is "15/03/2015"
     And the time is "4:30 am"
+    And the user 'william.mark@tvlive.io' with token '0123456789'
 
-  @86
+  @86 @101
   Scenario: Search by series title that contains 'sky'
     Given the TV guide now for channel "BBC TWO" is:
       | id                       | type   | title    | start   | end     | rating | imdbId    | posterImdb           | episode title | season | episode |
@@ -41,7 +42,7 @@ Feature: Search TV content by title
     |}]"""
 
 
-  @86
+  @86 @101
   Scenario: Search by episode title that contains 'sun'
     Given the TV guide now for channel "BBC TWO" is:
       | id                       | type   | title   | start   | end     | rating | imdbId    | posterImdb           | episode title | season | episode |
@@ -77,7 +78,7 @@ Feature: Search TV content by title
     |}]"""
 
 
-  @86
+  @86 @101
   Scenario: Search by program title contains 'stories'
     Given the TV guide now for channel "CHANNEL FOUR" is:
       | id                       | type    | title       | start   | end     |
@@ -137,7 +138,7 @@ Feature: Search TV content by title
     |}]"""
 
 
-  @86
+  @86 @101
   Scenario: Search by title 'moon' and TV content type 'program'
     Given the TV guide now for channel "BBC ONE" is:
       | id                       | type    | title           | start   | end     | rating | imdbId      | posterImdb           |
@@ -167,7 +168,7 @@ Feature: Search TV content by title
     |  "perCentTimeElapsed":11
     |}]"""
 
-  @86
+  @86 @101
   Scenario: Search by rating '9.4' and TV content type 'film'
     Given the TV guide now for channel "BBC ONE" is:
       | id                       | type    | title       | start   | end     | rating | imdbId     | posterImdb           |
@@ -200,7 +201,7 @@ Feature: Search TV content by title
 
 
 
-  @86
+  @86 @101
   Scenario: Search by title 'bridge' and rating '9.4'
     Given the TV guide now for channel "BBC ONE" is:
       | id                       | type    | title                 | start   | end     | rating | imdbId     | posterImdb          |
@@ -231,7 +232,7 @@ Feature: Search TV content by title
     |      "perCentTimeElapsed":null
     |}]"""
 
-  @86
+  @86 @101
   Scenario: Search by rating '7.4'
     Given the TV guide now for channel "BBC ONE" is:
       | id                       | type | title   | start   | end     | rating | imdbId     | posterImdb            |
@@ -262,7 +263,7 @@ Feature: Search TV content by title
     |}]"""
 
 
-  @86
+  @86 @101
   Scenario: Search by title 'news'
     Given the TV guide for the rest of the day is:
       | id                       | type    | title          | start   | end     | rating | imdbId     | posterImdb           | episode title | season | episode | Channel   |
@@ -276,7 +277,7 @@ Feature: Search TV content by title
       | series  | Weather in NYC |
       | program | BBC News       |
 
-  @86
+  @86 @101
   Scenario: Search TV Content with no critera
     When I GET the resource "/tvcontent/search/freeview"
     Then the HTTP status is "BAD REQUEST"
@@ -287,7 +288,7 @@ Feature: Search TV content by title
     | "status": 400
     |}"""
 
-  @86
+  @86 @101
   Scenario: Search TV Content with right title and wrong tv TV content type
     When I GET the resource "/tvcontent/search/freeview?t=news&c=wrong-tv-content"
     Then the HTTP status is "BAD REQUEST"
@@ -298,7 +299,7 @@ Feature: Search TV content by title
     | "status": 400
     |}"""
 
-  @86
+  @86 @101
   Scenario: Search TV Content with right rating and wrong tv TV content type
     When I GET the resource "/tvcontent/search/freeview?r=9.3&c=wrong-tv-content"
     Then the HTTP status is "BAD REQUEST"
@@ -310,7 +311,7 @@ Feature: Search TV content by title
     |}"""
 
 
-  @86
+  @86 @101
   Scenario: Search TV Content by 'no content exist'
     When I GET the resource "/tvcontent/search/freeview?t=no+content+exist"
     Then the HTTP status is "NOT FOUND"

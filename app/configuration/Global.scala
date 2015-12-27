@@ -1,14 +1,14 @@
 package configuration
 
 import controllers.{BadRequestResponse, InternalErrorServerResponse}
-import infrastructure.AuditFilter
+import infrastructure.{AuthFilter, AuditFilter}
 import play.api.libs.json.Json
 import play.api.mvc.Results._
 import play.api.mvc.{RequestHeader, SimpleResult, WithFilters}
 
 import scala.concurrent.Future
 
-object Global extends WithFilters(AuditFilter) {
+object Global extends WithFilters(AuditFilter, AuthFilter) {
 
   override def onError(request: RequestHeader, ex: Throwable): Future[SimpleResult] = {
     Future.successful {

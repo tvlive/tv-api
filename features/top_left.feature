@@ -4,8 +4,9 @@ Feature: Top content on TV from now to the end of the day
     Given the TV Provider "Freeview"
     And today is "15/03/2015"
     And the time is "4:30 am"
+    And the user 'william.mark@tvlive.io' with token '0123456789'
 
-  @77
+  @77 @101
   Scenario: 2 top contents left
     Given the TV guide for the rest of the day is:
       | id                       | type   | title   | start   | end     | rating | imdbId     | posterImdb            | episode title | season | episode | Channel   |
@@ -62,7 +63,7 @@ Feature: Top content on TV from now to the end of the day
     |   }]"""
 
 
-  @77
+  @77 @101
   Scenario: 3 top contents left
     Given the TV guide for the rest of the day is:
       | id                       | type    | title                  | start   | end     | rating | imdbId    | posterImdb            | episode title | season | episode | Channel   |
@@ -139,7 +140,7 @@ Feature: Top content on TV from now to the end of the day
     |      "perCentTimeElapsed":62
     |   }]"""
 
-  @77
+  @77 @101
   Scenario: No content now on TV
     When I GET the resource "/tvcontent/top/freeview?items=3"
     Then the HTTP status is "NOT FOUND"

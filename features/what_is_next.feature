@@ -4,8 +4,9 @@ Feature: What is next on TV
     Given the TV Provider "Freeview"
     And today is "15/03/2015"
     And the time is "4:30 am"
+    And the user 'william.mark@tvlive.io' with token '0123456789'
 
-  @85
+  @85 @101
   Scenario: Next content on TV
     Given the TV guide now is:
       | id                       | type    | title                  | start   | end     | rating | imdbId    | posterImdb            | episode title | season | episode | Channel   |
@@ -83,7 +84,7 @@ Feature: What is next on TV
     |  "perCentTimeElapsed":null
     |}]"""
 
-  @85
+  @85 @101
   Scenario: No content now on TV
     When I GET the resource "/tvcontent/next/freeview"
     Then the HTTP status is "NOT FOUND"

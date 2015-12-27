@@ -73,7 +73,8 @@ trait TVContentController extends BaseController with Validation {
 
   def currentContentByProvider(provider: String) = Action.async {
     contentRepository.findCurrentContentByProvider(provider.toUpperCase()).map {
-      ltv => buildResponseSeq(toTVShorts(ltv), s"No TV content at this moment for provider: $provider")
+      ltv =>
+        buildResponseSeq(toTVShorts(ltv), s"No TV content at this moment for provider: $provider")
     }
   }
 

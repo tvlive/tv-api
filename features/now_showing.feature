@@ -4,8 +4,10 @@ Feature: What is on TV now
     Given the TV Provider "Freeview"
     And today is "15/03/2015"
     And the time is "4:30 am"
+    And the user 'william.mark@tvlive.io' with token '0123456789'
 
-  @31
+
+  @31 @101
   Scenario: Current content on TV is a film
     Given the TV guide now for channel "BBC ONE" is:
       | id                       | type | title   | start   | end     | rating | imdbId      | posterImdb           |
@@ -35,7 +37,7 @@ Feature: What is on TV now
     |   }]
    """
 
-  @31
+  @31 @101
   Scenario: Current content on TV is a program
     And the TV guide now for channel "CHANNEL 4" is:
       | id                       | type    | title                  | start   | end     |
@@ -63,7 +65,7 @@ Feature: What is on TV now
     |  "perCentTimeElapsed":60
     |}]"""
 
-  @31
+  @31 @101
   Scenario: Current content on TV is a series
     And the TV guide now for channel "FILM FOUR" is:
       | id                       | type   | title   | start   | end     | rating | imdbId     | posterImdb           | episode title | season | episode |
@@ -97,7 +99,7 @@ Feature: What is on TV now
     |  "perCentTimeElapsed":66
     |}]"""
 
-  @31
+  @31 @101
   Scenario: Current content on TV
     Given the TV guide now is:
       | id                       | type    | title                  | start   | end     | rating | imdbId    | posterImdb           | episode title | season | episode | Channel   |
@@ -170,7 +172,7 @@ Feature: What is on TV now
     |  "perCentTimeElapsed":60
     |}]"""
 
-  @31
+  @31 @101
   Scenario: No content now on TV
     When I GET the resource "/tvcontent/all/freeview/current"
     Then the HTTP status is "NOT FOUND"

@@ -20,4 +20,11 @@ object AuthStub {
       .withStatus(status.toInt)))
   }
 
+  def findToken(username: String, token: String, status: Int = 200) = {
+    stubFor(get(urlEqualTo(s"/authorize/$username/$token"))
+      .withHeader("Content-Type", WireMock.equalTo("application/json; charset=UTF-8"))
+      .willReturn(aResponse()
+      .withStatus(status)))
+  }
+
 }
