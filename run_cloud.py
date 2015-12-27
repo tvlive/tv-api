@@ -11,7 +11,7 @@ app_pid = subprocess.Popen(["sbt", "-Drun.mode=Stub", "run"])
 import time
 
 code = 0
-while code != 200:
+while code != 401:
     try:
         code = request_to_app()
     except:
