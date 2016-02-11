@@ -75,6 +75,8 @@ trait ContentRepository {
 
   def findLeftContentByTypeAndProvider(contentType: String, provider: String): Future[Seq[TVContent]] = ???
 
+  def findNextContentByTypeAndProvider(contentType: String, provider: String): Future[Seq[TVContent]] = ???
+
   def findTopLeftContentByProvider(elements: Int, provider: String): Future[Seq[TVContent]] = ???
 
   def findNextProgramByProvider(provider: String): Future[Seq[TVContent]] = ???
@@ -148,6 +150,18 @@ class TVContentRepository(collectionName: String)(implicit val con: String => AP
     val orderBy = BSONDocument().startAsc().channelAsc()
 
     findContent(query, orderBy)
+  }
+
+  override def findNextContentByTypeAndProvider(tvcontentType: String, provider: String): Future[Seq[TVContent]] = {
+    val now = time.currentDate()
+    val query = BSONDocument().provider(provider).exist(tvcontentType).startGt(now)
+    val orderBy = BSONDocument().channelAsc().startAsc()
+
+    findContent(query, orderBy).map {
+      l => l.groupBy(_.channel).map {
+        case (_, e) => e.head
+      }.toSeq.sortWith(sortedBy)
+    }
   }
 
   override def findCurrentContentByProvider(provider: String): Future[Seq[TVContent]] = {

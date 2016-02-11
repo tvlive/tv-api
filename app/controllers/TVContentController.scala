@@ -97,4 +97,11 @@ trait TVContentController extends BaseController with Validation {
       }
   }
 
+  def contentNextByTypeAndProvider(contentType: String, provider: String) = tvcontentValidation(contentType).async {
+    cr: ContentRequest[_] =>
+      contentRepository.findNextContentByTypeAndProvider(cr.content.toLowerCase(), provider.toUpperCase()).map {
+        ltv => buildResponseSeq(toTVShorts(ltv), s"No next TV content for provider: $provider and content: $contentType")
+      }
+  }
+
 }
