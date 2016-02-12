@@ -43,7 +43,7 @@ trait TVRootController extends BaseController with URLBuilder {
               Messages("tvcontent.top.type.provider.uri", p.provider)) ::
               Link(
                 buildUrl(host, controllers.routes.TVContentController.contentNextByProvider(p.provider).url),
-                Messages("tvcontent.next.type.provider.uri", p.provider)) ::
+                Messages("tvcontent.next.provider.uri", p.provider)) ::
               Link(
                 buildUrl(host, controllers.routes.TVContentController.currentContentByProvider(p.provider).url),
                 Messages("tvcontent.all.now.type.provider.uri", p.provider)) ::
@@ -57,6 +57,9 @@ trait TVRootController extends BaseController with URLBuilder {
                 buildUrl(host, controllers.routes.TVContentController.contentLeftByTypeAndProvider("film", p.provider).url),
                 Messages("tvcontent.left.type.provider.uri", "FILMS", p.provider)) ::
               Link(
+                buildUrl(host, controllers.routes.TVContentController.contentNextByTypeAndProvider("film", p.provider).url),
+                Messages("tvcontent.next.type.provider.uri", "FILMS", p.provider)) ::
+              Link(
                 buildUrl(host, controllers.routes.TVContentController.allContentByTypeAndProvider("series", p.provider).url),
                 Messages("tvcontent.today.type.provider.uri", "SERIES", p.provider)) ::
               Link(
@@ -66,6 +69,9 @@ trait TVRootController extends BaseController with URLBuilder {
                 buildUrl(host, controllers.routes.TVContentController.contentLeftByTypeAndProvider("series", p.provider).url),
                 Messages("tvcontent.left.type.provider.uri", "SERIES", p.provider)) ::
               Link(
+                buildUrl(host, controllers.routes.TVContentController.contentNextByTypeAndProvider("series", p.provider).url),
+                Messages("tvcontent.next.type.provider.uri", "SERIES", p.provider)) ::
+              Link(
                 buildUrl(host, controllers.routes.TVContentController.allContentByTypeAndProvider("program", p.provider).url),
                 Messages("tvcontent.today.type.provider.uri", "PROGRAMS", p.provider)) ::
               Link(
@@ -73,7 +79,10 @@ trait TVRootController extends BaseController with URLBuilder {
                 Messages("tvcontent.current.type.provider.uri", "PROGRAMS", p.provider)) ::
               Link(
                 buildUrl(host, controllers.routes.TVContentController.contentLeftByTypeAndProvider("program", p.provider).url),
-                Messages("tvcontent.left.type.provider.uri", "PROGRAMS", p.provider)) :: Nil
+                Messages("tvcontent.left.type.provider.uri", "PROGRAMS", p.provider)) ::
+              Link(
+                buildUrl(host, controllers.routes.TVContentController.contentNextByTypeAndProvider("program", p.provider).url),
+                Messages("tvcontent.next.type.provider.uri", "PROGRAMS", p.provider)) :: Nil
         }
 
         val linkCategories: Seq[Link] = categories.map {
