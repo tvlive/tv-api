@@ -151,10 +151,5 @@ Feature: What is next on TV
   @103
   Scenario: No films next on TV
     When I GET the resource "/tvcontent/film/freeview/next"
-    Then the HTTP status is "NOT FOUND"
-    And the response is:
-    """
-    |{
-    | "reason": "No next TV content for provider: freeview and content: film",
-    | "status": 404
-    |}"""
+    Then the HTTP status is "OK"
+    And the response is empty list

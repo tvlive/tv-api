@@ -62,7 +62,6 @@ class ContentSteps extends ScalaDsl with EN with Matchers with Http {
       case Some(auth) => GET(s"${host}$url", ("Authorization" -> auth))
       case None => GET(s"${host}$url")
     }
-    println(s"the content coming from " + content)
     world += "httpStatus" -> statusCode
     world += "content" -> content
   }
@@ -71,12 +70,14 @@ class ContentSteps extends ScalaDsl with EN with Matchers with Http {
     world("httpStatus") shouldBe statusCode(sc)
   }
 
+  Then( """^the response is empty list$""") { () =>
+    world("content") shouldBe """[]"""
+  }
 
   Then( """^the response is:$""") { (jsonExpected: String) =>
     world("httpStatus") match {
       case "200" =>
         val contentsExpected = Json.parse(jsonExpected.stripMargin).as[Seq[TVContentShort]]
-        println("json: " + world("content"))
         val contents = Json.parse(world("content")).as[Seq[TVContentShort]]
         contentsExpected shouldBe contents
       case "404" =>

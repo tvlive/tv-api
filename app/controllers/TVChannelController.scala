@@ -20,20 +20,18 @@ trait TVChannelController extends BaseController {
   val toTVChannel: Seq[TVChannel] => Seq[TVChannelLong] = _.map(ChannelLong(_))
 
   def channels = Action.async {
-    channelRepository.listOfTVChannels().map { c =>
-      buildResponseSeq(toTVChannel(c), "No channels found")
-    }
+    channelRepository.listOfTVChannels().map { c => buildResponseSeq(toTVChannel(c)) }
   }
 
   def channelsByCategory(category: String) = Action.async {
-    channelRepository.listOfTVChannelsByCategory(category.toUpperCase).map { c =>
-      buildResponseSeq(toTVChannel(c), s"No channels found for the category: $category")
+    channelRepository.listOfTVChannelsByCategory(category.toUpperCase).map {
+      c => buildResponseSeq(toTVChannel(c))
     }
   }
 
   def channelsByProvider(provider: String) = Action.async {
-    channelRepository.listOfTVChannelsByProvider(provider.toUpperCase).map { c =>
-      buildResponseSeq(toTVChannel(c), s"No channels found for the provider: $provider")
+    channelRepository.listOfTVChannelsByProvider(provider.toUpperCase).map {
+      c => buildResponseSeq(toTVChannel(c))
     }
   }
 

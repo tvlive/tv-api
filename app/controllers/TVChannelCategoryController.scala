@@ -16,8 +16,6 @@ trait TVChannelCategoryController extends BaseController {
   val toCategories: Seq[TVChannelCategory] => Seq[TVChannelCategoryExternal] = _.map(ChannelCategoryExternal(_))
 
   def categories() = Action.async {
-    channelCategoryReporitory.findAll().map { c =>
-      buildResponseSeq(toCategories(c), "No channel categories found")
-    }
+    channelCategoryReporitory.findAll().map { c => buildResponseSeq(toCategories(c)) }
   }
 }

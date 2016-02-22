@@ -11,11 +11,8 @@ case class InternalErrorServerResponse(reason: String, status: Int = 500)
 
 trait BaseController extends Controller {
 
-  def buildResponseSeq[T](content: Seq[T], message: String)(implicit w: Writes[T]): SimpleResult = {
-    content match {
-      case content if content.size > 0 => Ok(Json.toJson(content))
-      case _ => NotFound(Json.toJson(NotFoundResponse(message)))
-    }
+  def buildResponseSeq[T](content: Seq[T])(implicit w: Writes[T]): SimpleResult = {
+    Ok(Json.toJson(content))
   }
 
   def buildResponse[T](content: Option[T], message: String)(implicit w: Writes[T]): SimpleResult = {

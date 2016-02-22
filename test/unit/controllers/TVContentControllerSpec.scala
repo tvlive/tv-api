@@ -21,10 +21,10 @@ import scala.concurrent.Future
 
 class TVContentControllerSpec extends PlaySpec with MustMatchers {
 
-//TODO create explicit TVContentLong and TVContentShort per TVContent persisted
+  //TODO create explicit TVContentLong and TVContentShort per TVContent persisted
   "TVContentController" should {
 
-    "return NOT_FOUND if there is no TV content for CHANNEL2 available today" in new TVContentSetUpTest() {
+    "return OK with empty list if there is no TV content for CHANNEL2 available today" in new TVContentSetUpTest() {
       //GIVEN
       when(tvContentRepository.findDayContentByChannel("CHANNEL2")).thenReturn(Future.successful(Seq()))
 
@@ -32,9 +32,10 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers {
       val contentsResult: Future[SimpleResult] = controller.allContent("CHANNEL2").apply(FakeRequest())
 
       //THEN
-      status(contentsResult) mustBe (NOT_FOUND)
-      val contentsInResponse = contentAsJson(contentsResult).as[NotFoundResponse]
-      contentsInResponse mustEqual (NotFoundResponse(s"No TV content for the channel: CHANNEL2"))
+      status(contentsResult) mustBe (OK)
+      contentType(contentsResult) mustBe (Some("application/json"))
+      val contentsInResponse = contentAsString(contentsResult)
+      Nil mustEqual Json.parse(contentsInResponse).as[Seq[TVContentShort]]
 
       //AND
       verify(tvContentRepository).findDayContentByChannel("CHANNEL2")
@@ -87,7 +88,7 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers {
     "return all the TV content for a CHANNEL1 available today" in new TVContentSetUpTest() {
       //GIVEN
       when(tvContentRepository.findDayContentByChannel("CHANNEL1")).thenReturn(Future.successful(
-        Seq(tvProgram1,tvProgram2, tvProgram3, tvProgram4, tvProgram5 )))
+        Seq(tvProgram1, tvProgram2, tvProgram3, tvProgram4, tvProgram5)))
 
       //WHEN
       val programResult: Future[SimpleResult] = controller.allContent("CHANNEL1").apply(FakeRequest())
@@ -165,7 +166,7 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers {
     }
 
 
-    "return NOT_FOUND if there is no TV content for CHANNEL2 available from now until the end of the day" in new TVContentSetUpTest() {
+    "return OK with empty list if there is no TV content for CHANNEL2 available from now until the end of the day" in new TVContentSetUpTest() {
       //GIVEN
       when(tvContentRepository.findLeftContentByChannel("CHANNEL2")).thenReturn(Future.successful(
         Seq()))
@@ -174,9 +175,10 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers {
       val contentsResult: Future[SimpleResult] = controller.contentLeft("CHANNEL2").apply(FakeRequest())
 
       //THEN
-      status(contentsResult) mustBe (NOT_FOUND)
-      val contentsInResponse = contentAsJson(contentsResult).as[NotFoundResponse]
-      contentsInResponse mustEqual (NotFoundResponse(s"No TV content left for the channel: CHANNEL2"))
+      status(contentsResult) mustBe (OK)
+      contentType(contentsResult) mustBe (Some("application/json"))
+      val contentsInResponse = contentAsString(contentsResult)
+      Nil mustEqual Json.parse(contentsInResponse).as[Seq[TVContentShort]]
 
       //AND
       verify(tvContentRepository).findLeftContentByChannel("CHANNEL2")
@@ -272,7 +274,7 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers {
       verify(tvContentRepository).findDayContentByTypeAndProvider("program", "FREEVIEW")
     }
 
-   "return NOT_FOUND by provider notExist available today" in new TVContentSetUpTest() {
+    "return OK with empty list by provider notExist available today" in new TVContentSetUpTest() {
       //GIVEN
       when(tvContentRepository.findDayContentByTypeAndProvider("program", "NOTEXIST")).thenReturn(
         Future.successful(Seq()))
@@ -281,15 +283,17 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers {
       val contentsResult: Future[SimpleResult] = controller.allContentByTypeAndProvider("program", "notExist").apply(FakeRequest())
 
       //THEN
-      status(contentsResult) mustBe (NOT_FOUND)
-      val contentsInResponse = contentAsJson(contentsResult).as[NotFoundResponse]
-      contentsInResponse mustEqual (NotFoundResponse(s"No TV content for type: program and provider: notExist"))
+      status(contentsResult) mustBe (OK)
+      contentType(contentsResult) mustBe (Some("application/json"))
+      val contentsInResponse = contentAsString(contentsResult)
+      Nil mustEqual Json.parse(contentsInResponse).as[Seq[TVContentShort]]
+
 
       //AND
       verify(tvContentRepository).findDayContentByTypeAndProvider("program", "NOTEXIST")
     }
 
-    "return NOT_FOUND by type notExist available today" in new TVContentSetUpTest() {
+    "return BAD_REQUEST by type notExist available today" in new TVContentSetUpTest() {
       //WHEN
       val contentsResult: Future[SimpleResult] = controller.allContentByTypeAndProvider("notExist", "freeview").apply(FakeRequest())
 
@@ -360,7 +364,7 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers {
       verify(tvContentRepository).findCurrentContentByTypeAndProvider("program", "FREEVIEW")
     }
 
-    "return NOT_FOUND by type notExist available now" in new TVContentSetUpTest() {
+    "return BAD_REQUEST by type notExist available now" in new TVContentSetUpTest() {
       //WHEN
       val contentsResult: Future[SimpleResult] = controller.currentContentByTypeAndProvider("notExist", "FREEVIEW").apply(FakeRequest())
 
@@ -428,7 +432,7 @@ class TVContentControllerSpec extends PlaySpec with MustMatchers {
     }
 
 
-    "return NOT_FOUND by type notExist from now until the end of the day" in new TVContentSetUpTest() {
+    "return BAD_REQUEST by type notExist from now until the end of the day" in new TVContentSetUpTest() {
       //WHEN
       val contentsResult: Future[SimpleResult] = controller.contentLeftByTypeAndProvider("notExist", "FREEVIEW").apply(FakeRequest())
 
@@ -446,22 +450,22 @@ trait TVContentSetUpTest extends MockitoSugar {
   val fakeNow = new DateTime(2014, 4, 4, 10, 0, 0, DateTimeZone.forID("UTC"))
 
   val tvProgram1 = TVContent("CHANNEL1", List("FREEVIEW", "SKY"), fakeNow.minusHours(3), fakeNow.minusHours(2), None,
-    Some(Series("serie1", Some(Episode(Some("ep1"), None, None, None, None)), List(), List(), List(),  List(), List(),  None, None, None, None, None, None)), None, None,
+    Some(Series("serie1", Some(Episode(Some("ep1"), None, None, None, None)), List(), List(), List(), List(), List(), None, None, None, None, None, None)), None, None,
     Some(BSONObjectID.generate))
 
   val tvProgram2 = TVContent("CHANNEL1", List("SKY"), fakeNow.minusHours(2), fakeNow.minusHours(1), None,
-    Some(Series("serie1", Some(Episode(Some("ep1"), None, None, None, None)), List(), List(), List(),  List(), List(), None, None, None, None, None, None)), None, None,
+    Some(Series("serie1", Some(Episode(Some("ep1"), None, None, None, None)), List(), List(), List(), List(), List(), None, None, None, None, None, None)), None, None,
     Some(BSONObjectID.generate))
 
   val tvProgram3 = TVContent("CHANNEL1", List("FREEVIEW", "SKY"), fakeNow.minusHours(1), fakeNow.plusHours(1), None,
     None,
-    Some(Film("program1", List(), List(), List(), List(),  List(), None, None, None, None, None, None)),
+    Some(Film("program1", List(), List(), List(), List(), List(), None, None, None, None, None, None)),
     None,
     Some(BSONObjectID.generate))
 
   val tvProgram4 = TVContent("CHANNEL1", List("FREEVIEW", "SKY"), fakeNow.plusHours(1), fakeNow.plusHours(3), None,
     None,
-    Some(Film("program1", List(), List(), List(), List(),  List(), None, None, None, None, None, None)),
+    Some(Film("program1", List(), List(), List(), List(), List(), None, None, None, None, None, None)),
     None,
     Some(BSONObjectID.generate))
 
@@ -471,7 +475,7 @@ trait TVContentSetUpTest extends MockitoSugar {
     Some(Program("p5", Some("d5"))),
     Some(BSONObjectID.generate))
 
-  val tvProgram6 = TVContent("CHANNEL 3", List("SKY"), fakeNow.plusHours(3), fakeNow.plusHours(5),None,
+  val tvProgram6 = TVContent("CHANNEL 3", List("SKY"), fakeNow.plusHours(3), fakeNow.plusHours(5), None,
     None,
     None,
     Some(Program("p6", Some("d6"))),
@@ -485,7 +489,7 @@ trait TVContentSetUpTest extends MockitoSugar {
 
   val tvProgram8 = TVContent("CHANNEL5", List("FREEVIEW", "SKY"), fakeNow.minusHours(1), fakeNow.plusHours(2), None,
     None,
-    Some(Film("program1", List(), List(), List(), List(),  List(), None, None, None, None,None, None)),
+    Some(Film("program1", List(), List(), List(), List(), List(), None, None, None, None, None, None)),
     None,
     Some(BSONObjectID.generate))
 

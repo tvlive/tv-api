@@ -200,7 +200,6 @@ Feature: Search TV content by title
     |}]"""
 
 
-
   @86 @101
   Scenario: Search by title 'bridge' and rating '9.4'
     Given the TV guide now for channel "BBC ONE" is:
@@ -314,10 +313,5 @@ Feature: Search TV content by title
   @86 @101
   Scenario: Search TV Content by 'no content exist'
     When I GET the resource "/tvcontent/search/freeview?t=no+content+exist"
-    Then the HTTP status is "NOT FOUND"
-    And the response is:
-    """
-    |{
-    | "reason": "No TV content found in search for provider: freeview",
-    | "status": 404
-    |}"""
+    Then the HTTP status is "OK"
+    And the response is empty list

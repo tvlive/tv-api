@@ -175,10 +175,5 @@ Feature: What is on TV now
   @31 @101
   Scenario: No content now on TV
     When I GET the resource "/tvcontent/all/freeview/current"
-    Then the HTTP status is "NOT FOUND"
-    And the response is:
-    """
-    |{
-    | "reason": "No TV content at this moment for provider: freeview",
-    | "status": 404
-    |}"""
+    Then the HTTP status is "OK"
+    And the response is empty list

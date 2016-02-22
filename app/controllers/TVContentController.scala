@@ -40,67 +40,67 @@ trait TVContentController extends BaseController with Validation {
 
   def contentLeft(channelName: String) = Action.async {
     contentRepository.findLeftContentByChannel(URLDecoder.decode(channelName, "UTF-8").toUpperCase).map {
-      ltv => buildResponseSeq(toTVShorts(ltv), s"No TV content left for the channel: $channelName")
+      ltv => buildResponseSeq(toTVShorts(ltv))
     }
   }
 
   def allContent(channelName: String) = Action.async {
     contentRepository.findDayContentByChannel(URLDecoder.decode(channelName, "UTF-8").toUpperCase).map {
-      ltv => buildResponseSeq(toTVShorts(ltv), s"No TV content for the channel: $channelName")
+      ltv => buildResponseSeq(toTVShorts(ltv))
     }
   }
 
   def allContentByTypeAndProvider(contentType: String, provider: String) = tvcontentValidation(contentType).async {
     cr: ContentRequest[_] => 
       contentRepository.findDayContentByTypeAndProvider(cr.content.toLowerCase, provider.toUpperCase).map {
-      ltv => buildResponseSeq(toTVShorts(ltv), s"No TV content for type: $contentType and provider: $provider")
+      ltv => buildResponseSeq(toTVShorts(ltv))
     }
   }
 
   def currentContentByTypeAndProvider(contentType: String, provider: String) = tvcontentValidation(contentType).async {
     cr: ContentRequest[_] =>
     contentRepository.findCurrentContentByTypeAndProvider(cr.content.toLowerCase, provider.toUpperCase).map {
-      ltv => buildResponseSeq(toTVShorts(ltv), s"No TV content at this moment for the type: $contentType and provider: $provider")
+      ltv => buildResponseSeq(toTVShorts(ltv))
     }
   }
 
   def contentLeftByTypeAndProvider(contentType: String, provider: String) = tvcontentValidation(contentType).async {
     cr: ContentRequest[_] =>
     contentRepository.findLeftContentByTypeAndProvider(cr.content.toLowerCase(), provider.toUpperCase()).map {
-      ltv => buildResponseSeq(toTVShorts(ltv), s"No TV content left for the type: $contentType and provider: $provider")
+      ltv => buildResponseSeq(toTVShorts(ltv))
     }
   }
 
   def currentContentByProvider(provider: String) = Action.async {
     contentRepository.findCurrentContentByProvider(provider.toUpperCase()).map {
       ltv =>
-        buildResponseSeq(toTVShorts(ltv), s"No TV content at this moment for provider: $provider")
+        buildResponseSeq(toTVShorts(ltv))
     }
   }
 
   def topContentLeftByProvider(provider: String, items: Int = 10) = Action.async {
     contentRepository.findTopLeftContentByProvider(items, provider.toUpperCase()).map {
-      ltv => buildResponseSeq(toTVShorts(ltv), s"No top TV content left for provider: $provider")
+      ltv => buildResponseSeq(toTVShorts(ltv))
     }
   }
 
   def contentNextByProvider(provider: String) = Action.async {
     contentRepository.findNextProgramByProvider(provider.toUpperCase()).map {
-      ltv => buildResponseSeq(toTVShorts(ltv), s"No next TV content for provider: $provider")
+      ltv => buildResponseSeq(toTVShorts(ltv))
     }
   }
 
   def searchBy(provider: String, t: Option[String], c: Option[String], r: Option[Double]) = searchValidation(t, r, c).async {
     sr: SearchRequest[_] =>
       contentRepository.searchBy(provider.toUpperCase, sr.title, sr.content.map(_.toLowerCase), sr.rating).map {
-        ltv => buildResponseSeq(toTVShorts(ltv), s"No TV content found in search for provider: $provider")
+        ltv => buildResponseSeq(toTVShorts(ltv))
       }
   }
 
   def contentNextByTypeAndProvider(contentType: String, provider: String) = tvcontentValidation(contentType).async {
     cr: ContentRequest[_] =>
       contentRepository.findNextContentByTypeAndProvider(cr.content.toLowerCase(), provider.toUpperCase()).map {
-        ltv => buildResponseSeq(toTVShorts(ltv), s"No next TV content for provider: $provider and content: $contentType")
+        ltv => buildResponseSeq(toTVShorts(ltv))
       }
   }
 

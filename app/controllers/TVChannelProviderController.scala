@@ -16,8 +16,8 @@ trait TVChannelProviderController extends BaseController {
   val toProviders: Seq[TVChannelProvider] => Seq[TVChannelProviderExternal] = _.map(ChannelProviderExternal(_))
 
   def providers() = Action.async {
-    channelProviderReporitory.findAll().map{ p =>
-      buildResponseSeq(toProviders(p), "No channel providers found")
+    channelProviderReporitory.findAll().map{
+      p => buildResponseSeq(toProviders(p))
     }
   }
 }

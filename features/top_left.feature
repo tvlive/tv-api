@@ -143,10 +143,5 @@ Feature: Top content on TV from now to the end of the day
   @77 @101
   Scenario: No content now on TV
     When I GET the resource "/tvcontent/top/freeview?items=3"
-    Then the HTTP status is "NOT FOUND"
-    And the response is:
-    """
-    |{
-    | "reason": "No top TV content left for provider: freeview",
-    | "status": 404
-    |}"""
+    Then the HTTP status is "OK"
+    And the response is empty list

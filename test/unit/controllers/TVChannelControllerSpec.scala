@@ -1,11 +1,12 @@
 package controllers
 
-import controllers.external.{ChannelLong, TVChannelLong}
+import controllers.external.{ChannelLong, TVChannelLong, TVContentShort}
 import models.{ChannelRepository, TVChannel}
 import org.mockito.Mockito._
 import org.scalatest.MustMatchers
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.PlaySpec
+import play.api.libs.json.Json
 import play.api.mvc.SimpleResult
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -25,8 +26,8 @@ class TVChannelControllerSpec extends PlaySpec with MustMatchers {
       val channelResult: Future[SimpleResult] = controller.channels().apply(FakeRequest())
 
       //THEN
-      status(channelResult) mustBe(OK)
-      contentType(channelResult) mustBe(Some("application/json"))
+      status(channelResult) mustBe (OK)
+      contentType(channelResult) mustBe (Some("application/json"))
       val channelsInResponse = contentAsJson(channelResult).as[Seq[TVChannelLong]]
       channelsInResponse mustEqual Seq(channelLong1, channelLong2, channelLong3, channelLong4)
 
@@ -42,8 +43,8 @@ class TVChannelControllerSpec extends PlaySpec with MustMatchers {
       val channelResult: Future[SimpleResult] = controller.channelsByCategory("ENTERTAINMENT").apply(FakeRequest())
 
       //THEN
-      status(channelResult) mustBe(OK)
-      contentType(channelResult) mustBe(Some("application/json"))
+      status(channelResult) mustBe (OK)
+      contentType(channelResult) mustBe (Some("application/json"))
       val channelsInResponse = contentAsJson(channelResult).as[Seq[TVChannelLong]]
       channelsInResponse mustEqual Seq(channelLong2, channelLong4)
 
@@ -59,8 +60,8 @@ class TVChannelControllerSpec extends PlaySpec with MustMatchers {
       val channelResult: Future[SimpleResult] = controller.channelsByCategory("documentary").apply(FakeRequest())
 
       //THEN
-      status(channelResult) mustBe(OK)
-      contentType(channelResult) mustBe(Some("application/json"))
+      status(channelResult) mustBe (OK)
+      contentType(channelResult) mustBe (Some("application/json"))
       val channelsInResponse = contentAsJson(channelResult).as[Seq[TVChannelLong]]
       channelsInResponse mustEqual Seq(channelLong1, channelLong3)
 
@@ -68,7 +69,7 @@ class TVChannelControllerSpec extends PlaySpec with MustMatchers {
       verify(tvChannelRepository).listOfTVChannelsByCategory("DOCUMENTARY")
     }
 
-    "provide NOT_FOUND if category does not exist" in new TVChannelSetUpTest() {
+    "provide OK with empty list if category does not exist" in new TVChannelSetUpTest() {
       //GIVEN
       when(tvChannelRepository.listOfTVChannelsByCategory("NOEXIST")).thenReturn(Future.successful(Seq()))
 
@@ -76,9 +77,10 @@ class TVChannelControllerSpec extends PlaySpec with MustMatchers {
       val channelResult: Future[SimpleResult] = controller.channelsByCategory("NOEXIST").apply(FakeRequest())
 
       //THEN
-      status(channelResult) mustBe(NOT_FOUND)
-      val channelsInResponse = contentAsJson(channelResult).as[NotFoundResponse]
-      channelsInResponse mustEqual(NotFoundResponse(s"No channels found for the category: NOEXIST"))
+      status(channelResult) mustBe (OK)
+      contentType(channelResult) mustBe (Some("application/json"))
+      val channelsInResponse = contentAsString(channelResult)
+      Nil mustEqual Json.parse(channelsInResponse).as[Seq[TVContentShort]]
 
       //AND
       verify(tvChannelRepository).listOfTVChannelsByCategory("NOEXIST")
@@ -92,8 +94,8 @@ class TVChannelControllerSpec extends PlaySpec with MustMatchers {
       val channelResult: Future[SimpleResult] = controller.channelsByProvider("PROVIDER2").apply(FakeRequest())
 
       //THEN
-      status(channelResult) mustBe(OK)
-      contentType(channelResult) mustBe(Some("application/json"))
+      status(channelResult) mustBe (OK)
+      contentType(channelResult) mustBe (Some("application/json"))
       val channelsInResponse = contentAsJson(channelResult).as[Seq[TVChannelLong]]
       channelsInResponse mustEqual Seq(channelLong2, channelLong4)
 
@@ -109,8 +111,8 @@ class TVChannelControllerSpec extends PlaySpec with MustMatchers {
       val channelResult: Future[SimpleResult] = controller.channelsByProvider("provider1").apply(FakeRequest())
 
       //THEN
-      status(channelResult) mustBe(OK)
-      contentType(channelResult) mustBe(Some("application/json"))
+      status(channelResult) mustBe (OK)
+      contentType(channelResult) mustBe (Some("application/json"))
       val channelsInResponse = contentAsJson(channelResult).as[Seq[TVChannelLong]]
       channelsInResponse mustEqual Seq(channelLong1)
 
@@ -118,7 +120,7 @@ class TVChannelControllerSpec extends PlaySpec with MustMatchers {
       verify(tvChannelRepository).listOfTVChannelsByProvider("PROVIDER1")
     }
 
-    "provide NOT_FOUND if provider does not exist" in new TVChannelSetUpTest() {
+    "provide OK with empty list if provider does not exist" in new TVChannelSetUpTest() {
       //GIVEN
       when(tvChannelRepository.listOfTVChannelsByProvider("NOEXIST")).thenReturn(Future.successful(Seq()))
 
@@ -126,9 +128,12 @@ class TVChannelControllerSpec extends PlaySpec with MustMatchers {
       val channelResult: Future[SimpleResult] = controller.channelsByProvider("NOEXIST").apply(FakeRequest())
 
       //THEN
-      status(channelResult) mustBe(NOT_FOUND)
-      val channelsInResponse = contentAsJson(channelResult).as[NotFoundResponse]
-      channelsInResponse mustEqual(NotFoundResponse(s"No channels found for the provider: NOEXIST"))
+      status(channelResult) mustBe (OK)
+      contentType(channelResult) mustBe (Some("application/json"))
+      val channelsInResponse = contentAsString(channelResult)
+      Nil mustEqual Json.parse(channelsInResponse).as[Seq[TVContentShort]]
+
+      //AND
       verify(tvChannelRepository).listOfTVChannelsByProvider("NOEXIST")
     }
   }
@@ -139,7 +144,7 @@ trait TVChannelSetUpTest extends MockitoSugar {
   val tvChannel1 = TVChannel("testTvChannel1", List("PROVIDER1"), List("DOCUMENTARY"), Some(BSONObjectID.generate))
 
   val tvChannel2 = TVChannel("testTvChannel2", List("PROVIDER2"), List("ENTERTAINMENT"), Some(BSONObjectID.generate))
-  val tvChannel3 = TVChannel("testTvChannel3", List("PROVIDER3"),List("DOCUMENTARY"),  Some(BSONObjectID.generate))
+  val tvChannel3 = TVChannel("testTvChannel3", List("PROVIDER3"), List("DOCUMENTARY"), Some(BSONObjectID.generate))
   val tvChannel4 = TVChannel("testTvChannel4", List("PROVIDER2"), List("ENTERTAINMENT"), Some(BSONObjectID.generate))
 
   val host = "http://beta.tvlive.io"
