@@ -20,8 +20,8 @@ class MarshallingTVContentShortSpec extends PlaySpec with MustMatchers {
     start = now,
     end = now.plusHours(2),
     rating = Some(7),
-    series = Some(SeriesShort("titleSerie", Some(EpisodeShort(Some("episodeTitle1"), Some("1"), Some("2"))), Some("poster1"))),
-    film = Some(FilmShort("titleFilm", Some("poster2"))),
+    series = Some(SeriesShort("titleSerie", Some(EpisodeShort(Some("episodeTitle1"), Some("1"), Some("2"))), Some("plotSeries"), Some("poster1"))),
+    film = Some(FilmShort("titleFilm", Some("plotFilm"), Some("poster2"))),
     program = Some(ProgramShort("titleProgram")),
     onTimeNow = true,
     minutesLeft = Some(120),
@@ -41,8 +41,10 @@ class MarshallingTVContentShortSpec extends PlaySpec with MustMatchers {
       (tvContentJson \ "series" \ "episode" \ "seasonNumber").as[String] mustBe "1"
       (tvContentJson \ "series" \ "episode" \ "episodeNumber").as[String] mustBe "2"
       (tvContentJson \ "series" \ "poster").as[String] mustBe "poster1"
+      (tvContentJson \ "series" \ "plot").as[String] mustBe "plotSeries"
       (tvContentJson \ "film" \ "title").as[String] mustBe "titleFilm"
       (tvContentJson \ "film" \ "poster").as[String] mustBe "poster2"
+      (tvContentJson \ "film" \ "plot").as[String] mustBe "plotFilm"
       (tvContentJson \ "program" \ "title").as[String] mustBe "titleProgram"
       (tvContentJson \ "uriTVContentDetails").as[String] mustBe "http://localhost:9000/tvcontent/445567777"
       (tvContentJson \ "onTimeNow").as[Boolean] mustBe true
@@ -60,9 +62,11 @@ class MarshallingTVContentShortSpec extends PlaySpec with MustMatchers {
           |"series":{
           | "serieTitle":"titleSerie",
           | "episode":{"episodeTitle":"episodeTitle1","seasonNumber":"1","episodeNumber":"2"},
+          | "plot":"plotSeries",
           | "poster":"poster1"
           | },
           |"film":{"title":"titleFilm",
+          | "plot":"plotFilm",
           | "poster":"poster2"},
           |"program":{"title":"titleProgram"},
           |"uriTVContentDetails":"http://localhost:9000/tvcontent/445567777",

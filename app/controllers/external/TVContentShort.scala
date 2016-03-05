@@ -23,13 +23,16 @@ case class TVContentShort(channel: String,
 
 case class SeriesShort(serieTitle: String,
                        episode: Option[EpisodeShort],
+                       plot: Option[String],
                        poster: Option[String])
 
 case class EpisodeShort(episodeTitle: Option[String],
                         seasonNumber: Option[String],
                         episodeNumber: Option[String])
 
-case class FilmShort(title: String, poster: Option[String])
+case class FilmShort(title: String,
+                     plot: Option[String],
+                     poster: Option[String])
 
 case class ProgramShort(title: String)
 
@@ -59,11 +62,13 @@ object TVShort extends URLBuilder with ModelUtils {
       tvContent.series.map(s => SeriesShort(
         serieTitle = s.serieTitle,
         episode = es,
-        poster = createPoster(s.imdbId, s.posterImdb)
+        poster = createPoster(s.imdbId, s.posterImdb),
+        plot = s.plot
       )),
       tvContent.film.map(f => FilmShort(
         title = f.title,
-        poster = createPoster(f.imdbId, f.posterImdb))),
+        poster = createPoster(f.imdbId, f.posterImdb),
+        plot = f.plot)),
       tvContent.program.map(p => ProgramShort(p.title)),
       onTimeNow,
       minutesLeft,
