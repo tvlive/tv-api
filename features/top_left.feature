@@ -40,7 +40,7 @@ Feature: Top content on TV from now to the end of the day
     |  "film":null,
     |  "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab634",
     |  "onTimeNow":false,
-    |  "perCentTimeElapsed":null
+    |  "minutesLeft":null
     |},
     |{
     |      "channel":"BBC ONE",
@@ -59,7 +59,7 @@ Feature: Top content on TV from now to the end of the day
     |      },
     |      "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab632",
     |      "onTimeNow":false,
-    |      "perCentTimeElapsed":null
+    |      "minutesLeft":null
     |   }]"""
 
 
@@ -100,7 +100,7 @@ Feature: Top content on TV from now to the end of the day
     |  "film":null,
     |  "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab637",
     |  "onTimeNow":false,
-    |  "perCentTimeElapsed":null
+    |  "minutesLeft":null
     |},
     |{
     |      "channel":"BBC ONE",
@@ -119,7 +119,7 @@ Feature: Top content on TV from now to the end of the day
     |      },
     |      "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab636",
     |      "onTimeNow":false,
-    |      "perCentTimeElapsed":null
+    |      "minutesLeft":null
     |},
     |{
     |      "channel":"CHANNEL 4",
@@ -137,7 +137,7 @@ Feature: Top content on TV from now to the end of the day
     |      "film": null,
     |      "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab639",
     |      "onTimeNow":true,
-    |      "perCentTimeElapsed":62
+    |      "minutesLeft":60
     |   }]"""
 
   @77 @101

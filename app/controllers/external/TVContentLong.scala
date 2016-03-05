@@ -15,7 +15,7 @@ case class TVContentLong(channel: String,
                          film: Option[FilmLong],
                          program: Option[ProgramLong],
                          onTimeNow: Boolean,
-                         perCentTimeElapsed: Option[Long])
+                         minutesLeft: Option[Long])
 
 case class EpisodeLong(episodeTitle: Option[String],
                        episodePlot: Option[String],
@@ -61,10 +61,7 @@ object TVLong extends URLBuilder with ModelUtils {
   def apply(tvContent: TVContent)(implicit host: String, time: TimeProvider): TVContentLong = {
     val onTimeNow = isNowShowing(tvContent)
 
-    val perCentTimeElapsed = onTimeNow match {
-      case true => calculateElapsed(tvContent)
-      case false => None
-    }
+    val minutesLeft = calculateMinutesLeft(tvContent)
 
     TVContentLong(
       tvContent.channel,
@@ -77,7 +74,7 @@ object TVLong extends URLBuilder with ModelUtils {
       tvContent.film.map(f => FLong(f)),
       tvContent.program.map(p => PLong(p)),
       onTimeNow,
-      perCentTimeElapsed)
+      minutesLeft)
 
   }
 }

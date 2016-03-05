@@ -33,7 +33,7 @@ Feature: What is on TV now
     |      },
     |      "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab641",
     |      "onTimeNow":true,
-    |      "perCentTimeElapsed":50
+    |      "minutesLeft":90
     |   }]
    """
 
@@ -62,7 +62,7 @@ Feature: What is on TV now
     |  "film":null,
     |  "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab642",
     |  "onTimeNow":true,
-    |  "perCentTimeElapsed":60
+    |  "minutesLeft":60
     |}]"""
 
   @31 @101
@@ -96,7 +96,7 @@ Feature: What is on TV now
     |  "film":null,
     |  "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab643",
     |  "onTimeNow":true,
-    |  "perCentTimeElapsed":66
+    |  "minutesLeft":15
     |}]"""
 
   @31 @101
@@ -127,7 +127,7 @@ Feature: What is on TV now
     |      },
     |      "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab644",
     |      "onTimeNow":true,
-    |      "perCentTimeElapsed":50
+    |      "minutesLeft":90
     |},
     {
     |  "channel":"FILM FOUR",
@@ -151,7 +151,7 @@ Feature: What is on TV now
     |  "film":null,
     |  "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab646",
     |  "onTimeNow":true,
-    |  "perCentTimeElapsed":66
+    |  "minutesLeft":15
     |},
     |{
     |  "channel":"CHANNEL 4",
@@ -169,7 +169,7 @@ Feature: What is on TV now
     |  "film":null,
     |  "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab645",
     |  "onTimeNow":true,
-    |  "perCentTimeElapsed":60
+    |  "minutesLeft":60
     |}]"""
 
   @31 @101

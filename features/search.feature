@@ -38,7 +38,7 @@ Feature: Search TV content by title
     |  "film":null,
     |  "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab661",
     |  "onTimeNow":true,
-    |  "perCentTimeElapsed":0
+    |  "minutesLeft":135
     |}]"""
 
 
@@ -74,7 +74,7 @@ Feature: Search TV content by title
     |  "film":null,
     |  "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab662",
     |  "onTimeNow":true,
-    |  "perCentTimeElapsed":0
+    |  "minutesLeft":135
     |}]"""
 
 
@@ -104,7 +104,7 @@ Feature: Search TV content by title
     |  "film":null,
     |  "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab663",
     |  "onTimeNow":true,
-    |  "perCentTimeElapsed":11
+    |  "minutesLeft":75
     |}]"""
 
   @86
@@ -134,7 +134,7 @@ Feature: Search TV content by title
     |      },
     |      "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab664",
     |      "onTimeNow":true,
-    |      "perCentTimeElapsed":50
+    |      "minutesLeft":90
     |}]"""
 
 
@@ -165,7 +165,7 @@ Feature: Search TV content by title
     |  "film":null,
     |  "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab666",
     |  "onTimeNow":true,
-    |  "perCentTimeElapsed":11
+    |  "minutesLeft":75
     |}]"""
 
   @86 @101
@@ -196,7 +196,7 @@ Feature: Search TV content by title
     |      },
     |      "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab672",
     |      "onTimeNow":false,
-    |      "perCentTimeElapsed":null
+    |      "minutesLeft":null
     |}]"""
 
 
@@ -228,7 +228,7 @@ Feature: Search TV content by title
     |      },
     |      "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab667",
     |      "onTimeNow":false,
-    |      "perCentTimeElapsed":null
+    |      "minutesLeft":null
     |}]"""
 
   @86 @101
@@ -258,7 +258,7 @@ Feature: Search TV content by title
     |      },
     |      "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab668",
     |      "onTimeNow":true,
-    |      "perCentTimeElapsed":11
+    |      "minutesLeft":75
     |}]"""
 
 

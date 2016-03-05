@@ -44,7 +44,7 @@ Feature: What is next on TV
     |  "film":null,
     |  "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab746",
     |  "onTimeNow":false,
-    |  "perCentTimeElapsed":null
+    |  "minutesLeft":null
     |},
     {
     |      "channel":"BBC ONE",
@@ -63,7 +63,7 @@ Feature: What is next on TV
     |      },
     |      "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab742",
     |      "onTimeNow":false,
-    |      "perCentTimeElapsed":null
+    |      "minutesLeft":null
     |},
     |{
     |  "channel":"CHANNEL 4",
@@ -81,7 +81,7 @@ Feature: What is next on TV
     |  "film":null,
     |  "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab744",
     |  "onTimeNow":false,
-    |  "perCentTimeElapsed":null
+    |  "minutesLeft":null
     |}]"""
 
   @85 @101

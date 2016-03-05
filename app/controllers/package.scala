@@ -73,7 +73,7 @@ package object controllers {
       (__ \ "film").read[Option[FilmLong]] and
       (__ \ "program").read[Option[ProgramLong]] and
       (__ \ "onTimeNow").read[Boolean] and
-      (__ \ "perCentTimeElapsed").read[Option[Long]]
+      (__ \ "minutesLeft").read[Option[Long]]
     )(TVContentLong.apply _)
 
   implicit val tvProgramWrites = new Writes[TVContentLong] {
@@ -88,7 +88,7 @@ package object controllers {
       "film" -> tvContentLong.film,
       "program" -> tvContentLong.program,
       "onTimeNow" -> tvContentLong.onTimeNow,
-      "perCentTimeElapsed" -> tvContentLong.perCentTimeElapsed
+      "minutesLeft" -> tvContentLong.minutesLeft
     )
   }
 
@@ -103,7 +103,7 @@ package object controllers {
       (__ \ "film").read[Option[FilmShort]] and
       (__ \ "program").read[Option[ProgramShort]] and
       (__ \ "onTimeNow").read[Boolean] and
-      (__ \ "perCentTimeElapsed").read[Option[Long]] and
+      (__ \ "minutesLeft").read[Option[Long]] and
       (__ \ "uriTVContentDetails").read[String]
     )(TVContentShort.apply _)
 
@@ -121,7 +121,7 @@ package object controllers {
       "program" -> tvContentShort.program,
       "uriTVContentDetails" -> tvContentShort.uriTVContentDetails,
       "onTimeNow" -> tvContentShort.onTimeNow,
-      "perCentTimeElapsed" -> tvContentShort.perCentTimeElapsed
+      "minutesLeft" -> tvContentShort.minutesLeft
     )
   }
 

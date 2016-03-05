@@ -36,7 +36,7 @@ class MarshallingFilmSpec extends PlaySpec with MustMatchers {
     series = None,
     program = None,
     onTimeNow = false,
-    perCentTimeElapsed = Some(65))
+    minutesLeft = Some(120))
 
 
   "Write and reads" should {
@@ -64,7 +64,7 @@ class MarshallingFilmSpec extends PlaySpec with MustMatchers {
       (tvContentJson \ "film" \ "year").as[String] mustBe "1977"
       (tvContentJson \ "film" \ "imdbId").as[String] mustBe "imdbId1"
       (tvContentJson \ "onTimeNow").as[Boolean] mustBe false
-      (tvContentJson \ "perCentTimeElapsed").as[Double] mustBe 65
+      (tvContentJson \ "minutesLeft").as[Double] mustBe 120
     }
 
     "transform film json to TVContentLong 'film' object" in {
@@ -91,7 +91,7 @@ class MarshallingFilmSpec extends PlaySpec with MustMatchers {
                        |"imdbId":"imdbId1"},
                        |"program":null,
                        |"onTimeNow":false,
-                       |"perCentTimeElapsed":65}""".stripMargin
+                       |"minutesLeft":120}""".stripMargin
 
       Json.parse(filmJson).as[TVContentLong] mustBe film.copy(
         start = now.withZone(DateTimeZone.forID("Europe/London")),

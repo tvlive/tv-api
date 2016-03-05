@@ -15,7 +15,7 @@ case class TVContentShort(channel: String,
                           film: Option[FilmShort],
                           program: Option[ProgramShort],
                           onTimeNow: Boolean,
-                          perCentTimeElapsed: Option[Long],
+                          minutesLeft: Option[Long],
                           uriTVContentDetails: String) {
 
 
@@ -39,10 +39,7 @@ object TVShort extends URLBuilder with ModelUtils {
 
     val onTimeNow = isNowShowing(tvContent)
 
-    val perCentTimeElapsed = onTimeNow match {
-      case true => calculateElapsed(tvContent)
-      case false => None
-    }
+    val minutesLeft = calculateMinutesLeft(tvContent)
 
     val uriTVContentDetails = buildUrl(host, controllers.routes.TVContentController.tvContentDetails(tvContent.id.get.stringify).url)
 
@@ -69,7 +66,7 @@ object TVShort extends URLBuilder with ModelUtils {
         poster = createPoster(f.imdbId, f.posterImdb))),
       tvContent.program.map(p => ProgramShort(p.title)),
       onTimeNow,
-      perCentTimeElapsed,
+      minutesLeft,
       uriTVContentDetails)
   }
 }

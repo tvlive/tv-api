@@ -23,9 +23,9 @@ trait ModelUtils {
     (tvContent.start.isBefore(time.currentDate())  || tvContent.start.isEqual(time.currentDate())) &&
       (tvContent.end.isAfter(time.currentDate()) || tvContent.end.isEqual(time.currentDate()))
 
-  def calculateElapsed(tvContent: TVContent)(implicit time: TimeProvider): Option[Long] = {
-    val initialDuration = new Duration(tvContent.start, tvContent.end).getStandardMinutes
-    val currentDuration = new Duration(tvContent.start, time.currentDate).getStandardMinutes
-    Some(currentDuration * 100 / initialDuration)
-  }
+  def calculateMinutesLeft(tvContent: TVContent)(implicit time: TimeProvider): Option[Long] =
+     isNowShowing(tvContent) match {
+       case true => Some(new Duration(time.currentDate, tvContent.end).getStandardMinutes)
+       case false => None
+     }
 }
