@@ -160,7 +160,7 @@ class TVContentRepository(collectionName: String)(implicit val con: String => AP
     findContent(query, orderBy).map {
       l => l.groupBy(_.channel).map {
         case (_, e) => e.head
-      }.toSeq.sortWith(sortedBy)
+      }.toSeq.sortWith(sortedByTimeRatingChannel)
     }
   }
 
@@ -188,7 +188,7 @@ class TVContentRepository(collectionName: String)(implicit val con: String => AP
     findContent(query, orderBy).map {
       l => l.groupBy(_.channel).map {
         case (_, e) => e.head
-      }.toSeq.sortWith(sortedBy)
+      }.toSeq.sortWith(sortedByRatingTimeChannel)
     }
   }
 

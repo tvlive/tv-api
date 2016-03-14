@@ -24,22 +24,22 @@ Feature: What is next on TV
     And the response is:
     """
     |[
-    {
-    |      "channel":"CHANNEL 4",
-    |      "channelImageURL":"http://localhost:9000/CHANNEL_4.png",
+    |{
+    |      "channel":"FILM FOUR",
+    |      "channelImageURL":"http://localhost:9000/FILM_FOUR.png",
     |      "provider":[
     |         "FREEVIEW"
     |      ],
-    |      "start":"2015-03-15T07:30:00",
-    |      "end":"2015-03-15T09:00:00",
-    |      "rating":9.4,
+    |      "start":"2015-03-15T04:45:00",
+    |      "end":"2015-03-15T08:00:00",
+    |      "rating":7.0,
     |      "program": null,
     |      "series": null,
     |      "film":{
-    |         "title":"Superman",
+    |         "title":"Star wars",
     |         "poster":"http://localhost:9000/images/345678944"
     |      },
-    |      "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab746",
+    |      "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab748",
     |      "onTimeNow":false,
     |      "minutesLeft":null
     |},
@@ -61,22 +61,23 @@ Feature: What is next on TV
     |      "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab742",
     |      "onTimeNow":false,
     |      "minutesLeft":null
-    |},{
-    |      "channel":"FILM FOUR",
-    |      "channelImageURL":"http://localhost:9000/FILM_FOUR.png",
+    |},
+     {
+    |      "channel":"CHANNEL 4",
+    |      "channelImageURL":"http://localhost:9000/CHANNEL_4.png",
     |      "provider":[
     |         "FREEVIEW"
     |      ],
-    |      "start":"2015-03-15T04:45:00",
-    |      "end":"2015-03-15T08:00:00",
-    |      "rating":7.0,
+    |      "start":"2015-03-15T07:30:00",
+    |      "end":"2015-03-15T09:00:00",
+    |      "rating":9.4,
     |      "program": null,
     |      "series": null,
     |      "film":{
-    |         "title":"Star wars",
+    |         "title":"Superman",
     |         "poster":"http://localhost:9000/images/345678944"
     |      },
-    |      "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab748",
+    |      "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab746",
     |      "onTimeNow":false,
     |      "minutesLeft":null
     |}]"""
@@ -99,6 +100,30 @@ Feature: What is next on TV
     And the response is:
     """
     |[
+     {
+    |  "channel":"BBC ONE",
+    |  "channelImageURL":"http://localhost:9000/BBC_ONE.png",
+    |  "provider":[
+    |     "FREEVIEW"
+    |  ],
+    |  "start":"2015-03-15T06:00:00",
+    |  "end":"2015-03-15T06:45:00",
+    |  "rating":8.3,
+    |  "series":{
+    |     "serieTitle":"Friends",
+    |     "episode":{
+    |        "episodeTitle":"Jellyfish",
+    |        "seasonNumber":"4",
+    |        "episodeNumber":"1"
+    |     },
+    |     "poster":"http://localhost:9000/images/345678945"
+    |  },
+    |  "program":null,
+    |  "film":null,
+    |  "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab742",
+    |  "onTimeNow":false,
+    |  "minutesLeft":null
+    |},
     {
     |  "channel":"CHANNEL 4",
     |  "channelImageURL":"http://localhost:9000/CHANNEL_4.png",
@@ -122,31 +147,8 @@ Feature: What is next on TV
     |  "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab746",
     |  "onTimeNow":false,
     |  "minutesLeft":null
-    |},
-    {
-    |  "channel":"BBC ONE",
-    |  "channelImageURL":"http://localhost:9000/BBC_ONE.png",
-    |  "provider":[
-    |     "FREEVIEW"
-    |  ],
-    |  "start":"2015-03-15T06:00:00",
-    |  "end":"2015-03-15T06:45:00",
-    |  "rating":8.3,
-    |  "series":{
-    |     "serieTitle":"Friends",
-    |     "episode":{
-    |        "episodeTitle":"Jellyfish",
-    |        "seasonNumber":"4",
-    |        "episodeNumber":"1"
-    |     },
-    |     "poster":"http://localhost:9000/images/345678945"
-    |  },
-    |  "program":null,
-    |  "film":null,
-    |  "uriTVContentDetails":"http://localhost:9000/tvcontent/55133bc701000001006ab742",
-    |  "onTimeNow":false,
-    |  "minutesLeft":null
-    |}]"""
+    |}
+    ]"""
 
   @103
   Scenario: No films next on TV
