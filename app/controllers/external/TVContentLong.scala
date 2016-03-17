@@ -65,7 +65,7 @@ object TVLong extends URLBuilder with ModelUtils {
 
     TVContentLong(
       tvContent.channel,
-      buildImageUrl(host, "/", tvContent.channel),
+      buildImageUrl(host, "/", buildImageName(tvContent.channel)),
       tvContent.provider,
       tvContent.start,
       tvContent.end,

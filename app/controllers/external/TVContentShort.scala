@@ -54,7 +54,7 @@ object TVShort extends URLBuilder with ModelUtils {
 
     TVContentShort(
       tvContent.channel,
-      buildImageUrl(host, "/", tvContent.channel),
+      buildImageUrl(host, "/", buildImageName(tvContent.channel)),
       tvContent.provider,
       tvContent.start,
       tvContent.end,
